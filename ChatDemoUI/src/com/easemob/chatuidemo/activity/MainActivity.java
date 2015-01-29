@@ -90,6 +90,10 @@ public class MainActivity extends BaseActivity {
 	//账号被移除
 	private boolean isCurrentAccountRemoved = false;
 	
+	private NewMessageListener newMessageListener;
+	private ReadAckListener readAckListener;
+	private CmdMessageListener cmdMessageListener;
+	
 	/**
 	 * 检查当前用户是否被删除
 	 */
@@ -139,24 +143,26 @@ public class MainActivity extends BaseActivity {
 		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, chatHistoryFragment)
 				.add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(chatHistoryFragment).commit();
 
-		// 注册一个接收消息的BroadcastReceiver
-		msgReceiver = new NewMessageBroadcastReceiver();
-		IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
-		intentFilter.setPriority(3);
-		registerReceiver(msgReceiver, intentFilter);
-
-		// 注册一个ack回执消息的BroadcastReceiver
-		IntentFilter ackMessageIntentFilter = new IntentFilter(EMChatManager.getInstance().getAckMessageBroadcastAction());
-		ackMessageIntentFilter.setPriority(3);
-		registerReceiver(ackMessageReceiver, ackMessageIntentFilter);
+//		// 注册一个接收消息的BroadcastReceiver
+//		msgReceiver = new NewMessageBroadcastReceiver();
+//		IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
+//		intentFilter.setPriority(3);
+//		registerReceiver(msgReceiver, intentFilter);
+//
+//		// 注册一个ack回执消息的BroadcastReceiver
+//		IntentFilter ackMessageIntentFilter = new IntentFilter(EMChatManager.getInstance().getAckMessageBroadcastAction());
+//		ackMessageIntentFilter.setPriority(3);
+//		registerReceiver(ackMessageReceiver, ackMessageIntentFilter);
+//		
+//		//注册一个透传消息的BroadcastReceiver
+//		IntentFilter cmdMessageIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
+//		cmdMessageIntentFilter.setPriority(3);
+//		registerReceiver(cmdMessageReceiver, cmdMessageIntentFilter);
 		
-		//注册一个透传消息的BroadcastReceiver
-		IntentFilter cmdMessageIntentFilter = new IntentFilter(EMChatManager.getInstance().getCmdMessageBroadcastAction());
-		cmdMessageIntentFilter.setPriority(3);
-		registerReceiver(cmdMessageReceiver, cmdMessageIntentFilter);
+		EMChatManager.getInstance().addListener(newMessageListener = new NewMessageListener());
+		EMChatManager.getInstance().addListener(readAckListener = new ReadAckListener());
+		EMChatManager.getInstance().addListener(cmdMessageListener = new CmdMessageListener());
 		
-		
-
 		// 注册一个离线消息的BroadcastReceiver
 		// IntentFilter offlineMessageIntentFilter = new
 		// IntentFilter(EMChatManager.getInstance()
@@ -345,6 +351,38 @@ public class MainActivity extends BaseActivity {
 		}
 	}
 
+	private class NewMessageListener implements EMChatManager.EMMessageListener {
+		@Override
+		public void onNotified(EMMessage message) {
+			// 主页面收到消息后，主要为了提示未读，实际消息内容需要到chat页面查看
+
+			String from = message.getFrom();
+			// 消息id
+			String msgId = message.getMsgId();			
+			// 2014-10-22 修复在某些机器上，在聊天页面对方发消息过来时不立即显示内容的bug
+			if (ChatActivity.activityInstance != null) {
+				if (message.getChatType() == ChatType.GroupChat) {
+					if (message.getTo().equals(ChatActivity.activityInstance.getToChatUsername()))
+						return;
+				} else {
+					if (from.equals(ChatActivity.activityInstance.getToChatUsername()))
+						return;
+				}
+			}
+			
+			notifyNewMessage(message);
+
+			// 刷新bottom bar消息未读数
+			updateUnreadLabel();
+			if (currentTabIndex == 0) {
+				// 当前页面如果为聊天历史页面，刷新此页面
+				if (chatHistoryFragment != null) {
+					chatHistoryFragment.refresh();
+				}
+			}
+
+		}
+	}
 	/**
 	 * 消息回执BroadcastReceiver
 	 */
@@ -379,7 +417,30 @@ public class MainActivity extends BaseActivity {
 		}
 	};
 	
-	
+	private class ReadAckListener implements EMChatManager.EMReadAckListener {
+
+		@Override
+		public void onNotified(String from, String msgId) {
+			EMConversation conversation = EMChatManager.getInstance().getConversation(from);
+			if (conversation != null) {
+				// 把message设为已读
+				EMMessage msg = conversation.getMessage(msgId);
+
+				if (msg != null) {
+
+					// 2014-11-5 修复在某些机器上，在聊天页面对方发送已读回执时不立即显示已读的bug
+					if (ChatActivity.activityInstance != null) {
+						if (msg.getChatType() == ChatType.Chat) {
+							if (from.equals(ChatActivity.activityInstance.getToChatUsername()))
+								return;
+						}
+					}
+
+					msg.isAcked = true;
+				}
+			}			
+		}
+	}
 	
 	/**
 	 * 透传消息BroadcastReceiver
@@ -403,6 +464,21 @@ public class MainActivity extends BaseActivity {
 			Toast.makeText(MainActivity.this, "收到透传：action："+action, Toast.LENGTH_SHORT).show();
 		}
 	};
+	
+	private class CmdMessageListener implements EMChatManager.EMCmdMsgListener {
+		@Override
+		public void onNotified(String msgId, EMMessage message) {
+			EMLog.d(TAG, "收到透传消息");
+			//获取消息body
+			CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
+			String action = cmdMsgBody.action;//获取自定义action
+			
+			//获取扩展属性 此处省略
+//			message.getStringAttribute("");
+			EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action,message.toString()));
+			Toast.makeText(MainActivity.this, "收到透传：action："+action, Toast.LENGTH_SHORT).show();
+		}		
+	}
 
 	/**
 	 * 离线消息BroadcastReceiver sdk 登录后，服务器会推送离线消息到client，这个receiver，是通知UI

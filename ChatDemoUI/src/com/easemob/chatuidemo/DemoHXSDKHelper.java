@@ -15,12 +15,14 @@ package com.easemob.chatuidemo;
 
 import java.util.Map;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.easemob.EMCallBack;
 import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.applib.model.HXSDKModel;
+import com.easemob.chat.EMChatConfig;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
@@ -29,6 +31,7 @@ import com.easemob.chat.OnMessageNotifyListener;
 import com.easemob.chat.OnNotificationClickListener;
 import com.easemob.chatuidemo.activity.ChatActivity;
 import com.easemob.chatuidemo.activity.MainActivity;
+import com.easemob.chatuidemo.activity.VoiceCallActivity;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.receiver.VoiceCallReceiver;
 import com.easemob.chatuidemo.utils.CommonUtils;
@@ -122,13 +125,24 @@ public class DemoHXSDKHelper extends HXSDKHelper{
         intent.putExtra(Constant.ACCOUNT_REMOVED, true);
         appContext.startActivity(intent);
     }
-    
-    
+        
     @Override
     protected void initListener(){
         super.initListener();
-        IntentFilter callFilter = new IntentFilter(EMChatManager.getInstance().getIncomingVoiceCallBroadcastAction());
-        appContext.registerReceiver(new VoiceCallReceiver(), callFilter);    
+//        IntentFilter callFilter = new IntentFilter(EMChatManager.getInstance().getIncomingVoiceCallBroadcastAction());
+//        appContext.registerReceiver(new VoiceCallReceiver(), callFilter);
+        EMChatManager.getInstance().addListener(new VoiceCallListener());
+    }
+
+    private class VoiceCallListener implements EMChatManager.EMIncomingVoiceCallListener {
+
+		@Override
+		public void onNotified(String from) {
+			Context context = EMChatConfig.getInstance().getApplicationContext();
+			context.startActivity(new Intent(context, VoiceCallActivity.class).
+					putExtra("username", from).putExtra("isComingCall", true).
+					addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+		}
     }
 
     @Override

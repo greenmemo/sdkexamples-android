@@ -178,6 +178,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 	private boolean haveMoreData = true;
 	private Button btnMore;
 	public String playMsgId;
+	private NewMessageListener newMessageListener;
+	private ReadAckListener readAckListener;
+	private DeliveryAckListener deliveryAckListener;
 
 	private Handler micImageHandler = new Handler() {
 		@Override
@@ -348,22 +351,27 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				return false;
 			}
 		});
-		// 注册接收消息广播
-		receiver = new NewMessageBroadcastReceiver();
-		IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
-		// 设置广播的优先级别大于Mainacitivity,这样如果消息来的时候正好在chat页面，直接显示消息，而不是提示消息未读
-		intentFilter.setPriority(5);
-		registerReceiver(receiver, intentFilter);
+//		// 注册接收消息广播
+//		receiver = new NewMessageBroadcastReceiver();
+//		IntentFilter intentFilter = new IntentFilter(EMChatManager.getInstance().getNewMessageBroadcastAction());
+//		// 设置广播的优先级别大于Mainacitivity,这样如果消息来的时候正好在chat页面，直接显示消息，而不是提示消息未读
+//		intentFilter.setPriority(5);
+//		registerReceiver(receiver, intentFilter);
+//
+//		// 注册一个ack回执消息的BroadcastReceiver
+//		IntentFilter ackMessageIntentFilter = new IntentFilter(EMChatManager.getInstance().getAckMessageBroadcastAction());
+//		ackMessageIntentFilter.setPriority(5);
+//		registerReceiver(ackMessageReceiver, ackMessageIntentFilter);
+//
+//		// 注册一个消息送达的BroadcastReceiver
+//		IntentFilter deliveryAckMessageIntentFilter = new IntentFilter(EMChatManager.getInstance().getDeliveryAckMessageBroadcastAction());
+//		deliveryAckMessageIntentFilter.setPriority(5);
+//		registerReceiver(deliveryAckMessageReceiver, deliveryAckMessageIntentFilter);
 
-		// 注册一个ack回执消息的BroadcastReceiver
-		IntentFilter ackMessageIntentFilter = new IntentFilter(EMChatManager.getInstance().getAckMessageBroadcastAction());
-		ackMessageIntentFilter.setPriority(5);
-		registerReceiver(ackMessageReceiver, ackMessageIntentFilter);
-
-		// 注册一个消息送达的BroadcastReceiver
-		IntentFilter deliveryAckMessageIntentFilter = new IntentFilter(EMChatManager.getInstance().getDeliveryAckMessageBroadcastAction());
-		deliveryAckMessageIntentFilter.setPriority(5);
-		registerReceiver(deliveryAckMessageReceiver, deliveryAckMessageIntentFilter);
+		// 测试新增加listener
+		EMChatManager.getInstance().addListener(newMessageListener = new NewMessageListener());
+		EMChatManager.getInstance().addListener(readAckListener = new ReadAckListener());
+		EMChatManager.getInstance().addListener(deliveryAckListener = new DeliveryAckListener());
 
 		// 监听当前会话的群聊解散被T事件
 		groupListener = new GroupListener();
@@ -1001,6 +1009,28 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	private class NewMessageListener implements EMChatManager.EMMessageListener {
+		@Override
+		public void onNotified(EMMessage message) {
+			String username = message.getFrom();
+			String msgid = message.getMsgId();
+			// 如果是群聊消息，获取到group id
+			if (message.getChatType() == ChatType.GroupChat) {
+				username = message.getTo();
+			}
+			if (!username.equals(toChatUsername)) {
+				// 消息不是发给当前会话，return
+			    notifyNewMessage(message);
+				return;
+			}
+			// conversation =
+			// EMChatManager.getInstance().getConversation(toChatUsername);
+			// 通知adapter有新消息，更新ui
+			adapter.refresh();
+			listView.setSelection(listView.getCount() - 1);
+		}
+	}
+
 	/**
 	 * 消息回执BroadcastReceiver
 	 */
@@ -1024,6 +1054,21 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		}
 	};
 
+	private class ReadAckListener implements EMChatManager.EMReadAckListener {
+		@Override
+		public void onNotified(String from, String msgId) {
+			EMConversation conversation = EMChatManager.getInstance().getConversation(from);
+			if (conversation != null) {
+				// 把message设为已读
+				EMMessage msg = conversation.getMessage(msgId);
+				if (msg != null) {
+					msg.isAcked = true;
+				}
+			}
+			adapter.notifyDataSetChanged();
+		}
+	}
+
 	/**
 	 * 消息送达BroadcastReceiver
 	 */
@@ -1046,6 +1091,22 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 			adapter.notifyDataSetChanged();
 		}
 	};
+
+	private class DeliveryAckListener implements EMChatManager.EMDeliveryAckListener {
+		@Override
+		public void onNotified(String from, String msgId) {
+			EMConversation conversation = EMChatManager.getInstance().getConversation(from);
+			if (conversation != null) {
+				// 把message设为已读
+				EMMessage msg = conversation.getMessage(msgId);
+				if (msg != null) {
+					msg.isDelivered = true;
+				}
+			}
+			adapter.notifyDataSetChanged();
+		}
+	}
+	
 	private PowerManager.WakeLock wakeLock;
 
 	/**
@@ -1213,18 +1274,21 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		activityInstance = null;
 		EMGroupManager.getInstance().removeGroupChangeListener(groupListener);
 		// 注销广播
-		try {
-			unregisterReceiver(receiver);
-			receiver = null;
-		} catch (Exception e) {
-		}
-		try {
-			unregisterReceiver(ackMessageReceiver);
-			ackMessageReceiver = null;
-			unregisterReceiver(deliveryAckMessageReceiver);
-			deliveryAckMessageReceiver = null;
-		} catch (Exception e) {
-		}
+//		try {
+//			unregisterReceiver(receiver);
+//			receiver = null;
+//		} catch (Exception e) {
+//		}
+//		try {
+//			unregisterReceiver(ackMessageReceiver);
+//			ackMessageReceiver = null;
+//			unregisterReceiver(deliveryAckMessageReceiver);
+//			deliveryAckMessageReceiver = null;
+//		} catch (Exception e) {
+//		}
+		EMChatManager.getInstance().removeListener(newMessageListener);
+		EMChatManager.getInstance().removeListener(readAckListener);
+		EMChatManager.getInstance().removeListener(deliveryAckListener);
 	}
 
 	@Override
