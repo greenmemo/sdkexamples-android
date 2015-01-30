@@ -137,7 +137,7 @@ public class DemoHXSDKHelper extends HXSDKHelper{
     private class VoiceCallListener implements EMChatManager.EMIncomingVoiceCallListener {
 
 		@Override
-		public void onNotified(String from) {
+		public void onNotified(final String from) {			
 			Context context = EMChatConfig.getInstance().getApplicationContext();
 			context.startActivity(new Intent(context, VoiceCallActivity.class).
 					putExtra("username", from).putExtra("isComingCall", true).

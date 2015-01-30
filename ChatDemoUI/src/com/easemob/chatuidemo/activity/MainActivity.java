@@ -353,34 +353,36 @@ public class MainActivity extends BaseActivity {
 
 	private class NewMessageListener implements EMChatManager.EMMessageListener {
 		@Override
-		public void onNotified(EMMessage message) {
-			// 主页面收到消息后，主要为了提示未读，实际消息内容需要到chat页面查看
-
-			String from = message.getFrom();
-			// 消息id
-			String msgId = message.getMsgId();			
-			// 2014-10-22 修复在某些机器上，在聊天页面对方发消息过来时不立即显示内容的bug
-			if (ChatActivity.activityInstance != null) {
-				if (message.getChatType() == ChatType.GroupChat) {
-					if (message.getTo().equals(ChatActivity.activityInstance.getToChatUsername()))
-						return;
-				} else {
-					if (from.equals(ChatActivity.activityInstance.getToChatUsername()))
-						return;
+		public void onNotified(final EMMessage message) {
+			runOnUiThread(new Runnable() {
+				public void run() {		
+					// 主页面收到消息后，主要为了提示未读，实际消息内容需要到chat页面查看		
+					String from = message.getFrom();
+					// 消息id
+					String msgId = message.getMsgId();			
+					// 2014-10-22 修复在某些机器上，在聊天页面对方发消息过来时不立即显示内容的bug
+					if (ChatActivity.activityInstance != null) {
+						if (message.getChatType() == ChatType.GroupChat) {
+							if (message.getTo().equals(ChatActivity.activityInstance.getToChatUsername()))
+								return;
+						} else {
+							if (from.equals(ChatActivity.activityInstance.getToChatUsername()))
+								return;
+						}
+					}
+					
+					notifyNewMessage(message);
+		
+					// 刷新bottom bar消息未读数
+					updateUnreadLabel();
+					if (currentTabIndex == 0) {
+						// 当前页面如果为聊天历史页面，刷新此页面
+						if (chatHistoryFragment != null) {
+							chatHistoryFragment.refresh();
+						}
+					}
 				}
-			}
-			
-			notifyNewMessage(message);
-
-			// 刷新bottom bar消息未读数
-			updateUnreadLabel();
-			if (currentTabIndex == 0) {
-				// 当前页面如果为聊天历史页面，刷新此页面
-				if (chatHistoryFragment != null) {
-					chatHistoryFragment.refresh();
-				}
-			}
-
+			});
 		}
 	}
 	/**
@@ -420,25 +422,29 @@ public class MainActivity extends BaseActivity {
 	private class ReadAckListener implements EMChatManager.EMReadAckListener {
 
 		@Override
-		public void onNotified(String from, String msgId) {
-			EMConversation conversation = EMChatManager.getInstance().getConversation(from);
-			if (conversation != null) {
-				// 把message设为已读
-				EMMessage msg = conversation.getMessage(msgId);
-
-				if (msg != null) {
-
-					// 2014-11-5 修复在某些机器上，在聊天页面对方发送已读回执时不立即显示已读的bug
-					if (ChatActivity.activityInstance != null) {
-						if (msg.getChatType() == ChatType.Chat) {
-							if (from.equals(ChatActivity.activityInstance.getToChatUsername()))
-								return;
+		public void onNotified(final String from, final String msgId) {
+			runOnUiThread(new Runnable() {
+				public void run() {
+				EMConversation conversation = EMChatManager.getInstance().getConversation(msgId);
+				if (conversation != null) {
+					// 把message设为已读
+					EMMessage msg = conversation.getMessage(msgId);
+	
+					if (msg != null) {
+	
+						// 2014-11-5 修复在某些机器上，在聊天页面对方发送已读回执时不立即显示已读的bug
+						if (ChatActivity.activityInstance != null) {
+							if (msg.getChatType() == ChatType.Chat) {
+								if (from.equals(ChatActivity.activityInstance.getToChatUsername()))
+									return;
+							}
 						}
+	
+						msg.isAcked = true;
 					}
-
-					msg.isAcked = true;
 				}
-			}			
+				}
+			});
 		}
 	}
 	
@@ -467,16 +473,20 @@ public class MainActivity extends BaseActivity {
 	
 	private class CmdMessageListener implements EMChatManager.EMCmdMsgListener {
 		@Override
-		public void onNotified(String msgId, EMMessage message) {
-			EMLog.d(TAG, "收到透传消息");
-			//获取消息body
-			CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
-			String action = cmdMsgBody.action;//获取自定义action
-			
-			//获取扩展属性 此处省略
-//			message.getStringAttribute("");
-			EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action,message.toString()));
-			Toast.makeText(MainActivity.this, "收到透传：action："+action, Toast.LENGTH_SHORT).show();
+		public void onNotified(final String msgId, final EMMessage message) {
+			runOnUiThread(new Runnable() {
+				public void run() {
+					EMLog.d(TAG, "收到透传消息");
+					//获取消息body
+					CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
+					String action = cmdMsgBody.action;//获取自定义action
+					
+					//获取扩展属性 此处省略
+		//			message.getStringAttribute("");
+					EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action,message.toString()));
+					Toast.makeText(MainActivity.this, "收到透传：action："+action, Toast.LENGTH_SHORT).show();
+				}
+			});
 		}		
 	}
 

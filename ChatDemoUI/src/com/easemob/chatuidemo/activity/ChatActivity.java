@@ -178,9 +178,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 	private boolean haveMoreData = true;
 	private Button btnMore;
 	public String playMsgId;
-	private NewMessageListener newMessageListener;
-	private ReadAckListener readAckListener;
-	private DeliveryAckListener deliveryAckListener;
+	private NewMessageListener newMessageListener = new NewMessageListener();
+	private ReadAckListener readAckListener = new ReadAckListener();
+	private DeliveryAckListener deliveryAckListener = new DeliveryAckListener();
 
 	private Handler micImageHandler = new Handler() {
 		@Override
@@ -369,9 +369,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 //		registerReceiver(deliveryAckMessageReceiver, deliveryAckMessageIntentFilter);
 
 		// 测试新增加listener
-		EMChatManager.getInstance().addListener(newMessageListener = new NewMessageListener());
-		EMChatManager.getInstance().addListener(readAckListener = new ReadAckListener());
-		EMChatManager.getInstance().addListener(deliveryAckListener = new DeliveryAckListener());
+		EMChatManager.getInstance().addListener(newMessageListener);
+		EMChatManager.getInstance().addListener(readAckListener);
+		EMChatManager.getInstance().addListener(deliveryAckListener);
 
 		// 监听当前会话的群聊解散被T事件
 		groupListener = new GroupListener();
@@ -1011,23 +1011,27 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 
 	private class NewMessageListener implements EMChatManager.EMMessageListener {
 		@Override
-		public void onNotified(EMMessage message) {
-			String username = message.getFrom();
-			String msgid = message.getMsgId();
-			// 如果是群聊消息，获取到group id
-			if (message.getChatType() == ChatType.GroupChat) {
-				username = message.getTo();
-			}
-			if (!username.equals(toChatUsername)) {
-				// 消息不是发给当前会话，return
-			    notifyNewMessage(message);
-				return;
-			}
-			// conversation =
-			// EMChatManager.getInstance().getConversation(toChatUsername);
-			// 通知adapter有新消息，更新ui
-			adapter.refresh();
-			listView.setSelection(listView.getCount() - 1);
+		public void onNotified(final EMMessage message) {
+			runOnUiThread(new Runnable() {
+				public void run() {
+					String username = message.getFrom();
+					String msgid = message.getMsgId();
+					// 如果是群聊消息，获取到group id
+					if (message.getChatType() == ChatType.GroupChat) {
+						username = message.getTo();
+					}
+					if (!username.equals(toChatUsername)) {
+						// 消息不是发给当前会话，return
+					    notifyNewMessage(message);
+						return;
+					}
+					// conversation =
+					// EMChatManager.getInstance().getConversation(toChatUsername);
+					// 通知adapter有新消息，更新ui
+					adapter.refresh();
+					listView.setSelection(listView.getCount() - 1);
+						}
+			});
 		}
 	}
 
@@ -1056,16 +1060,20 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 
 	private class ReadAckListener implements EMChatManager.EMReadAckListener {
 		@Override
-		public void onNotified(String from, String msgId) {
-			EMConversation conversation = EMChatManager.getInstance().getConversation(from);
-			if (conversation != null) {
-				// 把message设为已读
-				EMMessage msg = conversation.getMessage(msgId);
-				if (msg != null) {
-					msg.isAcked = true;
+		public void onNotified(final String from, final String msgId) {
+			runOnUiThread(new Runnable() {
+				public void run() {
+					EMConversation conversation = EMChatManager.getInstance().getConversation(from);
+					if (conversation != null) {
+						// 把message设为已读
+						EMMessage msg = conversation.getMessage(msgId);
+						if (msg != null) {
+							msg.isAcked = true;
+						}
+					}
+					adapter.notifyDataSetChanged();
 				}
-			}
-			adapter.notifyDataSetChanged();
+			});
 		}
 	}
 
@@ -1094,16 +1102,20 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 
 	private class DeliveryAckListener implements EMChatManager.EMDeliveryAckListener {
 		@Override
-		public void onNotified(String from, String msgId) {
-			EMConversation conversation = EMChatManager.getInstance().getConversation(from);
-			if (conversation != null) {
-				// 把message设为已读
-				EMMessage msg = conversation.getMessage(msgId);
-				if (msg != null) {
-					msg.isDelivered = true;
-				}
-			}
-			adapter.notifyDataSetChanged();
+		public void onNotified(final String from, final String msgId) {
+			runOnUiThread(new Runnable() {
+				public void run() {
+					EMConversation conversation = EMChatManager.getInstance().getConversation(from);
+					if (conversation != null) {
+						// 把message设为已读
+						EMMessage msg = conversation.getMessage(msgId);
+						if (msg != null) {
+							msg.isDelivered = true;
+						}
+					}
+					adapter.notifyDataSetChanged();
+						}
+			});
 		}
 	}
 	
