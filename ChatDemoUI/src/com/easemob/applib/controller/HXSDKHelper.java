@@ -231,6 +231,8 @@ public abstract class HXSDKHelper {
         // 设置notification消息点击时，跳转的intent为自定义的intent
         options.setOnNotificationClickListener(getNotificationClickListener());
         options.setNotifyText(getMessageNotifyListener());
+        // 设置是否始终缓存消息，不释放
+        options.setAlwaysCacheMsg(hxModel.isAlwaysCacheMsg());
     }
     
     /**

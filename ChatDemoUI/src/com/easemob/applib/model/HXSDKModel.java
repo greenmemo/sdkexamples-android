@@ -90,4 +90,12 @@ public abstract class HXSDKModel {
     public boolean isDebugMode(){
         return false;
     }
+    
+    /**
+     * 是否始终缓存消息列表，不释放
+     * @return
+     */
+    public boolean isAlwaysCacheMsg() {
+    	return false;
+    }
 }
