@@ -171,7 +171,6 @@ public class MainActivity extends BaseActivity {
 		EMGroupManager.getInstance().addGroupChangeListener(new MyGroupChangeListener());
 		// 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
 		EMChat.getInstance().setAppInited();
-
 	}
 
 	/**
