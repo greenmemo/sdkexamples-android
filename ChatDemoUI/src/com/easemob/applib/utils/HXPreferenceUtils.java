@@ -31,6 +31,7 @@ public class HXPreferenceUtils {
 	private String SHARED_KEY_SETTING_SOUND = "shared_key_setting_sound";
 	private String SHARED_KEY_SETTING_VIBRATE = "shared_key_setting_vibrate";
 	private String SHARED_KEY_SETTING_SPEAKER = "shared_key_setting_speaker";
+	private String SHARED_KEY_SETTING_SYNC_GROUPS_FINISHED = "shared_key_setting_sync_groups_finished";
 
 	private HXPreferenceUtils(Context cxt) {
 		mSharedPreferences = cxt.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -94,4 +95,12 @@ public class HXPreferenceUtils {
 		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_SPEAKER, true);
 	}
 
+	public void setSettingSyncGroupsFinished(boolean paramBoolean) {
+		editor.putBoolean(SHARED_KEY_SETTING_SYNC_GROUPS_FINISHED, paramBoolean);
+		editor.commit();
+	}
+	
+	public boolean getSettingSyncGroupsFinished() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_SYNC_GROUPS_FINISHED, false);		
+	}
 }

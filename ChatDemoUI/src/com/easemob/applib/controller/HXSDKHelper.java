@@ -13,8 +13,14 @@
  */
 package com.easemob.applib.controller;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.util.Log;
 
 import com.easemob.EMCallBack;
 import com.easemob.EMConnectionListener;
@@ -25,13 +31,10 @@ import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatConfig.EMEnvMode;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
+import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.OnMessageNotifyListener;
 import com.easemob.chat.OnNotificationClickListener;
-
-import android.app.ActivityManager;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.util.Log;
+import com.easemob.exceptions.EaseMobException;
 
 /**
  * The developer can derive from this class to talk with HuanXin SDK
@@ -47,6 +50,14 @@ import android.util.Log;
  *
  */
 public abstract class HXSDKHelper {
+	
+	public interface SyncGroupListener {
+	    /**
+	     * 群组更新完成
+	     */
+		public void onSyncSucess(boolean success);
+	}
+	
     private static final String TAG = "HXSDKHelper";
     /**
      * application context
@@ -83,6 +94,13 @@ public abstract class HXSDKHelper {
      */
     private static HXSDKHelper me = null;
     
+    /**
+     * HuanXin sync groups status listener
+     */
+    private List<SyncGroupListener> syncGroupListeners;
+    
+    private boolean syncingGroupsFromServer = false;
+    
     public HXSDKHelper(){
         me = this;
     }
@@ -111,7 +129,8 @@ public abstract class HXSDKHelper {
         }
 
         appContext = context;
-        
+        syncGroupListeners = new ArrayList<SyncGroupListener>(); 
+
         // create HX SDK model
         hxModel = createModel();
         
@@ -263,6 +282,8 @@ public abstract class HXSDKHelper {
             }
             
         });
+        
+        syncGroupListeners.clear();
     }
     
     /**
@@ -365,5 +386,45 @@ public abstract class HXSDKHelper {
             }
         }
         return processName;
+    }
+    
+    public void addSyncGroupListener(SyncGroupListener listener) {
+    	if (listener == null) {
+    		return;
+    	}
+    	if (!syncGroupListeners.contains(listener)) {
+    		syncGroupListeners.add(listener);
+    	}
+    }
+    
+    public void removeSyncGroupListener(SyncGroupListener listener) {
+    	if (listener == null) {
+    		return;
+    	}
+    	if (syncGroupListeners.contains(listener)) {
+    		syncGroupListeners.remove(listener);
+    	}
+    }
+    
+    public synchronized void getGroupsFromServer() throws EaseMobException {
+    	try {
+    		syncingGroupsFromServer = true;
+			EMGroupManager.getInstance().getGroupsFromServer();
+			syncingGroupsFromServer = false;
+			for (SyncGroupListener listener : syncGroupListeners) {
+				listener.onSyncSucess(true);
+			}
+		} catch (EaseMobException e) {
+			syncingGroupsFromServer = false;
+			for (SyncGroupListener listener : syncGroupListeners) {
+				listener.onSyncSucess(false);
+			}
+			e.printStackTrace();
+			throw e;
+		}
+    }
+    
+    public boolean isSyncingGroupsFromServer() {
+    	return syncingGroupsFromServer;
     }
 }

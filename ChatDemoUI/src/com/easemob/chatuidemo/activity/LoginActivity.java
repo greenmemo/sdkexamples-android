@@ -32,6 +32,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.easemob.EMCallBack;
+import com.easemob.applib.controller.HXSDKHelper;
+import com.easemob.applib.utils.HXPreferenceUtils;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMGroupManager;
@@ -176,8 +178,6 @@ public class LoginActivity extends BaseActivity {
 							// conversations in case we are auto login
 							EMGroupManager.getInstance().loadAllGroups();
 							EMChatManager.getInstance().loadAllConversations();
-							//处理好友和群组
-							processContactsAndGroups();
 						} catch (Exception e) {
 							e.printStackTrace();
 							//取好友或者群聊失败，不让进入主页面
@@ -195,10 +195,17 @@ public class LoginActivity extends BaseActivity {
 						if (!updatenick) {
 							Log.e("LoginActivity", "update current user nick fail");
 						}
-						if (!LoginActivity.this.isFinishing())
+						if (!LoginActivity.this.isFinishing() && pd.isShowing())
 							pd.dismiss();
 						// 进入主页面
 						startActivity(new Intent(LoginActivity.this, MainActivity.class));
+						//处理好友和群组
+						try {
+							processContactsAndGroups();
+						} catch (EaseMobException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						finish();
 					}
 
@@ -267,7 +274,8 @@ public class LoginActivity extends BaseActivity {
          EMContactManager.getInstance().saveBlackList(blackList);
 
          // 获取群聊列表(群聊里只有groupid和groupname等简单信息，不包含members),sdk会把群组存入到内存和db中
-         EMGroupManager.getInstance().getGroupsFromServer();
+         HXSDKHelper.getInstance().getGroupsFromServer();
+         HXPreferenceUtils.getInstance().setSettingSyncGroupsFinished(true);
      }
 	
 	/**
