@@ -25,7 +25,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     
-	 <uses-permission android:name="android.permission.GET_ACCOUNTS" />  
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
 	<uses-permission android:name="android.permission.USE_CREDENTIALS" />  
 	<uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />  
 	<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />  
@@ -240,19 +240,25 @@
             <intent-filter android:priority="1000" >
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="com.easemob.keepalive" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </receiver>
-
         
         <!-- 设置环信应用的appkey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
             android:value="easemob-demo#chatdemoui" />
         <!-- 声明sdk所需的service -->
-        <service android:name="com.easemob.chat.EMChatService" />
-        
+        <service android:name="com.easemob.chat.EMChatService" android:exported="true"/>
+        <service
+            android:name="com.easemob.KeepAliveService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":easemob_im">
+        </service>
+
         <!-- 百度地图所需的service -->
         <service
             android:name="com.baidu.location.f"
