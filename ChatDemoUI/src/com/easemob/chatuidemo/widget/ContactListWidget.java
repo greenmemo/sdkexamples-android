@@ -28,6 +28,8 @@ public class ContactListWidget extends EMContactListWidget {
 		super(context, attrs, defStyleAttr, defStyleRes);
 	}
 	
+	// EMContactListWidget中数据类型User和此处使用的User类型不一样
+	// 需要手工转换一次
 	protected List<User> getContactList() {
 		List<User> contactList = new ArrayList<User>();
 		for (com.easemob.chatuidemo.domain.User user : DemoApplication.getInstance().getContactList().values()) {

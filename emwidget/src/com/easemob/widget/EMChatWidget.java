@@ -765,7 +765,8 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 			// 通知adapter有消息变动，adapter会根据加入的这条message显示消息和调用sdk的发送方法
 			adapter.refreshSelectLast();
 			mEditTextContent.setText("");
-
+			edittext_layout.requestFocus();
+			
 			activity.setResult(Activity.RESULT_OK);
 
 		}

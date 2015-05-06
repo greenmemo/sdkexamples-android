@@ -33,7 +33,6 @@ public class DownloadImageTask extends AsyncTask<EMMessage, Integer, Bitmap>{
 	
 	@Override
 	protected Bitmap doInBackground(EMMessage... params) {
-		// TODO, EMWidget
 	    /*
 	    try {
 	        message = params[1];//视频的图片path信息的message

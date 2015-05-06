@@ -54,7 +54,8 @@
             android:orientation="vertical" >
 
 
-            <com.easemob.chatuidemo.widget.ExpandGridView
+            <GridView
+                class="com.easemob.chatuidemo.activity.GroupDetailsActivity$ExpandGridView"
                 android:id="@+id/gridview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

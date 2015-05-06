@@ -13,6 +13,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.LocationMessageBody;
 import com.easemob.uidemo.R;
 import com.easemob.util.LatLng;
+import com.easemob.widget.activity.BaiduMapActivity;
 
 public class EMChatRowLocationWidget extends EMChatRowWidget {
 
@@ -105,12 +106,12 @@ public class EMChatRowLocationWidget extends EMChatRowWidget {
 		public void onClick(View v) {
 			
 			// TODO, EMWidget
-//			Intent intent;
-//			intent = new Intent(context, BaiduMapActivity.class);
-//			intent.putExtra("latitude", location.latitude);
-//			intent.putExtra("longitude", location.longitude);
-//			intent.putExtra("address", address);
-//			activity.startActivity(intent);
+			Intent intent;
+			intent = new Intent(context, BaiduMapActivity.class);
+			intent.putExtra("latitude", location.latitude);
+			intent.putExtra("longitude", location.longitude);
+			intent.putExtra("address", address);
+			chatWidget.getActivity().startActivity(intent);
 		}
 
 	}

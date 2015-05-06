@@ -1,4 +1,4 @@
-package com.easemob.chatuidemo.activity;
+package com.easemob.widget.activity;
 
 import java.io.File;
 import java.util.HashMap;
@@ -11,9 +11,9 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMChatConfig;
 import com.easemob.chat.FileMessageBody;
-import com.easemob.chatuidemo.R;
 import com.easemob.cloud.CloudOperationCallback;
 import com.easemob.cloud.HttpFileManager;
+import com.easemob.uidemo.R;
 import com.easemob.util.FileUtils;
 
 public class ShowNormalFileActivity extends BaseActivity {
@@ -23,7 +23,7 @@ public class ShowNormalFileActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_show_file);
+		setContentView(R.layout.em_activity_show_file);
 		progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
 		final FileMessageBody messageBody = getIntent().getParcelableExtra("msgbody");

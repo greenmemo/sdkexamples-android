@@ -99,7 +99,7 @@ public class EMChatRowTextWidget extends EMChatRowWidget {
 
 	@Override
 	public void updateSendedView(EMMessage message, ViewHolder holder) {
-		chatWidget.getAdapter().notifyDataSetChanged();
+		chatWidget.getAdapter().refresh();
 	}
 
 	@Override

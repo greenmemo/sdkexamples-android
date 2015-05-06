@@ -65,7 +65,7 @@ public class PasteEditText extends EditText{
     
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
-        if(!TextUtils.isEmpty(text) && text.toString().startsWith(Constant.COPY_IMAGE)){
+        if(!TextUtils.isEmpty(text) && text.toString().startsWith(EMChatWidget.COPY_IMAGE)){
             setText("");
         }
 //        else if(!TextUtils.isEmpty(text)){

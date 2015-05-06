@@ -235,6 +235,7 @@ public class EMChatRowVoiceWidget extends EMChatRowWidget {
 			}
 			VoicePlayClickListener.isPlaying = false;
 			playMsgId = null;
+			// TODO: EMWidget
 			adapter.notifyDataSetChanged();
 			currentPlayListener = null;
 		}
@@ -355,7 +356,11 @@ public class EMChatRowVoiceWidget extends EMChatRowWidget {
 						@Override
 						protected void onPostExecute(Void result) {
 							super.onPostExecute(result);
-							adapter.notifyDataSetChanged();
+							activity.runOnUiThread( new Runnable() {
+								public void run() {
+									adapter.notifyDataSetChanged();
+								}
+							});
 						}
 
 					}.execute();

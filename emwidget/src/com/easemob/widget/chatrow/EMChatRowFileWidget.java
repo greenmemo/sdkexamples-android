@@ -6,6 +6,7 @@ import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ import com.easemob.uidemo.R;
 import com.easemob.util.EMLog;
 import com.easemob.util.FileUtils;
 import com.easemob.util.TextFormater;
+import com.easemob.widget.activity.ShowNormalFileActivity;
 
 public class EMChatRowFileWidget extends EMChatRowWidget {
 	private static final String TAG = "EMChatRowRecvFileWidget";
@@ -84,7 +86,7 @@ public class EMChatRowFileWidget extends EMChatRowWidget {
 				} else {
 					// 下载
 					// TODO, EMWidget
-//					context.startActivity(new Intent(context, ShowNormalFileActivity.class).putExtra("msgbody", fileMessageBody));
+					context.startActivity(new Intent(context, ShowNormalFileActivity.class).putExtra("msgbody", fileMessageBody));
 				}
 				if (message.direct == EMMessage.Direct.RECEIVE && !message.isAcked) {
 					try {

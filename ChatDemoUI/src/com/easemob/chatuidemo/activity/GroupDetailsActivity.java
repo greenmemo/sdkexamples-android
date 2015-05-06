@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,6 +31,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -42,7 +44,6 @@ import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.utils.UserUtils;
-import com.easemob.chatuidemo.widget.ExpandGridView;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.easemob.util.NetUtils;
@@ -58,7 +59,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 	String longClickUsername = null;
 
-	private ExpandGridView userGridview;
+	private GridView userGridview;
 	private String groupId;
 	private ProgressBar loadingPB;
 	private Button exitBtn;
@@ -94,7 +95,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		instance = this;
 		st = getResources().getString(R.string.people);
 		clearAllHistory = (RelativeLayout) findViewById(R.id.clear_all_history);
-		userGridview = (ExpandGridView) findViewById(R.id.gridview);
+		userGridview = (GridView) findViewById(R.id.gridview);
 		loadingPB = (ProgressBar) findViewById(R.id.progressBar);
 		exitBtn = (Button) findViewById(R.id.btn_exit_grp);
 		deleteBtn = (Button) findViewById(R.id.btn_exitdel_grp);
@@ -773,6 +774,23 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	    ImageView imageView;
 	    TextView textView;
 	    ImageView badgeDeleteView;
+	}
+
+	public class ExpandGridView extends GridView {
+
+		public ExpandGridView(Context context) {
+			super(context);
+		}
+		
+		public ExpandGridView(Context context, AttributeSet attrs) {
+			super(context, attrs);
+		}
+
+		@Override
+		public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+			int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
+			super.onMeasure(widthMeasureSpec, expandSpec);
+		}
 	}
 
 }

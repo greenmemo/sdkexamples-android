@@ -30,6 +30,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ProgressBar;
 
+import com.easemob.chat.EMChatConfig;
+import com.easemob.cloud.CloudOperationCallback;
+import com.easemob.cloud.HttpFileManager;
 import com.easemob.ui.utils.ImageCache;
 import com.easemob.uidemo.R;
 import com.easemob.uidemo.showimage.LoadLocalBigImgTask;
@@ -126,74 +129,74 @@ public class ShowImageActivity extends Activity {
 	 * @param remoteFilePath
 	 */
 	private void downloadImage(final String remoteFilePath, final Map<String, String> headers) {
-//		String str1 = getResources().getString(R.string.Download_the_pictures);
-//		pd = new ProgressDialog(this);
-//		pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//		pd.setCanceledOnTouchOutside(false);
-//		pd.setMessage(str1);
-//		pd.show();
-//		localFilePath = getLocalFilePath(remoteFilePath);
-//		final HttpFileManager httpFileMgr = new HttpFileManager(this, EMChatConfig.getInstance().getStorageUrl());
-//		final CloudOperationCallback callback = new CloudOperationCallback() {
-//			public void onSuccess(String resultMsg) {
-//
-//				runOnUiThread(new Runnable() {
-//					@Override
-//					public void run() {
-//						DisplayMetrics metrics = new DisplayMetrics();
-//						getWindowManager().getDefaultDisplay().getMetrics(metrics);
-//						int screenWidth = metrics.widthPixels;
-//						int screenHeight = metrics.heightPixels;
-//
-//						bitmap = ImageUtils.decodeScaleImage(localFilePath, screenWidth, screenHeight);
-//						if (bitmap == null) {
-//							image.setImageResource(default_res);
-//						} else {
-//							image.setImageBitmap(bitmap);
-//							ImageCache.getInstance().put(localFilePath, bitmap);
-//							isDownloaded = true;
-//						}
-//						if (pd != null) {
-//							pd.dismiss();
-//						}
-//					}
-//				});
-//			}
-//
-//			public void onError(String msg) {
-//				EMLog.e(TAG, "offline file transfer error:" + msg);
-//				File file = new File(localFilePath);
-//				if (file.exists()&&file.isFile()) {
-//					file.delete();
-//				}
-//				runOnUiThread(new Runnable() {
-//					@Override
-//					public void run() {
-//						pd.dismiss();
-//						image.setImageResource(default_res);
-//					}
-//				});
-//			}
-//
-//			public void onProgress(final int progress) {
-//				EMLog.d(TAG, "Progress: " + progress);
-//				final String str2 = getResources().getString(R.string.Download_the_pictures_new);
-//				runOnUiThread(new Runnable() {
-//					@Override
-//					public void run() {
-//						
-//						pd.setMessage(str2 + progress + "%");
-//					}
-//				});
-//			}
-//		};
-//
-//		new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				httpFileMgr.downloadFile(remoteFilePath, localFilePath, headers, callback);
-//			}
-//		}).start();
+		String str1 = getResources().getString(R.string.Download_the_pictures);
+		pd = new ProgressDialog(this);
+		pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		pd.setCanceledOnTouchOutside(false);
+		pd.setMessage(str1);
+		pd.show();
+		localFilePath = getLocalFilePath(remoteFilePath);
+		final HttpFileManager httpFileMgr = new HttpFileManager(this, EMChatConfig.getInstance().getStorageUrl());
+		final CloudOperationCallback callback = new CloudOperationCallback() {
+			public void onSuccess(String resultMsg) {
+
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						DisplayMetrics metrics = new DisplayMetrics();
+						getWindowManager().getDefaultDisplay().getMetrics(metrics);
+						int screenWidth = metrics.widthPixels;
+						int screenHeight = metrics.heightPixels;
+
+						bitmap = ImageUtils.decodeScaleImage(localFilePath, screenWidth, screenHeight);
+						if (bitmap == null) {
+							image.setImageResource(default_res);
+						} else {
+							image.setImageBitmap(bitmap);
+							ImageCache.getInstance().put(localFilePath, bitmap);
+							isDownloaded = true;
+						}
+						if (pd != null) {
+							pd.dismiss();
+						}
+					}
+				});
+			}
+
+			public void onError(String msg) {
+				EMLog.e(TAG, "offline file transfer error:" + msg);
+				File file = new File(localFilePath);
+				if (file.exists()&&file.isFile()) {
+					file.delete();
+				}
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						pd.dismiss();
+						image.setImageResource(default_res);
+					}
+				});
+			}
+
+			public void onProgress(final int progress) {
+				EMLog.d(TAG, "Progress: " + progress);
+				final String str2 = getResources().getString(R.string.Download_the_pictures_new);
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						
+						pd.setMessage(str2 + progress + "%");
+					}
+				});
+			}
+		};
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				httpFileMgr.downloadFile(remoteFilePath, localFilePath, headers, callback);
+			}
+		}).start();
 	}
 
 	@Override
