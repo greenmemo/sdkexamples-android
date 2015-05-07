@@ -1,10 +1,10 @@
 package com.easemob.widget.chatrow;
 
-import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.text.ClipboardManager;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,19 +13,22 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMMessage.Direct;
 import com.easemob.chat.EMMessage.Type;
-import com.easemob.chat.TextMessageBody;
+import com.easemob.exceptions.EaseMobException;
 import com.easemob.ui.utils.UserUtils;
 import com.easemob.uidemo.Constant;
 import com.easemob.uidemo.R;
+import com.easemob.widget.AlertDialog;
+import com.easemob.widget.AlertDialog.AlertDialogUser;
 import com.easemob.widget.EMChatWidget;
-import com.easemob.widget.activity.ForwardMessageActivity;
 
 public abstract class EMChatRowWidget extends LinearLayout {
 	
@@ -220,28 +223,17 @@ public abstract class EMChatRowWidget extends LinearLayout {
 			statusView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					new AlertDialog.Builder(context)
-					.setTitle(R.string.resend)
-					.setMessage(R.string.confirm_resend)
-					.setPositiveButton(R.string.ok,
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									dialog.dismiss();
-									message.status = EMMessage.Status.CREATE;
-									MessageAdapter adapter = chatWidget.getAdapter();
-									adapter.refreshSeekTo(position);
-								}
-							})
-					.setNegativeButton(R.string.cancel,
-							new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									dialog.dismiss();
-								}
-							}).show();
+					new AlertDialog(context, R.string.resend, R.string.confirm_resend, null, new AlertDialogUser() {
+						@Override
+						public void onResult(boolean confirmed, Bundle bundle) {
+							if (!confirmed) {
+								return;
+							}
+							message.status = EMMessage.Status.CREATE;
+							MessageAdapter adapter = chatWidget.getAdapter();
+							adapter.refreshSeekTo(position);
+						}
+					}, true).show();
 				}
 			});
 		}
@@ -257,17 +249,22 @@ public abstract class EMChatRowWidget extends LinearLayout {
 	 */
 	protected void setOnBlackList(EMMessage message, final int position, View convertView, ViewHolder holder) {
 		if (message.direct == EMMessage.Direct.RECEIVE) {
+			final EMMessage deleteMessage = message;
 			final String st = context.getResources().getString(R.string.Into_the_blacklist);
 			// 长按头像，移入黑名单
 			holder.iv_avatar.setOnLongClickListener(new OnLongClickListener() {
 	
 				@Override
 				public boolean onLongClick(View v) {
-					Intent intent = new Intent(context, AlertDialog.class);
-					intent.putExtra("msg", st);
-					intent.putExtra("cancel", true);
-					intent.putExtra("position", position);
-					chatWidget.getActivity().startActivityForResult(intent, REQUEST_CODE_ADD_TO_BLACKLIST);
+					new AlertDialog(context, R.string.prompt, R.string.Into_the_blacklist, null, new AlertDialogUser() {
+						@Override
+						public void onResult(boolean confirmed, Bundle bundle) {
+							if (!confirmed) {
+								return;
+							}
+							addUserToBlacklist(deleteMessage.getFrom());
+						}
+					}, true).show();
 					return true;
 				}
 			});
@@ -333,5 +330,39 @@ public abstract class EMChatRowWidget extends LinearLayout {
 //			}
 //		}		
 //	}
+	
+	/**
+	 * 加入到黑名单
+	 * 
+	 * @param username
+	 */
+	private void addUserToBlacklist(final String username) {
+		final ProgressDialog pd = new ProgressDialog(context);
+		pd.setMessage(context.getString(R.string.Is_moved_into_blacklist));
+		pd.setCanceledOnTouchOutside(false);
+		pd.show();
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					EMContactManager.getInstance().addUserToBlackList(username, false);
+					chatWidget.getActivity().runOnUiThread(new Runnable() {
+						public void run() {
+							pd.dismiss();
+							Toast.makeText(context, R.string.Move_into_blacklist_success, Toast.LENGTH_SHORT).show();
+						}
+					});
+				} catch (EaseMobException e) {
+					e.printStackTrace();
+					chatWidget.getActivity().runOnUiThread(new Runnable() {
+						public void run() {
+							pd.dismiss();
+							Toast.makeText(context, R.string.Move_into_blacklist_failure, Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+			}
+		}).start();
+	}
+
 	
 }

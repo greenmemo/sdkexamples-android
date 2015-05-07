@@ -47,6 +47,8 @@ import com.easemob.chatuidemo.utils.UserUtils;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.easemob.util.NetUtils;
+import com.easemob.widget.AlertDialog;
+import com.easemob.widget.AlertDialog.AlertDialogUser;
 
 public class GroupDetailsActivity extends BaseActivity implements OnClickListener {
 	private static final String TAG = "GroupDetailsActivity";
@@ -239,32 +241,32 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					}).start();
 				}
 				break;
-			case REQUEST_CODE_ADD_TO_BALCKLIST:
-				progressDialog.setMessage(st8);
-				progressDialog.show();
-				new Thread(new Runnable() {
-					public void run() {
-						try {
-							EMGroupManager.getInstance().blockUser(groupId, longClickUsername);
-							runOnUiThread(new Runnable() {
-								public void run() {
-									adapter.notifyDataSetChanged();
-									progressDialog.dismiss();
-									Toast.makeText(getApplicationContext(), stsuccess, 0).show();
-								}
-							});
-						} catch (EaseMobException e) {
-							runOnUiThread(new Runnable() {
-								public void run() {
-									progressDialog.dismiss();
-									Toast.makeText(getApplicationContext(), st9, 0).show();
-								}
-							});
-						}
-					}
-				}).start();
-
-				break;
+//			case REQUEST_CODE_ADD_TO_BALCKLIST:
+//				progressDialog.setMessage(st8);
+//				progressDialog.show();
+//				new Thread(new Runnable() {
+//					public void run() {
+//						try {
+//							EMGroupManager.getInstance().blockUser(groupId, longClickUsername);
+//							runOnUiThread(new Runnable() {
+//								public void run() {
+//									adapter.notifyDataSetChanged();
+//									progressDialog.dismiss();
+//									Toast.makeText(getApplicationContext(), stsuccess, 0).show();
+//								}
+//							});
+//						} catch (EaseMobException e) {
+//							runOnUiThread(new Runnable() {
+//								public void run() {
+//									progressDialog.dismiss();
+//									Toast.makeText(getApplicationContext(), st9, 0).show();
+//								}
+//							});
+//						}
+//					}
+//				}).start();
+//
+//				break;
 			default:
 				break;
 			}
@@ -480,13 +482,19 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			break;
 
 		case R.id.clear_all_history: // 清空聊天记录
-			String st9 = getResources().getString(R.string.sure_to_empty_this);
-			// TODO, EMWidget
-//			Intent intent = new Intent(GroupDetailsActivity.this, AlertDialog.class);
-//			intent.putExtra("cancel", true);
-//			intent.putExtra("titleIsCancel", true);
-//			intent.putExtra("msg", st9);
-//			startActivityForResult(intent, REQUEST_CODE_CLEAR_ALL_HISTORY);
+			new AlertDialog(this, R.string.prompt, R.string.sure_to_empty_this, null, new AlertDialogUser() {
+				@Override
+				public void onResult(boolean confirmed, Bundle bundle) {
+					if (progressDialog == null) {
+						progressDialog = new ProgressDialog(GroupDetailsActivity.this);
+						progressDialog.setCanceledOnTouchOutside(false);
+					}
+					String st4 = getResources().getString(R.string.are_empty_group_of_news);
+					progressDialog.setMessage(st4);
+					progressDialog.show();
+					clearGroupHistory();
+				}
+			}, true).show();
 			break;
 
 		case R.id.rl_blacklist: // 黑名单列表
@@ -689,10 +697,45 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					        return true;
 						if (group.getOwner().equals(EMChatManager.getInstance().getCurrentUser())) {
 							// TODO, EMWidget
-//							Intent intent = new Intent(GroupDetailsActivity.this, AlertDialog.class);
-//							intent.putExtra("msg", st15);
-//							intent.putExtra("cancel", true);
-//							startActivityForResult(intent, REQUEST_CODE_ADD_TO_BALCKLIST);
+							new AlertDialog(GroupDetailsActivity.this, R.string.prompt, R.string.confirm_the_members, null, new AlertDialogUser() {
+								@Override
+								public void onResult(boolean confirmed, Bundle bundle) {
+									if (!confirmed) {
+										return;
+									}
+									if (progressDialog == null) {
+										progressDialog = new ProgressDialog(GroupDetailsActivity.this);
+										progressDialog.setCanceledOnTouchOutside(false);
+									}
+									final String st8 = getResources().getString(R.string.Are_moving_to_blacklist);
+									final String st9 = getResources().getString(R.string.failed_to_move_into);
+									final String stsuccess = getResources().getString(R.string.Move_into_blacklist_success);
+									progressDialog.setMessage(st8);
+									progressDialog.show();
+									new Thread(new Runnable() {
+										public void run() {
+											try {
+												EMGroupManager.getInstance().blockUser(groupId, longClickUsername);
+												runOnUiThread(new Runnable() {
+													public void run() {
+														adapter.notifyDataSetChanged();
+														progressDialog.dismiss();
+														Toast.makeText(getApplicationContext(), stsuccess, 0).show();
+													}
+												});
+											} catch (EaseMobException e) {
+												runOnUiThread(new Runnable() {
+													public void run() {
+														progressDialog.dismiss();
+														Toast.makeText(getApplicationContext(), st9, 0).show();
+													}
+												});
+											}
+										}
+									}).start();
+		
+								}
+							}, true).show();
 							longClickUsername = username;
 						}
 						return false;

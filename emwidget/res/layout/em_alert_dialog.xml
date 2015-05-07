@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
@@ -46,25 +46,24 @@
         <Button
             android:id="@+id/btn_cancel"
             android:layout_width="match_parent"
-           android:layout_height="47dp"
+            android:layout_height="47dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/btn_cancel_bj"
             android:gravity="center"
-            android:onClick="onCancel"
             android:text="@string/cancel"
             android:textColor="#666666"
             android:textSize="16sp"
             android:visibility="gone" />
 
         <Button
+            android:id="@+id/btn_ok"
             android:layout_width="match_parent"
             android:layout_height="47dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/btn_blue_selector"
             android:gravity="center"
-            android:onClick="onOk"
             android:text="@string/ok"
             android:textColor="#fff"
             android:textSize="16sp" />

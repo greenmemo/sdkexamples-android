@@ -7,11 +7,9 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.database.Cursor;
@@ -21,6 +19,7 @@ import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -69,6 +68,7 @@ import com.easemob.ui.utils.SmileUtils;
 import com.easemob.uidemo.R;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
+import com.easemob.widget.AlertDialog.AlertDialogUser;
 import com.easemob.widget.activity.BaiduMapActivity;
 import com.easemob.widget.chatrow.EMChatRowVoiceWidget;
 import com.easemob.widget.chatrow.MessageAdapter;
@@ -1075,31 +1075,15 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 	 * @param view
 	 */
 	public void emptyHistory(View view) {
-//		String st5 = getResources().getString(R.string.Whether_to_empty_all_chats);
-//		activity.startActivityForResult(new Intent(context, AlertDialog.class).putExtra("titleIsCancel", true).putExtra("msg", st5)
-//				.putExtra("cancel", true), REQUEST_CODE_EMPTY_HISTORY);
-		
-		new AlertDialog.Builder(context)
-		.setTitle(R.string.Whether_to_empty_all_chats)
-//		.setMessage(R.string.confirm_resend)
-		.setPositiveButton(R.string.ok,
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						EMChatManager.getInstance().clearConversation(toChatUsername);
-						adapter.refresh();
-					}
-				})
-		.setNegativeButton(R.string.cancel,
-				new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog,
-							int which) {
-						dialog.dismiss();
-					}
-				}).show();
+		new AlertDialog(context, R.string.prompt, R.string.Whether_to_empty_all_chats, null, new AlertDialogUser() {
+			@Override
+			public void onResult(boolean confirmed, Bundle bundle) {
+				if (confirmed) {
+					EMChatManager.getInstance().clearConversation(toChatUsername);
+					adapter.refresh();
+				}
+			}
+		}, true).show();
 	}
 
 	/**

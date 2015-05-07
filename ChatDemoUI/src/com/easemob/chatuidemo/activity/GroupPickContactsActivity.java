@@ -32,11 +32,11 @@ import android.widget.ListView;
 
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
-import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.adapter.ContactAdapter;
 import com.easemob.chatuidemo.domain.User;
+import com.easemob.uidemo.Constant;
 import com.easemob.widget.Sidebar;
 
 public class GroupPickContactsActivity extends BaseActivity {

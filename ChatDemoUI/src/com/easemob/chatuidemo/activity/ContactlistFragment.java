@@ -42,13 +42,13 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMContact;
 import com.easemob.chat.EMContactManager;
-import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.exceptions.EaseMobException;
+import com.easemob.uidemo.Constant;
 import com.easemob.widget.EMContactListWidget;
 
 /**

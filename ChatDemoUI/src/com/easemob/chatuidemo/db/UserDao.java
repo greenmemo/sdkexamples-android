@@ -24,8 +24,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
-import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.domain.User;
+import com.easemob.uidemo.Constant;
 import com.easemob.util.HanziToPinyin;
 
 public class UserDao {

@@ -33,6 +33,27 @@ public class AlertDialog extends Dialog {
 	private AlertDialogUser user;
 	private Bundle bundle;
 	private boolean showCancel = false;
+
+	public AlertDialog(Context context, int msgId) {
+		super(context);
+		this.title = context.getResources().getString(R.string.prompt);
+		this.msg = context.getResources().getString(msgId);
+		this.setCanceledOnTouchOutside(true);
+	}
+	
+	public AlertDialog(Context context, String msg) {
+		super(context);
+		this.title = context.getResources().getString(R.string.prompt);
+		this.msg = msg;
+		this.setCanceledOnTouchOutside(true);
+	}
+	
+	public AlertDialog(Context context, int titleId, int msgId) {
+		super(context);
+		this.title = context.getResources().getString(titleId);
+		this.msg = context.getResources().getString(msgId);
+		this.setCanceledOnTouchOutside(true);
+	}
 	
 	public AlertDialog(Context context, String title, String msg) {
 		super(context);
@@ -40,16 +61,17 @@ public class AlertDialog extends Dialog {
 		this.msg = msg;
 		this.setCanceledOnTouchOutside(true);
 	}
-			
-	public AlertDialog(Context context, String title, String msg, Bundle bundle, AlertDialogUser user) {
+
+	public AlertDialog(Context context, int titleId, int msgId, Bundle bundle, AlertDialogUser user, boolean showCancel) {
 		super(context);
-		this.title = title;
-		this.msg = msg;
+		this.title = context.getResources().getString(titleId);
+		this.msg = context.getResources().getString(msgId);
 		this.user = user;
 		this.bundle = bundle;
+		this.showCancel = showCancel;
 		this.setCanceledOnTouchOutside(true);
 	}
-
+	
 	public AlertDialog(Context context, String title, String msg, Bundle bundle, AlertDialogUser user, boolean showCancel) {
 		super(context);
 		this.title = title;
@@ -64,11 +86,25 @@ public class AlertDialog extends Dialog {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.em_alert_dialog);
+		Button cancel = (Button)findViewById(R.id.btn_cancel);
+		Button ok = (Button)findViewById(R.id.btn_ok);
+		
+		View.OnClickListener listener = new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (view.getId() == R.id.btn_ok) {
+					onOk(view);
+				} else if (view.getId() == R.id.btn_cancel) {
+					onCancel(view);
+				}
+			}
+		};
+		cancel.setOnClickListener(listener);
+		ok.setOnClickListener(listener);
 
 		if (title != null)
 			setTitle(title);
 		
-		Button cancel = (Button)findViewById(R.id.btn_cancel);
 		if (showCancel) {
 			cancel.setVisibility(View.VISIBLE);
 		}

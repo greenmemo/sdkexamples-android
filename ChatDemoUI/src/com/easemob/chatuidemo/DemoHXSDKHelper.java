@@ -41,6 +41,7 @@ import com.easemob.chatuidemo.activity.MainActivity;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.receiver.CallReceiver;
 import com.easemob.ui.utils.CommonUtils;
+import com.easemob.uidemo.Constant;
 import com.easemob.util.EMLog;
 import com.easemob.util.EasyUtils;
 
