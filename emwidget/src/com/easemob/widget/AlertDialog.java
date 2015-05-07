@@ -17,6 +17,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.easemob.uidemo.R;
@@ -31,13 +32,31 @@ public class AlertDialog extends Dialog {
 	private String msg;
 	private AlertDialogUser user;
 	private Bundle bundle;
+	private boolean showCancel = false;
 	
-	public AlertDialog(Context context, String title, String msg, AlertDialogUser user, Bundle bundle) {
+	public AlertDialog(Context context, String title, String msg) {
+		super(context);
+		this.title = title;
+		this.msg = msg;
+		this.setCanceledOnTouchOutside(true);
+	}
+			
+	public AlertDialog(Context context, String title, String msg, Bundle bundle, AlertDialogUser user) {
 		super(context);
 		this.title = title;
 		this.msg = msg;
 		this.user = user;
 		this.bundle = bundle;
+		this.setCanceledOnTouchOutside(true);
+	}
+
+	public AlertDialog(Context context, String title, String msg, Bundle bundle, AlertDialogUser user, boolean showCancel) {
+		super(context);
+		this.title = title;
+		this.msg = msg;
+		this.user = user;
+		this.bundle = bundle;
+		this.showCancel = showCancel;
 		this.setCanceledOnTouchOutside(true);
 	}
 	
@@ -48,7 +67,11 @@ public class AlertDialog extends Dialog {
 
 		if (title != null)
 			setTitle(title);
-//			((TextView)findViewById(R.id.title)).setText(this.title);
+		
+		Button cancel = (Button)findViewById(R.id.btn_cancel);
+		if (showCancel) {
+			cancel.setVisibility(View.VISIBLE);
+		}
 
 		if (msg != null)
 		    ((TextView)findViewById(R.id.alert_message)).setText(msg);
@@ -56,11 +79,15 @@ public class AlertDialog extends Dialog {
 	
 	public void onOk(View view){
 		this.dismiss();
-		this.user.onResult(true, this.bundle);
+		if (this.user != null) {
+			this.user.onResult(true, this.bundle);
+		}
 	}
 	
 	public void onCancel(View view) {
 		this.dismiss();
-		this.user.onResult(false, this.bundle);
+		if (this.user != null) {
+			this.user.onResult(false, this.bundle);
+		}
 	}
 }

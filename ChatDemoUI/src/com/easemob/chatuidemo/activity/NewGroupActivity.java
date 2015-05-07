@@ -67,9 +67,10 @@ public class NewGroupActivity extends BaseActivity {
 		String str6 = getResources().getString(R.string.Group_name_cannot_be_empty);
 		String name = groupNameEditText.getText().toString();
 		if (TextUtils.isEmpty(name)) {
-			Intent intent = new Intent(this, AlertDialog.class);
-			intent.putExtra("msg", str6);
-			startActivity(intent);
+			// TODO, EMWidget
+//			Intent intent = new Intent(this, AlertDialog.class);
+//			intent.putExtra("msg", str6);
+//			startActivity(intent);
 		} else {
 			// 进通讯录选人
 			startActivityForResult(new Intent(this, GroupPickContactsActivity.class).putExtra("groupName", name), 0);

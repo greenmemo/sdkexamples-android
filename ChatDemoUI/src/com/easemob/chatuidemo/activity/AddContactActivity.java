@@ -15,7 +15,6 @@ package com.easemob.chatuidemo.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -30,6 +29,8 @@ import android.widget.Toast;
 import com.easemob.chat.EMContactManager;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.R;
+import com.easemob.widget.AlertDialog;
+import com.easemob.widget.AlertDialog.AlertDialogUser;
 
 public class AddContactActivity extends BaseActivity{
 	private EditText editText;
@@ -71,8 +72,13 @@ public class AddContactActivity extends BaseActivity{
 		if (getString(R.string.button_search).equals(saveText)) {
 			toAddUsername = name;
 			if(TextUtils.isEmpty(name)) {
-				String st = getResources().getString(R.string.Please_enter_a_username);
-				startActivity(new Intent(this, AlertDialog.class).putExtra("msg", st));
+//				String st = getResources().getString(R.string.Please_enter_a_username);
+//				AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.prompt).setMessage(R.string.Please_enter_a_username).create();
+//				dialog.setCanceledOnTouchOutside(true);
+				String title = getResources().getString(R.string.prompt);
+				String msg = getResources().getString(R.string.Please_enter_a_username);
+				new AlertDialog(this, title, msg).show();
+//				startActivity(new Intent(this, AlertDialog.class).putExtra("msg", st));
 				return;
 			}
 			
@@ -92,18 +98,21 @@ public class AddContactActivity extends BaseActivity{
 	public void addContact(View view){
 		if(DemoApplication.getInstance().getUserName().equals(nameText.getText().toString())){
 			String str = getString(R.string.not_add_myself);
-			startActivity(new Intent(this, AlertDialog.class).putExtra("msg", str));
+			// TODO, EMWidget
+//			startActivity(new Intent(this, AlertDialog.class).putExtra("msg", str));
 			return;
 		}
 		
 		if(DemoApplication.getInstance().getContactList().containsKey(nameText.getText().toString())){
 		    //提示已在好友列表中，无需添加
 		    if(EMContactManager.getInstance().getBlackListUsernames().contains(nameText.getText().toString())){
-		        startActivity(new Intent(this, AlertDialog.class).putExtra("msg", "此用户已是你好友(被拉黑状态)，从黑名单列表中移出即可"));
+				// TODO, EMWidget
+//		        startActivity(new Intent(this, AlertDialog.class).putExtra("msg", "此用户已是你好友(被拉黑状态)，从黑名单列表中移出即可"));
 		        return;
 		    }
-			String strin = getString(R.string.This_user_is_already_your_friend);
-			startActivity(new Intent(this, AlertDialog.class).putExtra("msg", strin));
+			// TODO, EMWidget
+//			String strin = getString(R.string.This_user_is_already_your_friend);
+//			startActivity(new Intent(this, AlertDialog.class).putExtra("msg", strin));
 			return;
 		}
 		

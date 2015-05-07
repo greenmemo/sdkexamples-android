@@ -23,9 +23,11 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
@@ -128,6 +130,14 @@ public class BaiduMapActivity extends BaseActivity {
 		iFilter.addAction(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR);
 		mBaiduReceiver = new BaiduSDKReceiver();
 		registerReceiver(mBaiduReceiver, iFilter);
+		
+		LinearLayout mBtnBack	= (LinearLayout) findViewById(R.id.btn_back);
+		mBtnBack.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				back(v);
+			}
+		});
 	}
 
 	private void showMap(double latitude, double longtitude, String address) {

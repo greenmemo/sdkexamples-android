@@ -68,8 +68,8 @@ import com.easemob.ui.utils.CommonUtils;
 import com.easemob.ui.utils.SmileUtils;
 import com.easemob.uidemo.R;
 import com.easemob.util.EMLog;
-import com.easemob.util.ImageUtils;
 import com.easemob.util.PathUtil;
+import com.easemob.widget.activity.BaiduMapActivity;
 import com.easemob.widget.chatrow.EMChatRowVoiceWidget;
 import com.easemob.widget.chatrow.MessageAdapter;
 
@@ -568,7 +568,7 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 			selectPicFromLocal(); // 点击图片图标
 		} else if (id == R.id.btn_location) { // 位置
 			// TODO EMWidget
-//			startActivityForResult(new Intent(this, BaiduMapActivity.class), REQUEST_CODE_MAP);
+			activity.startActivityForResult(new Intent(context, BaiduMapActivity.class), REQUEST_CODE_MAP);
 		} else if (id == R.id.iv_emoticons_normal) { // 点击显示表情框
 			more.setVisibility(View.VISIBLE);
 			iv_emoticons_normal.setVisibility(View.INVISIBLE);

@@ -481,11 +481,12 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 		case R.id.clear_all_history: // 清空聊天记录
 			String st9 = getResources().getString(R.string.sure_to_empty_this);
-			Intent intent = new Intent(GroupDetailsActivity.this, AlertDialog.class);
-			intent.putExtra("cancel", true);
-			intent.putExtra("titleIsCancel", true);
-			intent.putExtra("msg", st9);
-			startActivityForResult(intent, REQUEST_CODE_CLEAR_ALL_HISTORY);
+			// TODO, EMWidget
+//			Intent intent = new Intent(GroupDetailsActivity.this, AlertDialog.class);
+//			intent.putExtra("cancel", true);
+//			intent.putExtra("titleIsCancel", true);
+//			intent.putExtra("msg", st9);
+//			startActivityForResult(intent, REQUEST_CODE_CLEAR_ALL_HISTORY);
 			break;
 
 		case R.id.rl_blacklist: // 黑名单列表
@@ -618,8 +619,9 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						if (isInDeleteMode) {
 							// 如果是删除自己，return
 							if (EMChatManager.getInstance().getCurrentUser().equals(username)) {
-								startActivity(new Intent(GroupDetailsActivity.this, AlertDialog.class).putExtra("msg", st12));
-								return;
+								// TODO, EMWidget
+//								startActivity(new Intent(GroupDetailsActivity.this, AlertDialog.class).putExtra("msg", st12));
+//								return;
 							}
 							if (!NetUtils.hasNetwork(getApplicationContext())) {
 								Toast.makeText(getApplicationContext(), getString(R.string.network_unavailable), 0).show();
@@ -686,10 +688,11 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					    if(EMChatManager.getInstance().getCurrentUser().equals(username))
 					        return true;
 						if (group.getOwner().equals(EMChatManager.getInstance().getCurrentUser())) {
-							Intent intent = new Intent(GroupDetailsActivity.this, AlertDialog.class);
-							intent.putExtra("msg", st15);
-							intent.putExtra("cancel", true);
-							startActivityForResult(intent, REQUEST_CODE_ADD_TO_BALCKLIST);
+							// TODO, EMWidget
+//							Intent intent = new Intent(GroupDetailsActivity.this, AlertDialog.class);
+//							intent.putExtra("msg", st15);
+//							intent.putExtra("cancel", true);
+//							startActivityForResult(intent, REQUEST_CODE_ADD_TO_BALCKLIST);
 							longClickUsername = username;
 						}
 						return false;

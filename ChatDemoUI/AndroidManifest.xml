@@ -119,7 +119,7 @@
         </activity>
         <!-- 地图 -->
         <activity
-            android:name="com.easemob.chatuidemo.activity.BaiduMapActivity"
+            android:name="com.easemob.widget.activity.BaiduMapActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" >
         </activity>
