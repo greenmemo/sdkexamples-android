@@ -110,13 +110,13 @@ public class EMContactWidgetFactoryImpl extends EMContactWidgetFactory {
 			User user = new User(Constant.NEW_FRIENDS_USERNAME);
 			String strChat = context.getResources().getString(R.string.Application_and_notify);
 			user.setNick(strChat);
-			user.setHeader("#");
+			user.setHeader("");
 			users.add(0, user);
 			
 			user = new User(Constant.GROUP_USERNAME);
 			String strGroup = context.getResources().getString(R.string.group_chat);
 			user.setNick(strGroup);
-			user.setHeader("#");
+			user.setHeader("");
 			users.add(1, user);
 		}
 	}
