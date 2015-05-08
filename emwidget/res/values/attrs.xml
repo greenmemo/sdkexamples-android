@@ -6,10 +6,6 @@
         <attr name="emojiconTextStart" format="integer" />
         <attr name="emojiconTextLength" format="integer" />
     </declare-styleable>
-    
-    <declare-styleable name="ToolBoxBtn">
-        <attr name="innerBackGround" format="reference" />
-        <attr name="innerText" format="reference" />
-    </declare-styleable>
+
 
 </resources>
