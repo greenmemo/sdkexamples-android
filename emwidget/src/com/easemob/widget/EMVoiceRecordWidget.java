@@ -119,7 +119,6 @@ public class EMVoiceRecordWidget extends RelativeLayout  {
 			Toast.makeText(context, R.string.recoding_fail, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		voiceRecorder.startRecording(appKey, userId, context);
 	}
 	
 	public void showHint1() {

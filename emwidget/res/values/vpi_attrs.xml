@@ -16,7 +16,15 @@
 -->
 
 <resources>
+
+    <declare-styleable name="emchatwidget">
+        <attr name="hideTitleBar" format="boolean" />
+        <attr name="hideAvatar" format="boolean" />
+        <attr name="setPhotoCornerRadius" format="integer" />
+        <attr name="setUserNameVisible" format="boolean" />
+    </declare-styleable>
     
+        
     <declare-styleable name="ToolBoxBtn">
         <attr name="innerBackGround" format="reference" />
         <attr name="innerText" format="reference" />

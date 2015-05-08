@@ -154,45 +154,59 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 	private boolean haveMoreData = true;
 	private Button btnMore;
 	public String playMsgId;
-
-	
 	private EMGroup group;
-
 	private String forwardMsgId;
-	
 	private EMChatWidgetUser user;
+	
+	private boolean hideTitleBar = false;
+	private boolean hideAvatar = false;
+//	private boolean BothName = false;
+//	private boolean hideCurrentUserName = false;
 	
 	public EMChatWidget(Context context) {
 		super(context);
-		init(context);
+		init(context, null);
 	}
 
 	public EMChatWidget(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init(context);
+		init(context, attrs);
 	}
 	
 	public EMChatWidget(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		init(context);
+		init(context, attrs);
 	}
 
 	public EMChatWidget(Context context, AttributeSet attrs,
 			int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
-		init(context);
+		init(context, attrs);
 	}
 	
 	public void setUser(EMChatWidgetUser user) {
 		this.user = user;
 	}
 	
-	public void init(Context context) {
+	public void init(Context context, AttributeSet attrs) {
 		this.context = context;
 		this.activity = (Activity)context;
 		LayoutInflater.from(context).inflate(R.layout.em_chat_widget, this);
 		activityInstance = this;
+		initAttributes(attrs);
 		initView();
+	}
+	
+	protected void initAttributes(AttributeSet attrs) {
+		TypedArray a = context.obtainStyledAttributes(attrs,
+				R.styleable.emchatwidget);
+
+		boolean hideTitleBar = a.getBoolean(R.styleable.emchatwidget_hideTitleBar, false);
+		RelativeLayout topBar = (RelativeLayout) findViewById(R.id.top_bar);
+		if (hideTitleBar && topBar != null) {
+			topBar.setVisibility(View.GONE);
+		}
+		hideAvatar = a.getBoolean(R.styleable.emchatwidget_hideAvatar, false);
 	}
 
 	/**
@@ -200,7 +214,6 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 	 */
 	protected void initView() {
 		voiceRecordWidget = (EMVoiceRecordWidget) findViewById(R.id.voice_recorder);
-		
 		listView = (ListView) findViewById(R.id.list);
 		mEditTextContent = (PasteEditText) findViewById(R.id.et_sendmessage);
 		buttonSetModeKeyboard = findViewById(R.id.btn_set_mode_keyboard);
@@ -1479,4 +1492,9 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 	public Activity getActivity() {
 		return this.activity;
 	}
+	
+	public boolean isHideAvatar() {
+		return hideAvatar;
+	}
 }
+

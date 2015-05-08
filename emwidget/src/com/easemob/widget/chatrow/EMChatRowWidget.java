@@ -291,7 +291,11 @@ public abstract class EMChatRowWidget extends LinearLayout {
 	}
 
 	public abstract void setupView(final EMMessage message, final int position, ViewGroup parent);
-	public abstract void updateView(final EMMessage message, final int position, ViewGroup parent);
+	
+	protected void updateView(final EMMessage message, final int position, ViewGroup parent) {
+		boolean hideAvatar = chatWidget.isHideAvatar();
+		holder.iv_avatar.setVisibility(hideAvatar ? View.GONE : View.VISIBLE);
+	}
 
 	public abstract void updateSendedView(final EMMessage message, final ViewHolder holder);
 	public abstract void onProgress(final EMMessage message, final ViewHolder holder, int progress, String status);

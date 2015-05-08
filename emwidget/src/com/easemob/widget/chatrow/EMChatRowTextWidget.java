@@ -38,6 +38,7 @@ public class EMChatRowTextWidget extends EMChatRowWidget {
 				.findViewById(R.id.msg_status);
 		holder.iv_avatar = (ImageView) convertView
 				.findViewById(R.id.iv_userhead);
+		
 		// 这里是文字内容
 		holder.tv = (TextView) convertView
 				.findViewById(R.id.tv_chatcontent);
@@ -45,11 +46,12 @@ public class EMChatRowTextWidget extends EMChatRowWidget {
 	}
 	
 	public void updateView(final EMMessage message, final int position, ViewGroup parent) {
+		super.updateView(message, position, parent);
+
 		setAvatar(message, position, convertView, holder);
 		updateAckDelivered(message, position, convertView, holder);
 		setResendListener(message, position, convertView, holder);
 		setOnBlackList(message, position, convertView, holder);
-		
 		handleTextMessage(message, holder, position);
 	}
 

@@ -58,6 +58,8 @@ public class EMChatRowVideoWidget extends EMChatRowWidget {
 	}
 	
 	public void updateView(final EMMessage message, final int position, ViewGroup parent) {
+		super.updateView(message, position, parent);
+
 		setAvatar(message, position, convertView, holder);
 		updateAckDelivered(message, position, convertView, holder);
 		setResendListener(message, position, convertView, holder);
