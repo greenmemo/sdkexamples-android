@@ -17,25 +17,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_chat_activity"
         android:paddingRight="20dp" >
-
-        <ImageView
-            android:id="@+id/iv_userhead"
-            android:layout_width="@dimen/size_avatar"
-            android:layout_height="@dimen/size_avatar"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/margin_chat_activity"
-            android:background="@drawable/em_default_avatar"
-            android:scaleType="fitXY" />
-
-        <TextView
-            android:id="@+id/tv_userid"
-            style="@style/chat_text_name_style"
+        
+        <LinearLayout
+            android:id="@+id/userhead"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/iv_userhead"
-            android:layout_toLeftOf="@+id/ll_file_container" />
+            android:layout_height="wrap_content" >
+            <include
+            layout="@layout/em_row_received_userhead"/>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_file_container"
@@ -43,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_toLeftOf="@+id/pb_sending"
-            android:layout_toRightOf="@id/iv_userhead"
+            android:layout_toRightOf="@id/userhead"
             android:background="@drawable/em_chatfrom_bg" >
 
             <ImageView

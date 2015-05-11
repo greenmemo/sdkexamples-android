@@ -17,23 +17,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_chat_activity" >
 
-        <ImageView
-            android:id="@+id/iv_userhead"
-            android:layout_width="@dimen/size_avatar"
-            android:layout_height="@dimen/size_avatar"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/margin_chat_activity"
-            android:background="@drawable/em_mini_avatar_shadow"
-            android:scaleType="fitXY" />
+        <LinearLayout
+            android:id="@+id/userhead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            <include
+            layout="@layout/em_row_received_userhead"/>
+        </LinearLayout>
 
-       <TextView
+        <TextView
              android:maxWidth="225.0dip"
             android:id="@+id/tv_chatcontent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_chat_activity"
-            android:layout_toRightOf="@id/iv_userhead"
+            android:layout_toRightOf="@id/userhead"
             android:background="@drawable/em_chatfrom_bg"
             android:autoLink="web"
             android:clickable="true"
@@ -43,14 +41,7 @@
             android:minHeight="50dp"
             android:textColor="#ff000000"
             android:textSize="15sp" />
-        <TextView
-            android:id="@+id/tv_userid"
-            style="@style/chat_text_name_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@id/tv_chatcontent"
-            android:layout_below="@id/iv_userhead"/>
+
     </RelativeLayout>
 
 </LinearLayout>

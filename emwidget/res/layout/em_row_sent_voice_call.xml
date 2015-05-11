@@ -56,26 +56,13 @@
               />
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/msg_status"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/rl_picture"
-            android:clickable="true"
-            android:src="@drawable/em_msg_state_failed_resend"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tv_ack"
-            style="@style/chat_text_name_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/rl_picture"
-            android:text="@string/text_ack_msg"
-            android:textSize="12sp"
-            android:visibility="invisible" />
+            android:layout_centerVertical="true" >
+            <include layout="@layout/em_row_sent_status_container"/>
+        </LinearLayout>
     </RelativeLayout>
 
 </LinearLayout>
