@@ -55,7 +55,8 @@ public class EMContactWidgetFactoryImpl extends EMContactWidgetFactory {
 		String username = user.getUsername();
 		String header = user.getHeader();
 		if (isSectionHeader) {
-			if ("".equals(header)) {
+			String searchHeader = context.getString(R.string.search_new);
+			if (searchHeader.equals(header)) {
 			    holder.tvHeader.setVisibility(View.GONE);
 			} else {
 			    holder.tvHeader.setVisibility(View.VISIBLE);
@@ -110,13 +111,14 @@ public class EMContactWidgetFactoryImpl extends EMContactWidgetFactory {
 			User user = new User(Constant.NEW_FRIENDS_USERNAME);
 			String strChat = context.getResources().getString(R.string.Application_and_notify);
 			user.setNick(strChat);
-			user.setHeader("");
+			String searchHeader = context.getString(R.string.search_new);
+			user.setHeader(searchHeader);
 			users.add(0, user);
 			
 			user = new User(Constant.GROUP_USERNAME);
 			String strGroup = context.getResources().getString(R.string.group_chat);
 			user.setNick(strGroup);
-			user.setHeader("");
+			user.setHeader(searchHeader);
 			users.add(1, user);
 		}
 	}

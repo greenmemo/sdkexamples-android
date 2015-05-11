@@ -17,7 +17,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.easemob.chat.EMChatManager;
 import com.easemob.chatuidemo.R;
 import com.easemob.widget.EMChatWidget;
 
@@ -110,6 +112,25 @@ public class ChatActivity extends Activity implements EMChatWidget.EMChatWidgetU
 		// TODO, EMWidget
 		startActivityForResult((new Intent(this, GroupDetailsActivity.class).putExtra("groupId", groupId)),
 				REQUEST_CODE_GROUP_DETAIL);
+	}
+	
+	public void onVoiceCall(String toChatUsername) {
+		String st1 = getResources().getString(R.string.not_connect_to_server);
+		if (!EMChatManager.getInstance().isConnected())
+			Toast.makeText(this, st1, Toast.LENGTH_SHORT).show();
+		else
+			startActivity(new Intent(ChatActivity.this, VoiceCallActivity.class)
+					.putExtra("username", toChatUsername).putExtra(
+							"isComingCall", false));
+	}
+
+	public void onVideoCall(String toChatUsername) {
+		String st1 = getResources().getString(R.string.not_connect_to_server);
+		if (!EMChatManager.getInstance().isConnected())
+			Toast.makeText(this, st1, Toast.LENGTH_SHORT).show();
+		else
+			startActivity(new Intent(this, VideoCallActivity.class).putExtra(
+					"username", toChatUsername).putExtra("isComingCall", false));
 	}
 	
 	@Override

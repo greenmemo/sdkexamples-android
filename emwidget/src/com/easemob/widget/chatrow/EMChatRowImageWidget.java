@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,14 +54,15 @@ public class EMChatRowImageWidget extends EMChatRowWidget {
 	}
 
 	public void updateView(final EMMessage message, final int position, ViewGroup parent) {
-		super.updateView(message, position, parent);
-
 		setAvatar(message, position, convertView, holder);
 		updateAckDelivered(message, position, convertView, holder);
 		setResendListener(message, position, convertView, holder);
 		setOnBlackList(message, position, convertView, holder);
 		
 		handleImageMessage(message, position, convertView, holder);
+		
+		hideAvatorIfNeeded(message.direct, findViewById(message.direct == 
+				EMMessage.Direct.RECEIVE ? R.id.row_recv_pic :  R.id.rl_picture));
 	}
 
 	/**

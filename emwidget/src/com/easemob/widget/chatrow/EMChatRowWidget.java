@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -291,14 +292,21 @@ public abstract class EMChatRowWidget extends LinearLayout {
 	}
 
 	public abstract void setupView(final EMMessage message, final int position, ViewGroup parent);
-	
-	protected void updateView(final EMMessage message, final int position, ViewGroup parent) {
-		boolean hideAvatar = chatWidget.isHideAvatar();
-		holder.iv_avatar.setVisibility(hideAvatar ? View.GONE : View.VISIBLE);
-	}
-
 	public abstract void updateSendedView(final EMMessage message, final ViewHolder holder);
 	public abstract void onProgress(final EMMessage message, final ViewHolder holder, int progress, String status);
+	public abstract void updateView(final EMMessage message, final int position, ViewGroup parent);
+	
+	protected void hideAvatorIfNeeded(EMMessage.Direct direct, View siblingView) {
+		boolean hideAvatar = chatWidget.isHideAvatar();
+		if (hideAvatar) {
+			holder.iv_avatar.setVisibility(View.GONE);
+			
+			android.widget.RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)siblingView.getLayoutParams();
+			params.addRule(direct == EMMessage.Direct.SEND ?
+					RelativeLayout.ALIGN_PARENT_RIGHT : RelativeLayout.ALIGN_PARENT_LEFT);
+			siblingView.setLayoutParams(params);
+		}
+	}
 	
 //	protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
 //		

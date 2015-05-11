@@ -22,7 +22,21 @@
         <attr name="hideAvatar" format="boolean" />
         <attr name="setPhotoCornerRadius" format="integer" />
         <attr name="setUserNameVisible" format="boolean" />
-    </declare-styleable>
+        <attr name="background" format="reference" />
+        <attr name="textTypeFace">
+           <flag name="normal"     value="0" />
+           <flag name="sans"       value="1" />
+           <flag name="serif"      value="2" />
+           <flag name="monospace"  value="3" />
+       </attr>
+       <attr name="textStyle">
+           <flag name="normal"     value="0" />
+           <flag name="bold"       value="1" />
+           <flag name="italic"     value="2" />
+       </attr>
+       <attr name="textSize" format="float" />
+       <attr name="textColorStateList" format="reference" />
+       </declare-styleable>
     
         
     <declare-styleable name="ToolBoxBtn">

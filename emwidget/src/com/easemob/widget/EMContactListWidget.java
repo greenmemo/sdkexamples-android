@@ -207,13 +207,13 @@ public class EMContactListWidget extends LinearLayout {
 			String prev = "";
 			for (int i = 0; i < count; i++) {
 				String header = getItem(i).getHeader();
+				sectionForPosition.put(i, section);
 				if (getItem(i).getHeader() != null && !prev.equals(header)) {
 					list.add(header);
-					section++;
 					positionForSection.put(section, i);
+					section++;
 					prev = header;
 				}
-				sectionForPosition.put(i, section);
 			}
 			return list.toArray(new String[list.size()]);
 		}

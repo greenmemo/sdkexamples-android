@@ -58,7 +58,6 @@ public class EMChatRowVideoWidget extends EMChatRowWidget {
 	}
 	
 	public void updateView(final EMMessage message, final int position, ViewGroup parent) {
-		super.updateView(message, position, parent);
 
 		setAvatar(message, position, convertView, holder);
 		updateAckDelivered(message, position, convertView, holder);
@@ -66,6 +65,8 @@ public class EMChatRowVideoWidget extends EMChatRowWidget {
 		setOnBlackList(message, position, convertView, holder);
 
 		handleVideoMessage(message, position, convertView, holder);
+		hideAvatorIfNeeded(message.direct, findViewById(message.direct == 
+				EMMessage.Direct.RECEIVE ? R.id.row_recv_pic : R.id.rl_picture));
 	}
 
 	@Override

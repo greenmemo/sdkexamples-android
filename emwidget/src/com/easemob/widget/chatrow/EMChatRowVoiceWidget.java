@@ -48,10 +48,15 @@ public class EMChatRowVoiceWidget extends EMChatRowWidget {
 		holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
 		holder.tv_usernick = (TextView) convertView.findViewById(R.id.tv_userid);
 		holder.iv_read_status = (ImageView) convertView.findViewById(R.id.iv_unread_voice);
+		
+		View v = findViewById(R.id.iv_voice);
+		v = convertView.findViewById(R.id.iv_voice);
+		if (v != null) {
+			EMLog.d(TAG, "view:" + v);
+		}
 	}
 
 	public void updateView(final EMMessage message, final int position, ViewGroup parent) {
-		super.updateView(message, position, parent);
 
 		setAvatar(message, position, convertView, holder);
 		updateAckDelivered(message, position, convertView, holder);
@@ -59,6 +64,9 @@ public class EMChatRowVoiceWidget extends EMChatRowWidget {
 		setOnBlackList(message, position, convertView, holder);
 		
 		handleVoiceMessage(message, position, convertView, holder);
+		
+		hideAvatorIfNeeded(message.direct, findViewById(
+				message.direct == EMMessage.Direct.RECEIVE ? R.id.row_recv_pic : R.id.iv_voice));
 	}
 
 	@Override

@@ -11,11 +11,13 @@ import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
@@ -77,6 +79,8 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 	
 	public interface EMChatWidgetUser {
 		public void onGroupDetail(String groupId);
+		public void onVoiceCall(String toChatUsername);
+		public void onVideoCall(String toChatUsername);
 	}
 	
 	private static final String TAG = "ChatActivity";
@@ -160,6 +164,24 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 	
 	private boolean hideTitleBar = false;
 	private boolean hideAvatar = false;
+	private int avatarCornerRadius = -1;
+	
+	private float textSize = 15;
+	private int typeFaceIndex = -1;
+	private int textStyle = -1;
+	private ColorStateList textColorStateList;
+	
+	public enum Typeface {
+		DEFAULT,
+		SANS,
+		SERIF,
+		MONOSPACE
+	}
+	
+	public final static int TEXT_STYLE_NORMAL = 0; 
+	public final static int TEXT_STYLE_BOLD = 1;
+	public final static int TEXT_STYLE_ITALIC = 2;
+	
 //	private boolean BothName = false;
 //	private boolean hideCurrentUserName = false;
 	
@@ -206,7 +228,25 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 		if (hideTitleBar && topBar != null) {
 			topBar.setVisibility(View.GONE);
 		}
-		hideAvatar = a.getBoolean(R.styleable.emchatwidget_hideAvatar, false);
+		
+		hideAvatar = a.getBoolean(R.styleable.emchatwidget_hideAvatar, false);		
+		avatarCornerRadius = a.getInteger(R.styleable.emchatwidget_setPhotoCornerRadius, -1);
+		
+		int chatBackGroundId = a.getResourceId(
+				R.styleable.emchatwidget_background, -1);
+		if (chatBackGroundId != -1) {
+			ImageView ivBackGround = (ImageView) findViewById(R.id.iv_bg);
+			ivBackGround.setVisibility(View.VISIBLE);
+			ivBackGround.setImageResource(chatBackGroundId);
+		}
+		
+		textSize = a.getFloat(R.styleable.emchatwidget_textSize, -1);
+		typeFaceIndex = a.getInt(R.styleable.emchatwidget_textTypeFace, -1);
+		textStyle = a.getInt(R.styleable.emchatwidget_textStyle, -1);
+		int textColorId = a.getResourceId(R.styleable.emchatwidget_textColorStateList, -1);
+		if (textColorId != -1) {
+			textColorStateList = context.getResources().getColorStateList(textColorId);
+		}
 	}
 
 	/**
@@ -600,19 +640,13 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 		} else if (id == R.id.btn_file) { // 点击文件图标
 			selectFileFromLocal();
 		} else if (id == R.id.btn_voice_call) { // 点击语音电话图标
-			// TODO, EMWidget
-//			if (!EMChatManager.getInstance().isConnected())
-//				Toast.makeText(this, st1, 0).show();
-//			else
-//				startActivity(new Intent(ChatActivity.this, VoiceCallActivity.class).putExtra("username",
-//						toChatUsername).putExtra("isComingCall", false));
+			if (user != null) {
+				user.onVoiceCall(toChatUsername);
+			}
 		} else if (id == R.id.btn_video_call) { // 视频通话
-			// TODO, EMWidget
-//			if (!EMChatManager.getInstance().isConnected())
-//				Toast.makeText(this, st1, 0).show();
-//			else
-//				startActivity(new Intent(this, VideoCallActivity.class).putExtra("username", toChatUsername).putExtra(
-//						"isComingCall", false));
+			if (user != null) {
+				user.onVideoCall(toChatUsername);
+			}
 		} else if (id == R.id.title_bar_back) {
 			activity.finish();
 		}
@@ -1495,6 +1529,26 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 	
 	public boolean isHideAvatar() {
 		return hideAvatar;
+	}
+	
+	public int getAvatarCornerRadius() {
+		return avatarCornerRadius;
+	}
+	
+	public float getTextSize() {
+		return textSize;
+	}
+
+	public int getTypeFaceIndex() {
+		return typeFaceIndex;
+	}
+	
+	public int getTextStyle() {
+		return textStyle;
+	}
+	
+	public ColorStateList getTextColorStateList() {
+		return textColorStateList;
 	}
 }
 

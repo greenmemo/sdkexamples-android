@@ -36,13 +36,15 @@ public class EMChatRowLocationWidget extends EMChatRowWidget {
 	}
 	
 	public void updateView(final EMMessage message, final int position, ViewGroup parent) {
-		super.updateView(message, position, parent);
 
 		setAvatar(message, position, convertView, holder);
 		updateAckDelivered(message, position, convertView, holder);
 		setResendListener(message, position, convertView, holder);
 		setOnBlackList(message, position, convertView, holder);
 		handleLocationMessage(message, position, convertView, holder);
+		
+		hideAvatorIfNeeded(message.direct, findViewById(message.direct == 
+				EMMessage.Direct.RECEIVE ? R.id.row_rec_location : R.id.ll_location));
 	}
 
 	/**

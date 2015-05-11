@@ -2,6 +2,9 @@ package com.easemob.widget.chatrow;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.text.Spannable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.ui.utils.SmileUtils;
 import com.easemob.uidemo.R;
+import com.easemob.widget.EMChatWidget;
 import com.easemob.widget.activity.ContextMenu;
 
 public class EMChatRowTextWidget extends EMChatRowWidget {
@@ -43,16 +47,52 @@ public class EMChatRowTextWidget extends EMChatRowWidget {
 		holder.tv = (TextView) convertView
 				.findViewById(R.id.tv_chatcontent);
 		holder.tv_usernick = (TextView) convertView.findViewById(R.id.tv_userid);
+		
+		configDeclaredAttributes();
+	}
+	
+	public void configDeclaredAttributes() {
+		float textSize = chatWidget.getTextSize();
+		if (textSize != -1) {
+			holder.tv.setTextSize(textSize);
+		}
+		
+		Typeface typeFace = Typeface.DEFAULT;
+		int textStyle = EMChatWidget.TEXT_STYLE_NORMAL;
+		
+		int typeFaceIndex = chatWidget.getTypeFaceIndex();
+		if (typeFaceIndex != -1 && typeFaceIndex <= 3) {
+			if (typeFaceIndex == EMChatWidget.Typeface.DEFAULT.ordinal()) {
+				typeFace = Typeface.DEFAULT;
+			} else if (typeFaceIndex == EMChatWidget.Typeface.SANS.ordinal()) {
+				typeFace = Typeface.SANS_SERIF;
+			} else if (typeFaceIndex == EMChatWidget.Typeface.SERIF.ordinal()) {
+				typeFace = Typeface.SERIF;
+			} else if (typeFaceIndex == EMChatWidget.Typeface.MONOSPACE.ordinal()) {
+				typeFace = Typeface.MONOSPACE;
+			}
+		}
+		textStyle = chatWidget.getTextStyle();
+		if (textStyle < 0 || textStyle > 3) {
+			textStyle = EMChatWidget.TEXT_STYLE_NORMAL;
+		}
+		holder.tv.setTypeface(typeFace, textStyle);
+		
+		ColorStateList textColorStateList = chatWidget.getTextColorStateList();
+		if (textColorStateList != null) {
+			holder.tv.setTextColor(textColorStateList);
+		}
 	}
 	
 	public void updateView(final EMMessage message, final int position, ViewGroup parent) {
-		super.updateView(message, position, parent);
 
 		setAvatar(message, position, convertView, holder);
 		updateAckDelivered(message, position, convertView, holder);
 		setResendListener(message, position, convertView, holder);
 		setOnBlackList(message, position, convertView, holder);
 		handleTextMessage(message, holder, position);
+
+		hideAvatorIfNeeded(message.direct, holder.tv);
 	}
 
 	/**

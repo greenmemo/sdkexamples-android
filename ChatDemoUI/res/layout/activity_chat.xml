@@ -12,7 +12,12 @@
         android:id="@+id/chat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        easemob:hideTitleBar="true"
-        easemob:hideAvatar="true" />
+        easemob:hideTitleBar="false"
+        easemob:hideAvatar="false"
+        easemob:background="@drawable/user_intro_pic"
+        easemob:textSize="18"
+        easemob:textColorStateList="@color/chat_text_color"
+        easemob:textStyle="bold|italic"
+        easemob:textTypeFace="sans" />
 
 </RelativeLayout>
