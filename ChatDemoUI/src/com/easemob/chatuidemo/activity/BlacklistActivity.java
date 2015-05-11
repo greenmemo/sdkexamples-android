@@ -33,7 +33,7 @@ public class BlacklistActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_black_list);
+		setContentView(R.layout.em_activity_black_list);
 
 		listView = (ListView) findViewById(R.id.list);
 

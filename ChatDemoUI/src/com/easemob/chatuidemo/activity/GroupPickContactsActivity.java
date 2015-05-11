@@ -52,7 +52,7 @@ public class GroupPickContactsActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_group_pick_contacts);
+		setContentView(R.layout.em_activity_group_pick_contacts);
 
 		// String groupName = getIntent().getStringExtra("groupName");
 		String groupId = getIntent().getStringExtra("groupId");
@@ -81,7 +81,7 @@ public class GroupPickContactsActivity extends BaseActivity {
 		});
 
 		listView = (ListView) findViewById(R.id.list);
-		contactAdapter = new PickContactAdapter(this, R.layout.row_contact_with_checkbox, alluserList);
+		contactAdapter = new PickContactAdapter(this, R.layout.em_row_contact_with_checkbox, alluserList);
 		listView.setAdapter(contactAdapter);
 		((Sidebar) findViewById(R.id.sidebar)).setListView(listView);
 		listView.setOnItemClickListener(new OnItemClickListener() {

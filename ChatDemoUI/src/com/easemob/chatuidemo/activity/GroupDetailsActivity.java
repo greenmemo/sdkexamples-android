@@ -93,7 +93,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_group_details);
+		setContentView(R.layout.em_activity_group_details);
 		instance = this;
 		st = getResources().getString(R.string.people);
 		clearAllHistory = (RelativeLayout) findViewById(R.id.clear_all_history);
@@ -133,7 +133,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		}
 		
 		((TextView) findViewById(R.id.group_name)).setText(group.getGroupName() + "(" + group.getAffiliationsCount() + st);
-		adapter = new GridAdapter(this, R.layout.grid, group.getMembers());
+		adapter = new GridAdapter(this, R.layout.em_grid, group.getMembers());
 		userGridview.setAdapter(adapter);
 
 		// 保证每次进详情看到的都是最新的group

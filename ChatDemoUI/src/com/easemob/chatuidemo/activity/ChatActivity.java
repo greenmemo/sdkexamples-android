@@ -73,7 +73,7 @@ public class ChatActivity extends Activity implements EMChatWidget.EMChatWidgetU
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		setContentView(R.layout.activity_chat);
+		setContentView(R.layout.em_activity_chat);
 		chatWidget = (EMChatWidget) findViewById(R.id.chat);
 		
 		int chatType = getIntent().getIntExtra("chatType", CHATTYPE_SINGLE);

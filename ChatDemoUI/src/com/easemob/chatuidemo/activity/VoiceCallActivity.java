@@ -73,7 +73,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
         	finish();
         	return;
         }
-		setContentView(R.layout.activity_voice_call);
+		setContentView(R.layout.em_activity_voice_call);
 
 		comingBtnContainer = (LinearLayout) findViewById(R.id.ll_coming_call);
 		refuseBtn = (Button) findViewById(R.id.btn_refuse_call);

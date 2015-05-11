@@ -67,7 +67,7 @@ public class GroupAdapter extends ArrayAdapter<EMGroup> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (getItemViewType(position) == 0) {
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.search_bar_with_padding, null);
+				convertView = inflater.inflate(R.layout.em_search_bar_with_padding, null);
 			}
 			final EditText query = (EditText) convertView.findViewById(R.id.query);
 			final ImageButton clearSearch = (ImageButton) convertView.findViewById(R.id.search_clear);
@@ -95,13 +95,13 @@ public class GroupAdapter extends ArrayAdapter<EMGroup> {
 			});
 		} else if (getItemViewType(position) == 1) {
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.row_add_group, null);
+				convertView = inflater.inflate(R.layout.em_row_add_group, null);
 			}
 			((ImageView) convertView.findViewById(R.id.avatar)).setImageResource(R.drawable.em_create_group);
 			((TextView) convertView.findViewById(R.id.name)).setText(newGroup);
 		} else if (getItemViewType(position) == 2) {
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.row_add_group, null);
+				convertView = inflater.inflate(R.layout.em_row_add_group, null);
 			}
 			((ImageView) convertView.findViewById(R.id.avatar)).setImageResource(R.drawable.em_add_public_group);
 			((TextView) convertView.findViewById(R.id.name)).setText(addPublicGroup);
@@ -109,7 +109,7 @@ public class GroupAdapter extends ArrayAdapter<EMGroup> {
 
 		} else {
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.row_group, null);
+				convertView = inflater.inflate(R.layout.em_row_group, null);
 			}
 			((TextView) convertView.findViewById(R.id.name)).setText(getItem(position - 3).getGroupName());
 

@@ -40,7 +40,7 @@ public class NewGroupActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_new_group);
+		setContentView(R.layout.em_activity_new_group);
 		groupNameEditText = (EditText) findViewById(R.id.edit_group_name);
 		introductionEditText = (EditText) findViewById(R.id.edit_group_introduction);
 		checkBox = (CheckBox) findViewById(R.id.cb_public);

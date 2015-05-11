@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			startActivity(new Intent(this, LoginActivity.class));
 			return;
 		}
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.em_activity_main);
 		initView();
 
 		// MobclickAgent.setDebugMode( true );

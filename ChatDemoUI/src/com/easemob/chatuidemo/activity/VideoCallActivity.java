@@ -83,7 +83,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         	finish();
         	return;
         }
-        setContentView(R.layout.activity_video_call);
+        setContentView(R.layout.em_activity_video_call);
         
         getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD

@@ -44,7 +44,7 @@ public class AddContactActivity extends BaseActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_add_contact);
+		setContentView(R.layout.em_activity_add_contact);
 		mTextView = (TextView) findViewById(R.id.add_list_friends);
 		
 		editText = (EditText) findViewById(R.id.edit_note);

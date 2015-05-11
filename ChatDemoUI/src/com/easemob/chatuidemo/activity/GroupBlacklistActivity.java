@@ -30,7 +30,7 @@ public class GroupBlacklistActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
-		setContentView(R.layout.activity_group_blacklist);
+		setContentView(R.layout.em_activity_group_blacklist);
 
 		progressBar = (ProgressBar) findViewById(R.id.progressBar);
 		listView = (ListView) findViewById(R.id.list);

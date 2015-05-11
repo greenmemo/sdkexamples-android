@@ -29,7 +29,7 @@ public class ExitGroupDialog extends BaseActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.logout_actionsheet);
+        setContentView(R.layout.em_logout_actionsheet);
         
         text = (TextView) findViewById(R.id.tv_text);
         exitBtn = (Button) findViewById(R.id.btn_exit);
