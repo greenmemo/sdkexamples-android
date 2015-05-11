@@ -24,7 +24,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/margin_chat_activity"
-            android:background="@drawable/mini_avatar_shadow"
+            android:background="@drawable/em_mini_avatar_shadow"
             android:scaleType="fitXY" />
 
         <RelativeLayout
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_toRightOf="@id/iv_userhead"
-            android:background="@drawable/chatfrom_bg" >
+            android:background="@drawable/em_chatfrom_bg" >
 
             <ImageView
                 android:layout_marginLeft="4dp"
@@ -41,7 +41,7 @@
                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:src="@drawable/chat_voice_call_receive" 
+                android:src="@drawable/em_chat_voice_call_receive" 
                  />
 
             <TextView

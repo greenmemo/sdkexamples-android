@@ -111,7 +111,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 		rl_switch_block_groupmsg.setOnClickListener(this);
 
-		Drawable referenceDrawable = getResources().getDrawable(R.drawable.smiley_add_btn);
+		Drawable referenceDrawable = getResources().getDrawable(R.drawable.em_smiley_add_btn);
 		referenceWidth = referenceDrawable.getIntrinsicWidth();
 		referenceHeight = referenceDrawable.getIntrinsicHeight();
 
@@ -548,8 +548,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			if (position == getCount() - 1) {
 			    holder.textView.setText("");
 				// 设置成删除按钮
-			    holder.imageView.setImageResource(R.drawable.smiley_minus_btn);
-//				button.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.smiley_minus_btn, 0, 0);
+			    holder.imageView.setImageResource(R.drawable.em_smiley_minus_btn);
+//				button.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.em_smiley_minus_btn, 0, 0);
 				// 如果不是创建者或者没有相应权限，不提供加减人按钮
 				if (!group.getOwner().equals(EMChatManager.getInstance().getCurrentUser())) {
 					// if current user is not group admin, hide add/remove btn
@@ -575,8 +575,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				}
 			} else if (position == getCount() - 2) { // 添加群组成员按钮
 			    holder.textView.setText("");
-			    holder.imageView.setImageResource(R.drawable.smiley_add_btn);
-//				button.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.smiley_add_btn, 0, 0);
+			    holder.imageView.setImageResource(R.drawable.em_smiley_add_btn);
+//				button.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.em_smiley_add_btn, 0, 0);
 				// 如果不是创建者或者没有相应权限
 				if (!group.isAllowInvites() && !group.getOwner().equals(EMChatManager.getInstance().getCurrentUser())) {
 					// if current user is not group admin, hide add/remove btn
@@ -605,7 +605,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				final String username = getItem(position);
 				convertView.setVisibility(View.VISIBLE);
 				button.setVisibility(View.VISIBLE);
-//				Drawable avatar = getResources().getDrawable(R.drawable.default_avatar);
+//				Drawable avatar = getResources().getDrawable(R.drawable.em_default_avatar);
 //				avatar.setBounds(0, 0, referenceWidth, referenceHeight);
 //				button.setCompoundDrawables(null, avatar, null, null);
 				holder.textView.setText(username);

@@ -272,7 +272,7 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 		iv_emoticons_normal.setVisibility(View.VISIBLE);
 		iv_emoticons_checked.setVisibility(View.INVISIBLE);
 		more = findViewById(R.id.more);
-		edittext_layout.setBackgroundResource(R.drawable.input_bar_bg_normal);
+		edittext_layout.setBackgroundResource(R.drawable.em_input_bar_bg_normal);
 		
 		int[] ids = {R.id.et_sendmessage, R.id.btn_set_mode_keyboard, R.id.btn_set_mode_voice, R.id.btn_send, R.id.btn_press_to_speak, R.id.btn_more,
 				R.id.container_remove, R.id.container_to_group, R.id.btn_picture, R.id.btn_take_picture, R.id.btn_location, R.id.iv_emoticons_normal,
@@ -300,9 +300,9 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
-					edittext_layout.setBackgroundResource(R.drawable.input_bar_bg_active);
+					edittext_layout.setBackgroundResource(R.drawable.em_input_bar_bg_active);
 				} else {
-					edittext_layout.setBackgroundResource(R.drawable.input_bar_bg_normal);
+					edittext_layout.setBackgroundResource(R.drawable.em_input_bar_bg_normal);
 				}
 
 			}
@@ -311,7 +311,7 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 
 			@Override
 			public void onClick(View v) {
-				edittext_layout.setBackgroundResource(R.drawable.input_bar_bg_active);
+				edittext_layout.setBackgroundResource(R.drawable.em_input_bar_bg_active);
 				more.setVisibility(View.GONE);
 				iv_emoticons_normal.setVisibility(View.VISIBLE);
 				iv_emoticons_checked.setVisibility(View.INVISIBLE);
@@ -513,7 +513,7 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 					bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
 					if (bitmap == null) {
 						EMLog.d("chatactivity", "problem load video thumbnail bitmap,use default icon");
-						bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.app_panel_video_icon);
+						bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.em_app_panel_video_icon);
 					}
 					fos = new FileOutputStream(file);
 

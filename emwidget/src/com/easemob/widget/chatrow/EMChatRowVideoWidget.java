@@ -116,7 +116,7 @@ public class EMChatRowVideoWidget extends EMChatRowWidget {
 			String time = DateUtils.toTimeBySecond(videoBody.getLength());
 			holder.timeLength.setText(time);
 		}
-		holder.playBtn.setImageResource(R.drawable.video_download_btn_nor);
+		holder.playBtn.setImageResource(R.drawable.em_video_download_btn_nor);
 
 		if (message.direct == EMMessage.Direct.RECEIVE) {
 			if (videoBody.getVideoFileLength() > 0) {
@@ -135,12 +135,12 @@ public class EMChatRowVideoWidget extends EMChatRowWidget {
 			// System.err.println("it is receive msg");
 			if (message.status == EMMessage.Status.INPROGRESS) {
 				// System.err.println("!!!! back receive");
-				holder.iv.setImageResource(R.drawable.default_image);
+				holder.iv.setImageResource(R.drawable.em_default_image);
 				showDownloadImageProgress(message, holder);
 
 			} else {
 				// System.err.println("!!!! not back receive, show image directly");
-				holder.iv.setImageResource(R.drawable.default_image);
+				holder.iv.setImageResource(R.drawable.em_default_image);
 				if (localThumb != null) {
 					showVideoThumbView(localThumb, holder.iv, videoBody.getThumbnailUrl(), message);
 				}

@@ -74,9 +74,9 @@ public class EMConversationWidgetFactoryImp extends EMConversationWidgetFactory 
 			convertView.setTag(holder);
 		}
 		if (position % 2 == 0) {
-			holder.list_item_layout.setBackgroundResource(R.drawable.mm_listitem);
+			holder.list_item_layout.setBackgroundResource(R.drawable.em_mm_listitem);
 		} else {
-			holder.list_item_layout.setBackgroundResource(R.drawable.mm_listitem_grey);
+			holder.list_item_layout.setBackgroundResource(R.drawable.em_mm_listitem_grey);
 		}
 
 		
@@ -95,7 +95,7 @@ public class EMConversationWidgetFactoryImp extends EMConversationWidgetFactory 
 		
 		if (isGroup) {
 			// 群聊消息，显示群聊头像
-			holder.avatar.setImageResource(R.drawable.groups_icon);
+			holder.avatar.setImageResource(R.drawable.em_groups_icon);
 			holder.name.setText(contact.getNick() != null ? contact.getNick() : username);
 		} else {
 		    UserUtils.setUserAvatar(context, username, holder.avatar);

@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         easemob:hideTitleBar="false"
         easemob:hideAvatar="false"
-        easemob:background="@drawable/user_intro_pic"
+        easemob:background="@drawable/em_user_intro_pic"
         easemob:textSize="18"
         easemob:textColorStateList="@color/chat_text_color"
         easemob:textStyle="bold|italic"

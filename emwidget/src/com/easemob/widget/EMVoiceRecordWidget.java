@@ -78,20 +78,20 @@ public class EMVoiceRecordWidget extends RelativeLayout  {
 		
 		// 动画资源文件,用于录制语音时
 		micImages = new Drawable[] {
-				getResources().getDrawable(R.drawable.record_animate_01),
-				getResources().getDrawable(R.drawable.record_animate_02),
-				getResources().getDrawable(R.drawable.record_animate_03),
-				getResources().getDrawable(R.drawable.record_animate_04),
-				getResources().getDrawable(R.drawable.record_animate_05),
-				getResources().getDrawable(R.drawable.record_animate_06),
-				getResources().getDrawable(R.drawable.record_animate_07),
-				getResources().getDrawable(R.drawable.record_animate_08),
-				getResources().getDrawable(R.drawable.record_animate_09),
-				getResources().getDrawable(R.drawable.record_animate_10),
-				getResources().getDrawable(R.drawable.record_animate_11),
-				getResources().getDrawable(R.drawable.record_animate_12),
-				getResources().getDrawable(R.drawable.record_animate_13),
-				getResources().getDrawable(R.drawable.record_animate_14), };
+				getResources().getDrawable(R.drawable.em_record_animate_01),
+				getResources().getDrawable(R.drawable.em_record_animate_02),
+				getResources().getDrawable(R.drawable.em_record_animate_03),
+				getResources().getDrawable(R.drawable.em_record_animate_04),
+				getResources().getDrawable(R.drawable.em_record_animate_05),
+				getResources().getDrawable(R.drawable.em_record_animate_06),
+				getResources().getDrawable(R.drawable.em_record_animate_07),
+				getResources().getDrawable(R.drawable.em_record_animate_08),
+				getResources().getDrawable(R.drawable.em_record_animate_09),
+				getResources().getDrawable(R.drawable.em_record_animate_10),
+				getResources().getDrawable(R.drawable.em_record_animate_11),
+				getResources().getDrawable(R.drawable.em_record_animate_12),
+				getResources().getDrawable(R.drawable.em_record_animate_13),
+				getResources().getDrawable(R.drawable.em_record_animate_14), };
 		
 		wakeLock = ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).newWakeLock(
 				PowerManager.SCREEN_DIM_WAKE_LOCK, "demo");
@@ -123,7 +123,7 @@ public class EMVoiceRecordWidget extends RelativeLayout  {
 	
 	public void showHint1() {
 		recordingHint.setText(context.getString(R.string.release_to_cancel));
-		recordingHint.setBackgroundResource(R.drawable.recording_text_hint_bg);
+		recordingHint.setBackgroundResource(R.drawable.em_recording_text_hint_bg);
 	}
 	
 	public void showHint2() {

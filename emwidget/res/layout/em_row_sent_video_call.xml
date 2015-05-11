@@ -24,7 +24,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="@dimen/margin_chat_activity"
-            android:background="@drawable/mini_avatar_shadow"
+            android:background="@drawable/em_mini_avatar_shadow"
             android:scaleType="fitXY" />
 
         <RelativeLayout
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/margin_chat_activity"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/chatto_bg" >
+            android:background="@drawable/em_chatto_bg" >
 
             <ImageView
                 android:layout_marginLeft="4dp"
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:src="@drawable/chat_video_call_self" />
+                android:src="@drawable/em_chat_video_call_self" />
 
             <TextView
                 android:id="@+id/tv_chatcontent"
@@ -63,7 +63,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/rl_picture"
             android:clickable="true"
-            android:src="@drawable/msg_state_failed_resend"
+            android:src="@drawable/em_msg_state_failed_resend"
             android:visibility="gone" />
 
         <TextView

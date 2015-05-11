@@ -266,7 +266,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                             } catch (Exception e) {
                             }
                             openSpeakerOn();
-                            handsFreeImage.setImageResource(R.drawable.icon_speaker_on);
+                            handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
                             isHandsfreeState = true;
                             chronometer.setVisibility(View.VISIBLE);
                             chronometer.setBase(SystemClock.elapsedRealtime());
@@ -395,7 +395,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     cameraHelper.setStartFlag(true);
 
                     openSpeakerOn();
-                    handsFreeImage.setImageResource(R.drawable.icon_speaker_on);
+                    handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
                     isHandsfreeState = true;
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
@@ -422,12 +422,12 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         case R.id.iv_mute: // 静音开关
             if (isMuteState) {
                 // 关闭静音
-                muteImage.setImageResource(R.drawable.icon_mute_normal);
+                muteImage.setImageResource(R.drawable.em_icon_mute_normal);
                 audioManager.setMicrophoneMute(false);
                 isMuteState = false;
             } else {
                 // 打开静音
-                muteImage.setImageResource(R.drawable.icon_mute_on);
+                muteImage.setImageResource(R.drawable.em_icon_mute_on);
                 audioManager.setMicrophoneMute(true);
                 isMuteState = true;
             }
@@ -435,11 +435,11 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         case R.id.iv_handsfree: // 免提开关
             if (isHandsfreeState) {
                 // 关闭免提
-                handsFreeImage.setImageResource(R.drawable.icon_speaker_normal);
+                handsFreeImage.setImageResource(R.drawable.em_icon_speaker_normal);
                 closeSpeakerOn();
                 isHandsfreeState = false;
             } else {
-                handsFreeImage.setImageResource(R.drawable.icon_speaker_on);
+                handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
                 openSpeakerOn();
                 isHandsfreeState = true;
             }

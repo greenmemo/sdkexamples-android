@@ -98,7 +98,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/icon_mute_normal" />
+                            android:src="@drawable/em_icon_mute_normal" />
 
                         <TextView
                             android:layout_width="fill_parent"
@@ -121,7 +121,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/icon_speaker_normal" />
+                            android:src="@drawable/em_icon_speaker_normal" />
 
                         <TextView
                             android:layout_width="fill_parent"
@@ -142,7 +142,7 @@
                         android:id="@+id/btn_hangup_call"
                         android:layout_width="fill_parent"
                         android:layout_height="55dp"
-                        android:background="@drawable/voice_call_hangup_bg"
+                        android:background="@drawable/em_voice_call_hangup_bg"
                         android:gravity="center"
                         android:text="挂断"
                         android:textColor="@android:color/white"
@@ -159,7 +159,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="55dp"
                             android:layout_weight="1"
-                            android:background="@drawable/voice_call_hangup_bg"
+                            android:background="@drawable/em_voice_call_hangup_bg"
                             android:gravity="center"
                             android:text="挂断"
                             android:textColor="@android:color/white"
@@ -171,7 +171,7 @@
                             android:layout_height="55dp"
                             android:layout_marginLeft="30dp"
                             android:layout_weight="1"
-                            android:background="@drawable/button_register_bg"
+                            android:background="@drawable/em_button_register_bg"
                             android:gravity="center"
                             android:text="接听"
                             android:textColor="@android:color/white"

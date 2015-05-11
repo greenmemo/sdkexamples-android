@@ -29,7 +29,7 @@
         <item name="android:paddingRight">12dip</item>
         <item name="android:textColor">@color/btn_gray_normal</item>
         <item name="android:textSize">12sp</item>
-        <item name="android:background">@drawable/timestampe_bg</item>
+        <item name="android:background">@drawable/em_timestampe_bg</item>
     </style>
 
     <style name="AnimFade" parent="@android:style/Animation.Activity">
@@ -167,6 +167,6 @@
         <item name="android:paddingRight">6.0dip</item>
         <item name="android:paddingBottom">6.0dip</item>
         <item name="android:includeFontPadding">false</item>
-        <item name="android:background">@drawable/edit_text_bg</item>
+        <item name="android:background">@drawable/em_edit_text_bg</item>
     </style>
 </resources>

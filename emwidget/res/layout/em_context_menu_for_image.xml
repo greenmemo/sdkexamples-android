@@ -28,7 +28,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/context_menu_item_bg"
+        android:background="@drawable/em_context_menu_item_bg"
         android:clickable="true"
         android:gravity="center_vertical"
         android:onClick="delete"
@@ -45,7 +45,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/context_menu_item_bg"
+        android:background="@drawable/em_context_menu_item_bg"
         android:clickable="true"
         android:gravity="center_vertical"
         android:onClick="forward"

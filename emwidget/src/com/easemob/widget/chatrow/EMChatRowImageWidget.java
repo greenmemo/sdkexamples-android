@@ -90,14 +90,14 @@ public class EMChatRowImageWidget extends EMChatRowWidget {
 			// "it is receive msg";
 			if (message.status == EMMessage.Status.INPROGRESS) {
 				// "!!!! back receive";
-				holder.iv.setImageResource(R.drawable.default_image);
+				holder.iv.setImageResource(R.drawable.em_default_image);
 				showDownloadImageProgress(message, holder);
 				// downloadImage(message, holder);
 			} else {
 				// "!!!! not back receive, show image directly");
 				holder.pb.setVisibility(View.GONE);
 				holder.tv.setVisibility(View.GONE);
-				holder.iv.setImageResource(R.drawable.default_image);
+				holder.iv.setImageResource(R.drawable.em_default_image);
 				ImageMessageBody imgBody = (ImageMessageBody) message.getBody();
 				if (imgBody.getLocalUrl() != null) {
 					// String filePath = imgBody.getLocalUrl();

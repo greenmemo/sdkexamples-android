@@ -35,7 +35,7 @@
             android:layout_marginLeft="15dip"
             android:layout_marginRight="15dip"
             android:layout_marginTop="20dip"
-            android:background="@drawable/nickename_input_bg"
+            android:background="@drawable/em_nickename_input_bg"
             android:paddingLeft="10dip"
             android:hint="输入新昵称" />
 
@@ -48,7 +48,7 @@
             android:layout_marginTop="20dip"
             android:textColor="#fff"
             android:text="@string/save_new_nickname"
-            android:background="@drawable/button_login_bg" />
+            android:background="@drawable/em_button_login_bg" />
 
         <TextView
             android:id="@+id/tv_nickname_description"

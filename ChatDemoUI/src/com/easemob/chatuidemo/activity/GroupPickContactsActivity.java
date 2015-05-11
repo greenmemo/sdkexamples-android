@@ -143,9 +143,9 @@ public class GroupPickContactsActivity extends BaseActivity {
 				// 选择框checkbox
 				final CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox);
 				if(exitingMembers != null && exitingMembers.contains(username)){
-					checkBox.setButtonDrawable(R.drawable.checkbox_bg_gray_selector);
+					checkBox.setButtonDrawable(R.drawable.em_checkbox_bg_gray_selector);
 				}else{
-					checkBox.setButtonDrawable(R.drawable.checkbox_bg_selector);
+					checkBox.setButtonDrawable(R.drawable.em_checkbox_bg_selector);
 				}
 				if (checkBox != null) {
 					// checkBox.setOnCheckedChangeListener(null);

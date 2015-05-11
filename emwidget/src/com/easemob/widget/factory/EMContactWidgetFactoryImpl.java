@@ -68,7 +68,7 @@ public class EMContactWidgetFactoryImpl extends EMContactWidgetFactory {
 		//显示申请与通知item
 		if(username.equals(Constant.NEW_FRIENDS_USERNAME)){
 		    holder.nameTextview.setText(user.getNick());
-		    holder.avatar.setImageResource(R.drawable.new_friends_icon);
+		    holder.avatar.setImageResource(R.drawable.em_new_friends_icon);
 			if(user.getUnreadMsgCount() > 0){
 			    holder.unreadMsgView.setVisibility(View.VISIBLE);
 			    holder.unreadMsgView.setText(user.getUnreadMsgCount()+"");
@@ -78,7 +78,7 @@ public class EMContactWidgetFactoryImpl extends EMContactWidgetFactory {
 		}else if(username.equals(Constant.GROUP_USERNAME)){
 			//群聊item
 		    holder.nameTextview.setText(user.getNick());
-		    holder.avatar.setImageResource(R.drawable.groups_icon);
+		    holder.avatar.setImageResource(R.drawable.em_groups_icon);
 		}else{
 		    holder.nameTextview.setText(username);
 		    //设置用户头像

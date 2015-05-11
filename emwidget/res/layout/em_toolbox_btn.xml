@@ -15,7 +15,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_centerInParent="true"
-            android:background="@drawable/chat_takepic_selector"
+            android:background="@drawable/em_chat_takepic_selector"
             android:scaleType="fitCenter" />
     </RelativeLayout>
 

@@ -117,9 +117,9 @@ public class EMChatRowVoiceWidget extends EMChatRowWidget {
 			voiceAnimation.start();
 		} else {
 			if (message.direct == EMMessage.Direct.RECEIVE) {
-				holder.iv.setImageResource(R.drawable.chatfrom_voice_playing);
+				holder.iv.setImageResource(R.drawable.em_chatfrom_voice_playing);
 			} else {
-				holder.iv.setImageResource(R.drawable.chatto_voice_playing);
+				holder.iv.setImageResource(R.drawable.em_chatto_voice_playing);
 			}
 		}
 		
@@ -234,9 +234,9 @@ public class EMChatRowVoiceWidget extends EMChatRowWidget {
 		public void stopPlayVoice() {
 			voiceAnimation.stop();
 			if (message.direct == EMMessage.Direct.RECEIVE) {
-				voiceIconView.setImageResource(R.drawable.chatfrom_voice_playing);
+				voiceIconView.setImageResource(R.drawable.em_chatfrom_voice_playing);
 			} else {
-				voiceIconView.setImageResource(R.drawable.chatto_voice_playing);
+				voiceIconView.setImageResource(R.drawable.em_chatto_voice_playing);
 			}
 			// stop play voice
 			if (mediaPlayer != null) {

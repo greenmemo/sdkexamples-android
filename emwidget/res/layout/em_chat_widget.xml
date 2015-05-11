@@ -32,7 +32,7 @@
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:background="@drawable/common_tab_bg" >
+            android:background="@drawable/em_common_tab_bg" >
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="9dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/mm_title_remove" />
+                android:src="@drawable/em_mm_title_remove" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -49,7 +49,7 @@
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:background="@drawable/common_tab_bg"
+            android:background="@drawable/em_common_tab_bg"
             android:visibility="gone" >
 
             <ImageView
@@ -58,7 +58,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:scaleType="centerInside"
-                android:src="@drawable/to_group_details_normal" />
+                android:src="@drawable/em_to_group_details_normal" />
         </RelativeLayout>
     </RelativeLayout>
 
@@ -90,7 +90,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginLeft="6dp"
-                android:background="@drawable/chatting_setmode_voice_btn"
+                android:background="@drawable/em_chatting_setmode_voice_btn"
                 android:visibility="visible" />
 
             <Button
@@ -98,7 +98,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginLeft="6dp"
-                android:background="@drawable/chatting_setmode_keyboard_btn"
+                android:background="@drawable/em_chatting_setmode_keyboard_btn"
                 android:visibility="gone" />
 
             <LinearLayout
@@ -110,7 +110,7 @@
                 android:layout_marginRight="6dp"
                 android:layout_marginTop="6dp"
                 android:layout_weight="1"
-                android:background="@drawable/chat_press_speak_btn"
+                android:background="@drawable/em_chat_press_speak_btn"
                 android:gravity="center"
                 android:visibility="gone" >
 
@@ -156,7 +156,7 @@
                     android:layout_gravity="center_vertical|right"
                     android:layout_margin="1dip"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/chatting_biaoqing_btn_normal"
+                    android:src="@drawable/em_chatting_biaoqing_btn_normal"
                     android:visibility="visible" />
 
                 <ImageView
@@ -168,7 +168,7 @@
                     android:layout_gravity="center_vertical|right"
                     android:layout_margin="1dip"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/chatting_biaoqing_btn_enable"
+                    android:src="@drawable/em_chatting_biaoqing_btn_enable"
                     android:visibility="invisible" />
             </RelativeLayout>
 
@@ -178,14 +178,14 @@
                 android:layout_height="32dip"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/type_select_btn" />
+                android:background="@drawable/em_type_select_btn" />
 
             <Button
                 android:id="@+id/btn_send"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
                 android:layout_marginRight="4dp"
-                android:background="@drawable/chat_send_btn_selector"
+                android:background="@drawable/em_chat_send_btn_selector"
                 android:text="@string/button_send"
                 android:textColor="#666666"
                 android:textSize="16sp"
@@ -231,7 +231,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        easemob:innerBackGround="@drawable/chat_takepic_selector"
+                        easemob:innerBackGround="@drawable/em_chat_takepic_selector"
                         easemob:innerText="@string/attach_take_pic" />
 
                     <view class="com.easemob.widget.EMChatWidget$ToolBoxWidget"
@@ -239,7 +239,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        easemob:innerBackGround="@drawable/chat_image_selector"
+                        easemob:innerBackGround="@drawable/em_chat_image_selector"
                         easemob:innerText="@string/attach_picture" />
 
                     <view class="com.easemob.widget.EMChatWidget$ToolBoxWidget"
@@ -247,7 +247,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        easemob:innerBackGround="@drawable/chat_location_selector"
+                        easemob:innerBackGround="@drawable/em_chat_location_selector"
                         easemob:innerText="@string/attach_location" />
 
                     <view class="com.easemob.widget.EMChatWidget$ToolBoxWidget"
@@ -255,7 +255,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        easemob:innerBackGround="@drawable/chat_video_selector"
+                        easemob:innerBackGround="@drawable/em_chat_video_selector"
                         easemob:innerText="@string/attach_video" />
                     
                 </LinearLayout>
@@ -272,7 +272,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        easemob:innerBackGround="@drawable/chat_file_selector"
+                        easemob:innerBackGround="@drawable/em_chat_file_selector"
                         easemob:innerText="@string/attach_file" />
 
                     <view class="com.easemob.widget.EMChatWidget$ToolBoxWidget"
@@ -280,7 +280,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        easemob:innerBackGround="@drawable/chat_voice_call_selector"
+                        easemob:innerBackGround="@drawable/em_chat_voice_call_selector"
                         easemob:innerText="@string/attach_voice_call" />
                     
                     <view class="com.easemob.widget.EMChatWidget$ToolBoxWidget"
@@ -288,7 +288,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        easemob:innerBackGround="@drawable/chat_video_call_selector"
+                        easemob:innerBackGround="@drawable/em_chat_video_call_selector"
                         easemob:innerText="@string/attach_video_call" />
                     
                 </LinearLayout>
@@ -335,7 +335,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@drawable/recording_hint_bg"
+            android:background="@drawable/em_recording_hint_bg"
             android:padding="10dp"
             android:visibility="invisible" />
     </RelativeLayout>

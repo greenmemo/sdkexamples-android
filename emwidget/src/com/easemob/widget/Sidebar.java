@@ -111,7 +111,7 @@ public class Sidebar extends View{
 			}
 			setHeaderTextAndscroll(event);
 			header.setVisibility(View.VISIBLE);
-			setBackgroundResource(R.drawable.sidebar_background_pressed);
+			setBackgroundResource(R.drawable.em_sidebar_background_pressed);
 			return true;
 		}
 		case MotionEvent.ACTION_MOVE:{

@@ -26,10 +26,10 @@
             android:layout_width="48dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:background="@drawable/common_tab_bg"
+            android:background="@drawable/em_common_tab_bg"
             android:clickable="true"
             android:scaleType="centerInside"
-            android:src="@drawable/add" />
+            android:src="@drawable/em_add" />
     </RelativeLayout>
     
     <include 
