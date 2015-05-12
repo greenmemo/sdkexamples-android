@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.easemob.uidemo.R;
 
+
 public class AlertDialog extends Dialog {
 	
 	public interface AlertDialogUser {

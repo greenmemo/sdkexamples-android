@@ -211,22 +211,22 @@ public class MessageAdapter extends BaseAdapter{
 	private EMChatRowWidget createViewByMessage(EMMessage message, int position, ViewGroup parent) {
 		switch (message.getType()) {
 		case LOCATION:
-			return new EMChatRowLocationWidget(context, message, position, parent);
+			return EMChatRowWidgetFactory.getLocationWidget(context, message, position, parent);
 		case IMAGE:
-			return new EMChatRowImageWidget(context, message, position, parent);
+			return EMChatRowWidgetFactory.getImageWidget(context, message, position, parent);
 		case VOICE:
-			return new EMChatRowVoiceWidget(context, message, position, parent);
+			return EMChatRowWidgetFactory.getVoiceWidget(context, message, position, parent);
 		case VIDEO:
-			return new EMChatRowVideoWidget(context, message, position, parent);
+			return EMChatRowWidgetFactory.getVideoWidget(context, message, position, parent);
 		case FILE:
-			return new EMChatRowFileWidget(context, message, position, parent);
+			return EMChatRowWidgetFactory.getFileWidget(context, message, position, parent);
 		default:
 			// 语音通话,  视频通话
 			if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
 				message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false))
-				return new EMChatRowCallWidget(context, message, position, parent);
+				return EMChatRowWidgetFactory.getCallWidget(context, message, position, parent);
 			else
-				return new EMChatRowTextWidget(context, message, position, parent);
+				return EMChatRowWidgetFactory.getTextWidget(context, message, position, parent);
 		}
 	}
 

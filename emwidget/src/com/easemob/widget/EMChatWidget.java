@@ -247,6 +247,51 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 		if (textColorId != -1) {
 			textColorStateList = context.getResources().getColorStateList(textColorId);
 		}
+		
+		int[] tbIds = { R.id.btn_picture, R.id.btn_location, R.id.btn_video,
+				R.id.btn_file, R.id.btn_take_picture, R.id.btn_voice_call, R.id.btn_video_call};
+		
+		int[] attrDisables = {
+				R.styleable.emchatwidget_tb_image_disable,
+				R.styleable.emchatwidget_tb_location_disable,
+				R.styleable.emchatwidget_tb_video_disable,
+				R.styleable.emchatwidget_tb_file_disable,
+				R.styleable.emchatwidget_tb_takepic_disable,
+				R.styleable.emchatwidget_tb_voice_call_disable,
+				R.styleable.emchatwidget_tb_video_call_disable};
+		
+		int[] attrBgs = { R.styleable.emchatwidget_tb_image_bg,
+				R.styleable.emchatwidget_tb_location_bg,
+				R.styleable.emchatwidget_tb_video_bg,
+				R.styleable.emchatwidget_tb_file_bg,
+				R.styleable.emchatwidget_tb_takepic_bg,
+				R.styleable.emchatwidget_tb_video_call_bg,
+				R.styleable.emchatwidget_tb_voice_call_bg};
+
+		for (int i = 0; i < tbIds.length; i++) {
+			setToolBoxAttribute(a, tbIds[i], attrDisables[i], attrBgs[i]);
+		}
+	}
+	
+	private void setToolBoxAttribute(TypedArray a, int itemId, int attrDisable, int attrBg) {
+		boolean disabled = a.getBoolean(attrDisable, false);
+		if (disabled) {
+			View btn = (View)findViewById(itemId);
+			if (btn != null) {
+				btn.setVisibility(View.GONE);
+			}
+		}
+		
+		int bgId = a.getResourceId(attrBg, -1);
+		if (bgId != -1) {
+			View btn = (View)findViewById(itemId);
+			if (btn != null) {
+				ImageView bg = (ImageView)btn.findViewById(R.id.inner_image);
+				if (bg != null) {
+					bg.setImageResource(bgId);
+				}
+			}
+		}
 	}
 
 	/**

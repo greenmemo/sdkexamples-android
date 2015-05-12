@@ -226,14 +226,6 @@
                     android:layout_marginTop="6dp"
                     android:weightSum="4" >
 
-                    <view class="com.easemob.widget.EMChatWidget$ToolBoxWidget" 
-                        android:id="@+id/btn_take_picture"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        easemob:innerBackGround="@drawable/em_chat_takepic_selector"
-                        easemob:innerText="@string/attach_take_pic" />
-
                     <view class="com.easemob.widget.EMChatWidget$ToolBoxWidget"
                         android:id="@+id/btn_picture"
                         android:layout_width="0dp"
@@ -258,6 +250,14 @@
                         easemob:innerBackGround="@drawable/em_chat_video_selector"
                         easemob:innerText="@string/attach_video" />
                     
+                     <view class="com.easemob.widget.EMChatWidget$ToolBoxWidget"
+                        android:id="@+id/btn_file"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        easemob:innerBackGround="@drawable/em_chat_file_selector"
+                        easemob:innerText="@string/attach_file" />
+                    
                 </LinearLayout>
 
                 <LinearLayout
@@ -266,14 +266,14 @@
                     android:layout_marginBottom="4dp"
                     android:layout_marginTop="6dp"
                     android:weightSum="4" >
-
-                    <view class="com.easemob.widget.EMChatWidget$ToolBoxWidget"
-                        android:id="@+id/btn_file"
+                    
+                    <view class="com.easemob.widget.EMChatWidget$ToolBoxWidget" 
+                        android:id="@+id/btn_take_picture"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        easemob:innerBackGround="@drawable/em_chat_file_selector"
-                        easemob:innerText="@string/attach_file" />
+                        easemob:innerBackGround="@drawable/em_chat_takepic_selector"
+                        easemob:innerText="@string/attach_take_pic" />
 
                     <view class="com.easemob.widget.EMChatWidget$ToolBoxWidget"
                         android:id="@+id/btn_voice_call"

@@ -18,6 +18,10 @@
         easemob:textSize="18"
         easemob:textColorStateList="@color/chat_text_color"
         easemob:textStyle="bold|italic"
-        easemob:textTypeFace="sans" />
+        easemob:textTypeFace="sans"
+        easemob:tb_video_call_disable="true"
+        easemob:tb_voice_call_disable="true"
+        easemob:tb_takepic_disable="true"        
+        />
 
 </RelativeLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 Jake Wharton
+<!--
+     Copyright (C) 2012 Jake Wharton
      Copyright (C) 2011 Patrik Åkerfeldt
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,24 +25,36 @@
         <attr name="setUserNameVisible" format="boolean" />
         <attr name="background" format="reference" />
         <attr name="textTypeFace">
-           <flag name="normal"     value="0" />
-           <flag name="sans"       value="1" />
-           <flag name="serif"      value="2" />
-           <flag name="monospace"  value="3" />
-       </attr>
-       <attr name="textStyle">
-           <flag name="normal"     value="0" />
-           <flag name="bold"       value="1" />
-           <flag name="italic"     value="2" />
-       </attr>
-       <attr name="textSize" format="float" />
-       <attr name="textColorStateList" format="reference" />
-       </declare-styleable>
-    
-        
+            <flag name="normal" value="0" />
+            <flag name="sans" value="1" />
+            <flag name="serif" value="2" />
+            <flag name="monospace" value="3" />
+        </attr>
+        <attr name="textStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+        <attr name="textSize" format="float" />
+        <attr name="textColorStateList" format="reference" />
+        <attr name="tb_image_disable" format="boolean" />
+        <attr name="tb_location_disable" format="boolean" />
+        <attr name="tb_video_disable" format="boolean" />
+        <attr name="tb_file_disable" format="boolean" />
+        <attr name="tb_takepic_disable" format="boolean" />
+        <attr name="tb_video_call_disable" format="boolean" />
+        <attr name="tb_voice_call_disable" format="boolean" />
+        <attr name="tb_image_bg" format="reference" />
+        <attr name="tb_location_bg" format="reference" />
+        <attr name="tb_video_bg" format="reference" />
+        <attr name="tb_file_bg" format="reference" />
+        <attr name="tb_takepic_bg" format="reference" />
+        <attr name="tb_video_call_bg" format="reference" />
+        <attr name="tb_voice_call_bg" format="reference" />
+    </declare-styleable>
     <declare-styleable name="ToolBoxBtn">
         <attr name="innerBackGround" format="reference" />
         <attr name="innerText" format="reference" />
     </declare-styleable>
-    
+
 </resources>
