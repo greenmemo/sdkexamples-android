@@ -12,7 +12,8 @@
         android:background="@color/top_bar_normal_bg"
         android:gravity="center_vertical" >
 
-        <include 
+        <include
+            android:id="@+id/btn_back"
             layout="@layout/em_common_back_btn"
             />
 

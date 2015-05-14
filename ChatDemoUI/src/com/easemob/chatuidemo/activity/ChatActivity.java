@@ -16,6 +16,7 @@ package com.easemob.chatuidemo.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -77,7 +78,7 @@ public class ChatActivity extends Activity implements EMChatWidget.EMChatWidgetU
 		chatWidget = (EMChatWidget) findViewById(R.id.chat);
 		
 		int chatType = getIntent().getIntExtra("chatType", CHATTYPE_SINGLE);
-		String username = "";
+		final String username;
 		if (chatType == CHATTYPE_SINGLE) {
 			username = getIntent().getStringExtra("userId");
 		} else {
@@ -85,6 +86,32 @@ public class ChatActivity extends Activity implements EMChatWidget.EMChatWidgetU
 		}
 		chatWidget.setUpView(chatType, username);
 		chatWidget.setUser(this);
+		
+		chatWidget.setVoiceCallToolBoxClick(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String st1 = getResources().getString(R.string.not_connect_to_server);
+				if (!EMChatManager.getInstance().isConnected())
+					Toast.makeText(ChatActivity.this, st1, Toast.LENGTH_SHORT).show();
+				else
+					startActivity(new Intent(ChatActivity.this, VoiceCallActivity.class)
+							.putExtra("username", username).putExtra(
+									"isComingCall", false));
+			}
+		});
+		
+		
+		chatWidget.setVideoCallToolBoxClick(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String st1 = getResources().getString(R.string.not_connect_to_server);
+				if (!EMChatManager.getInstance().isConnected())
+					Toast.makeText(ChatActivity.this, st1, Toast.LENGTH_SHORT).show();
+				else
+					startActivity(new Intent(ChatActivity.this, VideoCallActivity.class).putExtra(
+							"username", username).putExtra("isComingCall", false));
+			}
+		});
 		
 		activityInstance = this;
 	}
@@ -137,5 +164,11 @@ public class ChatActivity extends Activity implements EMChatWidget.EMChatWidgetU
 	public void onPause() {
 		chatWidget.onPause();
 		super.onPause();
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		chatWidget.refresh();
 	}
 }

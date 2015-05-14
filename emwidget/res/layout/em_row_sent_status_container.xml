@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:src="@drawable/em_msg_state_failed_resend"
+        android:layout_alignParentRight="true"
         android:visibility="gone" />
 
     <TextView

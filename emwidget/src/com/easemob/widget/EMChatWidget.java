@@ -79,8 +79,6 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 	
 	public interface EMChatWidgetUser {
 		public void onGroupDetail(String groupId);
-		public void onVoiceCall(String toChatUsername);
-		public void onVideoCall(String toChatUsername);
 	}
 	
 	private static final String TAG = "ChatActivity";
@@ -278,6 +276,15 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 
 		for (int i = 0; i < tbIds.length; i++) {
 			setToolBoxAttribute(a, tbIds[i], attrDisables[i], attrBgs[i]);
+		}
+		
+		// voiceModeBtnVisible
+		boolean setVoiceModeBtnVisible = a.getBoolean(R.styleable.emchatwidget_voiceModeBtnVisible, true);
+		if (setVoiceModeBtnVisible == false) {
+			Button setVoiceModeBtn = (Button) findViewById(R.id.btn_set_mode_voice);
+			setVoiceModeBtn.setVisibility(View.GONE);
+			Button setKeyboardModeBtn = (Button) findViewById(R.id.btn_set_mode_keyboard);
+			setKeyboardModeBtn.setVisibility(View.GONE);
 		}
 	}
 	
@@ -715,17 +722,17 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 			if (voiceCallToolBoxClickListener != null) {
 				voiceCallToolBoxClickListener.onClick(view);
 			} else {
-				if (user != null) {
-					user.onVoiceCall(toChatUsername);
-				}
+//				if (user != null) {
+//					user.onVoiceCall(toChatUsername);
+//				}
 			}
 		} else if (id == R.id.btn_video_call) { // 视频通话
 			if (videoToolBoxClickListener != null) {
 				videoToolBoxClickListener.onClick(view);
 			} else {
-				if (user != null) {
-					user.onVideoCall(toChatUsername);
-				}
+//				if (user != null) {
+//					user.onVideoCall(toChatUsername);
+//				}
 			}
 		} else if (id == R.id.title_bar_back) {
 			activity.finish();
@@ -772,18 +779,18 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
         case EventDeliveryAck:
         {
             //获取到message
-            refreshUI();
+            refresh();
             break;
         }
         case EventReadAck:
         {
             //获取到message
-            refreshUI();
+            refresh();
             break;
         }
         case EventOfflineMessage:
         {
-            refreshUI();
+            refresh();
             break;
         }
         default:
@@ -797,7 +804,7 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
         adapter.refreshSelectLast();
 	}
 
-	private void refreshUI() {
+	public void refresh() {
 		adapter.refresh();
 	}
 
@@ -1657,6 +1664,34 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 	
 	public void setVideoCallToolBoxClick(View.OnClickListener listener) {
 		videoCallToolBoxClickListener = listener;
+	}
+	
+	public void onSelectImage(String path) {
+		
+	}
+	
+	public void onSelectLocation(double latitude, double longitude, String address) {
+		
+	}
+	
+	public void onSelectVideo(String videoPath, int duration) {
+		
+	}
+	
+	public void onSelectFile(String file) {
+		
+	}
+	
+	public void onTakePic(String path) {
+		
+	}
+	
+	public void onVoiceCallEnded() {
+		
+	}
+	
+	public void onVideoCallEnded() {
+		
 	}
 }
 

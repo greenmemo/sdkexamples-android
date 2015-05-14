@@ -23,6 +23,7 @@
         easemob:tb_voice_call_disable="true"
         easemob:tb_takepic_disable="true"
         easemob:tb_image_bg="@drawable/cs_chat_image_selector"
+        easemob:voiceModeBtnVisible="false"
         />
 
 </RelativeLayout>
