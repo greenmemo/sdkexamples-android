@@ -171,6 +171,14 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 	private int textStyle = -1;
 	private ColorStateList textColorStateList;
 	
+	private View.OnClickListener imageToolBoxClickListener;
+	private View.OnClickListener locationToolBoxClickListener;
+	private View.OnClickListener videoToolBoxClickListener;
+	private View.OnClickListener fileToolBoxClickListener;
+	private View.OnClickListener takePicToolBoxClickListener;
+	private View.OnClickListener voiceCallToolBoxClickListener;
+	private View.OnClickListener videoCallToolBoxClickListener;
+	
 	public enum Typeface {
 		DEFAULT,
 		SANS,
@@ -661,12 +669,23 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 		} else if (id == R.id.btn_send) {// 点击发送按钮(发文字和表情)
 			sendText(mEditTextContent.getText().toString());
 		} else if (id == R.id.btn_take_picture) {
-			selectPicFromCamera();// 点击照相图标
+			if (takePicToolBoxClickListener != null) {
+				takePicToolBoxClickListener.onClick(view);
+			} else {
+				selectPicFromCamera();// 点击照相图标
+			}
 		} else if (id == R.id.btn_picture) {
-			selectPicFromLocal(); // 点击图片图标
+			if (imageToolBoxClickListener != null) {
+				imageToolBoxClickListener.onClick(view);
+			} else {
+				selectPicFromLocal(); // 点击图片图标
+			}
 		} else if (id == R.id.btn_location) { // 位置
-			// TODO EMWidget
-			activity.startActivityForResult(new Intent(context, BaiduMapActivity.class), REQUEST_CODE_MAP);
+			if (locationToolBoxClickListener != null) {
+				locationToolBoxClickListener.onClick(view);
+			} else {
+				activity.startActivityForResult(new Intent(context, BaiduMapActivity.class), REQUEST_CODE_MAP);
+			}
 		} else if (id == R.id.iv_emoticons_normal) { // 点击显示表情框
 			more.setVisibility(View.VISIBLE);
 			iv_emoticons_normal.setVisibility(View.INVISIBLE);
@@ -681,16 +700,32 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 			expressionWidget.setVisibility(View.GONE);
 			more.setVisibility(View.GONE);
 		} else if (id == R.id.btn_video) {
-			selectVideoFromLocal();
+			if (videoToolBoxClickListener != null) {
+				videoToolBoxClickListener.onClick(view);
+			} else {
+				selectVideoFromLocal();
+			}
 		} else if (id == R.id.btn_file) { // 点击文件图标
-			selectFileFromLocal();
+			if (fileToolBoxClickListener != null) {
+				fileToolBoxClickListener.onClick(view);
+			} else {
+				selectFileFromLocal();
+			}
 		} else if (id == R.id.btn_voice_call) { // 点击语音电话图标
-			if (user != null) {
-				user.onVoiceCall(toChatUsername);
+			if (voiceCallToolBoxClickListener != null) {
+				voiceCallToolBoxClickListener.onClick(view);
+			} else {
+				if (user != null) {
+					user.onVoiceCall(toChatUsername);
+				}
 			}
 		} else if (id == R.id.btn_video_call) { // 视频通话
-			if (user != null) {
-				user.onVideoCall(toChatUsername);
+			if (videoToolBoxClickListener != null) {
+				videoToolBoxClickListener.onClick(view);
+			} else {
+				if (user != null) {
+					user.onVideoCall(toChatUsername);
+				}
 			}
 		} else if (id == R.id.title_bar_back) {
 			activity.finish();
@@ -1594,6 +1629,34 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 	
 	public ColorStateList getTextColorStateList() {
 		return textColorStateList;
+	}
+	
+	public void setImageToolBoxClick(View.OnClickListener listener) {
+		imageToolBoxClickListener = listener;
+	}
+	
+	public void setLocationToolBoxClick(View.OnClickListener listener) {
+		locationToolBoxClickListener = listener;
+	}
+	
+	public void setVideoToolBoxClick(View.OnClickListener listener) {
+		videoToolBoxClickListener = listener;
+	}
+	
+	public void setFileToolBoxClick(View.OnClickListener listener) {
+		fileToolBoxClickListener = listener;
+	}
+	
+	public void setTakePicToolBoxClick(View.OnClickListener listener) {
+		takePicToolBoxClickListener = listener;
+	}
+	
+	public void setVoiceCallToolBoxClick(View.OnClickListener listener) {
+		voiceCallToolBoxClickListener = listener;
+	}
+	
+	public void setVideoCallToolBoxClick(View.OnClickListener listener) {
+		videoCallToolBoxClickListener = listener;
 	}
 }
 
