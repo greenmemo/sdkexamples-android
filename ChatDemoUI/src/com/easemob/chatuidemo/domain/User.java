@@ -13,12 +13,19 @@
  */
 package com.easemob.chatuidemo.domain;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.graphics.Bitmap;
+import android.util.Base64;
+
 import com.easemob.chat.EMContact;
 
 public class User extends EMContact {
 	private int unreadMsgCount;
 	private String header;
 	private String avatar;
+	private byte[] avatarBlob;
 	
 	public User(){}
 	
@@ -41,8 +48,6 @@ public class User extends EMContact {
 	public void setUnreadMsgCount(int unreadMsgCount) {
 		this.unreadMsgCount = unreadMsgCount;
 	}
-	
-	
 
 	public String getAvatar() {
         return avatar;
@@ -52,6 +57,15 @@ public class User extends EMContact {
         this.avatar = avatar;
     }
 
+	public byte[] getAvatarBlob() {
+        return avatarBlob;
+    }
+
+    public void setAvatarBlob(byte[] data) {
+        this.avatarBlob = data;
+    }
+
+    
     @Override
 	public int hashCode() {
 		return 17 * getUsername().hashCode();
@@ -68,5 +82,41 @@ public class User extends EMContact {
 	@Override
 	public String toString() {
 		return nick == null ? username : nick;
+	}
+	
+	public static User fromJson(JSONObject json) {
+		User user = new User();
+		try {
+			user.username = json.getString("username");
+			user.eid = json.getString("eid");
+			user.nick = json.getString("nick");
+			String data = json.getString("avatar");
+			if (data != "") {
+//				byte[] byteData = Base64.decode(data, 0);
+//				InputStream stream = new ByteArrayInputStream(byteData);
+//				user.icon = BitmapFactory.decodeStream(stream);
+				user.avatarBlob = Base64.decode(data, 0);
+			}
+			return user;
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public String getJson() {
+		JSONObject json = new JSONObject();
+		try {
+			json.put("username", username).put("eid", eid).put("nick", nick);
+			
+//			ByteArrayOutputStream baos = new ByteArrayOutputStream();  
+//	        icon.compress(Bitmap.CompressFormat.PNG, 0, baos);
+//	        byte[] bytes = baos.toByteArray();
+			json.put("avatar", Base64.encode(avatarBlob, 0));
+			return json.toString();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 }

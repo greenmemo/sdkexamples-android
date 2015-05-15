@@ -36,5 +36,5 @@
     <color name="black_deep">#FF000000</color>
     <color name="chat_text_normal">#303030</color>
     <color name="chat_text_pressed">#A0A0A0</color>
-    
+    <color name="chat_bg_color">#808080</color>
 </resources>

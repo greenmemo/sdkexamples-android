@@ -33,6 +33,7 @@ public class UserDao {
 	public static final String COLUMN_NAME_ID = "username";
 	public static final String COLUMN_NAME_NICK = "nick";
 	public static final String COLUMN_NAME_AVATAR = "avatar";
+	public static final String COLUMN_NAME_AVATAR_BLOB = "avatar_blob";
 	
 	public static final String PREF_TABLE_NAME = "pref";
 	public static final String COLUMN_NAME_DISABLED_GROUPS = "disabled_groups";
@@ -60,6 +61,8 @@ public class UserDao {
 					values.put(COLUMN_NAME_NICK, user.getNick());
 				if(user.getAvatar() != null)
 				    values.put(COLUMN_NAME_AVATAR, user.getAvatar());
+				if(user.getAvatarBlob() != null)
+				    values.put(COLUMN_NAME_AVATAR_BLOB, user.getAvatarBlob());
 				db.replace(TABLE_NAME, null, values);
 			}
 		}
@@ -79,10 +82,12 @@ public class UserDao {
 				String username = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_ID));
 				String nick = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_NICK));
 				String avatar = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_AVATAR));
+				byte[] avatarBlob = cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_AVATAR_BLOB));
 				User user = new User();
 				user.setUsername(username);
 				user.setNick(nick);
 				user.setAvatar(avatar);
+				user.setAvatarBlob(avatarBlob);
 				String headerName = null;
 				if (!TextUtils.isEmpty(user.getNick())) {
 					headerName = user.getNick();
@@ -107,6 +112,31 @@ public class UserDao {
 			cursor.close();
 		}
 		return users;
+	}
+	
+	public User getContact(String username) {
+		try {
+			SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+			Cursor cursor = db.rawQuery("select * from " + TABLE_NAME + " where " + COLUMN_NAME_ID + " = ? ", new String[] {username});
+			if (!cursor.moveToFirst()) {
+				cursor.close();
+				return null;
+			}
+			String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_ID));
+			String nick = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_NICK));
+			String avatar = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_AVATAR));
+			byte[] avatarBlob = cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_AVATAR_BLOB));
+			User user = new User();
+			user.setUsername(name);
+			user.setNick(nick);
+			user.setAvatar(avatar);
+			user.setAvatarBlob(avatarBlob);
+			cursor.close();
+			return user;
+		} catch (Exception e) {
+		}
+		return null;
 	}
 	
 	/**

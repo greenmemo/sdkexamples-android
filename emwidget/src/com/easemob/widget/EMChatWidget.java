@@ -286,6 +286,13 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 			Button setKeyboardModeBtn = (Button) findViewById(R.id.btn_set_mode_keyboard);
 			setKeyboardModeBtn.setVisibility(View.GONE);
 		}
+		
+		// back ground Color
+		if (a.hasValue(R.styleable.emchatwidget_backGroundColor)) {
+			int backGroundColor = a.getColor(R.styleable.emchatwidget_backGroundColor, 0xf2f0eb);
+			View bg = findViewById(R.id.root_layout);
+			bg.setBackgroundColor(backGroundColor);
+		}
 	}
 	
 	private void setToolBoxAttribute(TypedArray a, int itemId, int attrDisable, int attrBg) {

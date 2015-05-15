@@ -52,7 +52,8 @@
         <attr name="tb_video_call_bg" format="reference" />
         <attr name="tb_voice_call_bg" format="reference" />
         <attr name="voiceModeBtnVisible" format="boolean" />
-    </declare-styleable>
+        <attr name="backGroundColor" format="color" />
+        </declare-styleable>
     <declare-styleable name="ToolBoxBtn">
         <attr name="innerBackGround" format="reference" />
         <attr name="innerText" format="reference" />
