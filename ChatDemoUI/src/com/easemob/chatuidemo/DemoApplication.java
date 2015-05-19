@@ -17,9 +17,12 @@ import java.util.Map;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Bitmap;
 
 import com.easemob.EMCallBack;
+import com.easemob.chatuidemo.domain.ProfileManager;
 import com.easemob.chatuidemo.domain.User;
+import com.easemob.widget.EMWidgetConfig;
 
 public class DemoApplication extends Application {
 
@@ -59,6 +62,14 @@ public class DemoApplication extends Application {
          * }
          */
         hxSDKHelper.onInit(applicationContext);
+        
+        // 用户头像需要应用提供，这里为控件EMWidget设置头像回调方法
+        EMWidgetConfig.getInstance().setAvatarCallBack(new EMWidgetConfig.EMAvatarCallBack() {
+			@Override
+			public Bitmap getAvatar(String username) {
+				return ProfileManager.getInstance(applicationContext).getAvatar(username);
+			}
+        });;
 	}
 
 	public static DemoApplication getInstance() {

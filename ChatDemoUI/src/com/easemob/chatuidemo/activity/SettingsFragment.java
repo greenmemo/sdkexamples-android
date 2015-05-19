@@ -13,8 +13,15 @@
  */
 package com.easemob.chatuidemo.activity;
 
+import java.io.InputStream;
+import java.util.Arrays;
+
+import org.apache.http.util.ByteArrayBuffer;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -35,7 +42,12 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.db.UserDao;
+import com.easemob.chatuidemo.domain.ProfileManager;
+import com.easemob.chatuidemo.domain.ProfileManager.ProfileUrlGen;
+import com.easemob.chatuidemo.domain.User;
 import com.easemob.uidemo.Constant;
+import com.easemob.util.EMLog;
 
 /**
  * 设置界面
@@ -117,6 +129,17 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	 * iOS离线推送昵称
 	 */
 	private LinearLayout pushNick;
+	
+	/**
+	 * avatar 
+	 */
+	private ImageView iv_avatar;
+	
+	/**
+	 * username textview
+	 */
+	private TextView tv_username;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.em_fragment_conversation_settings, container, false);
@@ -127,6 +150,9 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		super.onActivityCreated(savedInstanceState);
 		if(savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
             return;
+		iv_avatar = (ImageView)  getView().findViewById(R.id.iv_avatar);
+		tv_username = (TextView)  getView().findViewById(R.id.tv_username);
+		
 		rl_switch_notification = (RelativeLayout) getView().findViewById(R.id.rl_switch_notification);
 		rl_switch_sound = (RelativeLayout) getView().findViewById(R.id.rl_switch_sound);
 		rl_switch_vibrate = (RelativeLayout) getView().findViewById(R.id.rl_switch_vibrate);
@@ -152,6 +178,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		llDiagnose=(LinearLayout) getView().findViewById(R.id.ll_diagnose);
 		pushNick=(LinearLayout) getView().findViewById(R.id.ll_set_push_nick);
 		
+		iv_avatar.setOnClickListener(this);
 		blacklistContainer.setOnClickListener(this);
 		rl_switch_notification.setOnClickListener(this);
 		rl_switch_sound.setOnClickListener(this);
@@ -164,6 +191,13 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		chatOptions = EMChatManager.getInstance().getChatOptions();
 		
 		HXSDKModel model = HXSDKHelper.getInstance().getModel();
+		
+		String username = EMChatManager.getInstance().getCurrentUser();
+		Bitmap avatar = ProfileManager.getInstance(this.getActivity()).getAvatar(username);
+		if (avatar != null) {
+			iv_avatar.setImageBitmap(avatar);
+		}
+		tv_username.setText(username);
 		
 		// 震动和声音总开关，来消息时，是否允许此开关打开
 		// the vibrate and sound notification are allowed or not?
@@ -207,10 +241,104 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 
 	}
 
+	public void postProfile() {
+		String currentUser = EMChatManager.getInstance().getCurrentUser();
+		try {
+			String avatarFileName = "em_default_face.9.png";
+			if (currentUser.equals("gm0")) {
+				avatarFileName = "avatar_0.png";
+			} else if (currentUser.equals("gm1")) {
+				avatarFileName = "avatar_1.png";
+			} else if (currentUser.equals("gm2")) {
+				avatarFileName = "avatar_2.png";
+			} else if (currentUser.equals("gm3")) {
+				avatarFileName = "avatar_3.png";
+			}
+			InputStream in = getResources().getAssets().open(avatarFileName, AssetManager.ACCESS_RANDOM);
+			final int BUF_LEN = 10 * 1024;
+			ByteArrayBuffer byteBuf = new ByteArrayBuffer(BUF_LEN);
+			byte[] buf = new byte[BUF_LEN];
+			int len = 0;
+			while ((len = in.read(buf, 0, BUF_LEN)) != -1) {
+				byteBuf.append(buf, 0, len);
+			}
+			byte[] avatarBlob = new byte[byteBuf.length()];
+			avatarBlob = Arrays.copyOf(byteBuf.buffer(), byteBuf.length());
+
+			UserDao dao = new UserDao(getActivity());
+//			User user = dao.getContact(currentUser);
+			User user = new User(currentUser);
+			user.setNick(currentUser);
+			user.setAvatarBlob(avatarBlob);
+			dao.saveContact(user);
+			
+			ProfileManager.getInstance(getActivity()).setUrlGen(new ProfileUrlGen() {
+				@Override
+				public String getProfileUrl(String username) {
+					return "http://172.16.1.70:6666/MyApp";
+				}
+				
+				@Override
+				public String postProfileUrl(String username) {
+					return "http://172.16.1.70:6666/MyApp";
+				}
+			});
+			(new Thread(new Runnable() {
+					@Override
+					public void run() {
+						ProfileManager.getInstance(getActivity()).postCurrentUserProfile();
+					}
+				})				
+			).start();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.iv_avatar:
+			String currentUser = EMChatManager.getInstance().getCurrentUser();
+//			Bitmap defaultAvatar = BitmapFactory.decodeResource(context.getResources(), R.drawable.em_default_avatar);
+//			InputStreamReader inputReader = new InputStreamReader(getResources().getAssets().open("avatar_0.png"));
+			try {
+				InputStream in = getResources().getAssets().open("avatar_0.png",AssetManager.ACCESS_RANDOM);
+				final int BUF_LEN = 10 * 1024;
+				ByteArrayBuffer byteBuf = new ByteArrayBuffer(BUF_LEN);
+				byte[] buf = new byte[BUF_LEN];
+				int len = 0;
+				while ((len = in.read(buf, 0, BUF_LEN)) != -1) {
+					byteBuf.append(buf, 0, len);
+				}
+				byte[] avatarBlob = byteBuf.buffer();
+	
+				UserDao dao = new UserDao(getActivity());
+				User user = dao.getContact(currentUser);
+				user.setAvatarBlob(avatarBlob);
+				dao.saveContact(user);
+				
+				
+				ProfileManager.getInstance(getActivity()).setUrlGen(new ProfileUrlGen() {
+					@Override
+					public String getProfileUrl(String username) {
+						return "http://172.16.1.70:6666/myApp";
+					}
+					
+					@Override
+					public String postProfileUrl(String username) {
+						return "http://172.16.1.70:6666/myApp";
+					}
+				});
+				ProfileManager.getInstance(getActivity()).postCurrentUserProfile();
+				EMLog.d("SettingsFragment", "send avatar");
+				
+			} catch (Exception e) {
+				
+			}
+
+			break;
 		case R.id.rl_switch_notification:
 			if (iv_switch_open_notification.getVisibility() == View.VISIBLE) {
 				iv_switch_open_notification.setVisibility(View.INVISIBLE);
@@ -287,7 +415,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 			startActivity(new Intent(getActivity(), BlacklistActivity.class));
 			break;
 		case R.id.ll_diagnose:
-			startActivity(new Intent(getActivity(), DiagnoseActivity.class));
+//			startActivity(new Intent(getActivity(), DiagnoseActivity.class));
+			postProfile();
 			break;
 		case R.id.ll_set_push_nick:
 			startActivity(new Intent(getActivity(), OfflinePushNickActivity.class));

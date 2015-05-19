@@ -162,6 +162,8 @@ public class UserDao {
 			values.put(COLUMN_NAME_NICK, user.getNick());
 		if(user.getAvatar() != null)
 		    values.put(COLUMN_NAME_AVATAR, user.getAvatar());
+		if(user.getAvatarBlob() != null)
+			values.put(COLUMN_NAME_AVATAR_BLOB, user.getAvatarBlob());
 		if(db.isOpen()){
 			db.replace(TABLE_NAME, null, values);
 		}

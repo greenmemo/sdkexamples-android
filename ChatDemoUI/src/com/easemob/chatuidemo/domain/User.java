@@ -88,9 +88,10 @@ public class User extends EMContact {
 		User user = new User();
 		try {
 			user.username = json.getString("username");
-			user.eid = json.getString("eid");
-			user.nick = json.getString("nick");
 			String data = json.getString("avatar");
+			if (json.has("nick")) {
+				user.nick = json.getString("nick");
+			}
 			if (data != "") {
 //				byte[] byteData = Base64.decode(data, 0);
 //				InputStream stream = new ByteArrayInputStream(byteData);
@@ -107,12 +108,13 @@ public class User extends EMContact {
 	public String getJson() {
 		JSONObject json = new JSONObject();
 		try {
-			json.put("username", username).put("eid", eid).put("nick", nick);
+			json.put("username", username).put("nick", nick);
 			
 //			ByteArrayOutputStream baos = new ByteArrayOutputStream();  
 //	        icon.compress(Bitmap.CompressFormat.PNG, 0, baos);
 //	        byte[] bytes = baos.toByteArray();
-			json.put("avatar", Base64.encode(avatarBlob, 0));
+			
+			json.put("avatar", Base64.encodeToString(avatarBlob, 0));
 			return json.toString();
 		} catch (JSONException e) {
 			e.printStackTrace();

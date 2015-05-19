@@ -1,5 +1,6 @@
 package com.easemob.chatuidemo.domain;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -9,6 +10,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
@@ -22,11 +24,14 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.easemob.chat.EMChatManager;
+import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.cloud.HttpClientConfig;
 import com.easemob.cloud.HttpClientManager;
+import com.easemob.util.EMLog;
 import com.easemob.util.NetUtils;
 
 public class ProfileManager {
@@ -55,8 +60,17 @@ public class ProfileManager {
 
 	private Context context;
 	private ProfileUrlGen urlGen;
+	private Bitmap defaultAvatar;
+	private static ProfileManager instance;
 	
-	public ProfileManager(Context context) {
+	public static ProfileManager getInstance(Context context) {
+		if (instance == null) {
+			instance = new ProfileManager(context);
+		}
+		return instance;
+	}
+	
+	ProfileManager(Context context) {
 		this.context = context;
 	}
 	
@@ -164,8 +178,11 @@ public class ProfileManager {
 		User user = (new UserDao(context)).getContact(currentUser);
 		String body = user.getJson();
 		
+		EMLog.d("ProfileManager", "send:" + body);
+		
 		try {
-			HttpClientManager.httpExecute(remoteUrl, null, body, "POST");
+			Map<String, String> headers = new HashMap<String, String>();
+			HttpClientManager.httpExecute(remoteUrl, headers, body, "POST");
 		} catch (KeyManagementException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -188,5 +205,45 @@ public class ProfileManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private Bitmap getDefaultAvatar() {
+		if (defaultAvatar == null) {
+			defaultAvatar = BitmapFactory.decodeResource(context.getResources(), R.drawable.em_default_avatar);
+		}
+		return defaultAvatar;
+	}
+	
+	public Bitmap getAvatar(String username) {
+		// ======================== begin
+		// 验证通过，不过效率非常低，看来缓存是必须的
+//		Bitmap avatar_0 = BitmapFactory.decodeResource(context.getResources(), R.drawable.avatar_0);
+//		
+//		// bitmap to bytearray
+//		ByteArrayOutputStream out = new ByteArrayOutputStream();
+//		avatar_0.compress(Bitmap.CompressFormat.PNG, 100, out);
+//		byte[] byteData= out.toByteArray();
+//		
+//		// byte To String
+//		String strData = Base64.encodeToString(byteData, 0);
+//		
+//		// String to byte
+//		byteData = Base64.decode(strData, 0);
+//
+//		avatar_0 = BitmapFactory.decodeByteArray(byteData, 0, byteData.length);
+//
+//		return avatar_0;
+		// ======================== end
+		User user = (new UserDao(context)).getContact(username);
+		if (user == null) {
+			return null;
+		}
+		byte[] blob = user.getAvatarBlob();
+		if (blob == null) {
+//			return getDefaultAvatar();
+			return null;
+		}
+		InputStream is = new ByteArrayInputStream(blob);
+		return BitmapFactory.decodeStream(is);
 	}
 }

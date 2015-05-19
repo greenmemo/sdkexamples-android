@@ -8,10 +8,10 @@ public class EMWidgetConfig {
 		public abstract Bitmap getAvatar(String username);
 	}
 	
-	EMWidgetConfig instance;
+	static EMWidgetConfig instance;
 	EMAvatarCallBack avatarCallBack;
 	
-	public EMWidgetConfig getInstance() {
+	public static EMWidgetConfig getInstance() {
 		if (instance == null) {
 			instance = new EMWidgetConfig();
 		}
@@ -20,5 +20,12 @@ public class EMWidgetConfig {
 	
 	public void setAvatarCallBack(EMAvatarCallBack callback) {
 		avatarCallBack = callback;
+	}
+	
+	public Bitmap getAvatar(String username) {
+		if (avatarCallBack != null) {
+			return avatarCallBack.getAvatar(username);
+		}
+		return null;
 	}
 }
