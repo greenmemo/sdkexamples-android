@@ -24,6 +24,7 @@
         easemob:tb_takepic_disable="true"
         easemob:tb_image_bg="@drawable/cs_chat_image_selector"
         easemob:voiceModeBtnVisible="false"
+        easemob:tb_anim_enable="true"
         />
 
 </RelativeLayout>

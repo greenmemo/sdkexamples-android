@@ -51,6 +51,7 @@
         <attr name="tb_takepic_bg" format="reference" />
         <attr name="tb_video_call_bg" format="reference" />
         <attr name="tb_voice_call_bg" format="reference" />
+        <attr name="tb_animation_enable" format="boolean" />
         <attr name="voiceModeBtnVisible" format="boolean" />
     </declare-styleable>
     <declare-styleable name="ToolBoxBtn">

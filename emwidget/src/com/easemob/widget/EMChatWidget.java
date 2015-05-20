@@ -33,6 +33,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -168,6 +171,7 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 	private int typeFaceIndex = -1;
 	private int textStyle = -1;
 	private ColorStateList textColorStateList;
+	private boolean enableToolBoxAnimation = true;
 	
 	private View.OnClickListener imageToolBoxClickListener;
 	private View.OnClickListener locationToolBoxClickListener;
@@ -286,6 +290,8 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 			Button setKeyboardModeBtn = (Button) findViewById(R.id.btn_set_mode_keyboard);
 			setKeyboardModeBtn.setVisibility(View.GONE);
 		}
+		
+		enableToolBoxAnimation = a.getBoolean(R.styleable.emchatwidget_tb_animation_enable, true);
 	}
 	
 	private void setToolBoxAttribute(TypedArray a, int itemId, int attrDisable, int attrBg) {
@@ -1247,18 +1253,39 @@ public class EMChatWidget extends LinearLayout implements OnClickListener, EMEve
 			more.setVisibility(View.VISIBLE);
 			btnContainer.setVisibility(View.VISIBLE);
 			expressionWidget.setVisibility(View.GONE);
+			if (enableToolBoxAnimation) {
+				startToolBoxAnim();
+			}
 		} else {
 			if (expressionWidget.getVisibility() == View.VISIBLE) {
 				expressionWidget.setVisibility(View.GONE);
 				btnContainer.setVisibility(View.VISIBLE);
 				iv_emoticons_normal.setVisibility(View.VISIBLE);
 				iv_emoticons_checked.setVisibility(View.INVISIBLE);
+				if (enableToolBoxAnimation) {
+					startToolBoxAnim();
+				}
 			} else {
 				more.setVisibility(View.GONE);
 			}
-
 		}
-
+	}
+	
+	private void startToolBoxAnim() {
+		int[] tbIds = { R.id.btn_picture, R.id.btn_location, R.id.btn_video,
+				R.id.btn_file, R.id.btn_take_picture, R.id.btn_voice_call, R.id.btn_video_call};
+		AnimationSet animationSet = new AnimationSet(true);
+		RotateAnimation rotateAnimation = new RotateAnimation(-45.0f, 0, Animation.RELATIVE_TO_SELF, 0.5f,
+				Animation.RELATIVE_TO_SELF, 0.5f);
+		rotateAnimation.setDuration(250);
+		animationSet.addAnimation(rotateAnimation);
+		for (int id : tbIds) {
+			View container = findViewById(id);
+			if (container != null) {
+				ImageView image = (ImageView) container.findViewById(R.id.inner_image);
+				image.startAnimation(animationSet);
+			}
+		}
 	}
 
 	/**
