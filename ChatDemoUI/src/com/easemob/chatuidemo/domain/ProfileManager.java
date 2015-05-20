@@ -12,6 +12,8 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -26,6 +28,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.UserDao;
@@ -58,10 +61,12 @@ public class ProfileManager {
 		public abstract String postProfileUrl(String username);
 	}
 
+	public static final String TAG = "ProfileManager"; 
 	private Context context;
 	private ProfileUrlGen urlGen;
 	private Bitmap defaultAvatar;
 	private static ProfileManager instance;
+	private ExecutorService singleThreadService = Executors.newSingleThreadExecutor();
 	
 	public static ProfileManager getInstance(Context context) {
 		if (instance == null) {
@@ -99,7 +104,6 @@ public class ProfileManager {
     		return null;
     	}    	
     	InputStream input = null;
-		OutputStream output = null;
 
 		try {
 			input = entity.getContent();
@@ -122,8 +126,10 @@ public class ProfileManager {
 			while ((count = input.read(buffer)) != -1) {
 				byteBuffer.put(buffer, 0, count);
 			}
-			
-			JSONObject json = new JSONObject(byteBuffer.toString());
+
+			String data = new String(byteBuffer.array());
+			EMLog.d(TAG, "onDownloadCompleted:" + data);
+			JSONObject json = new JSONObject(data);
 			User user = User.fromJson(json);
 			return user;
 		} catch (IOException e) {
@@ -135,12 +141,11 @@ public class ProfileManager {
 			e.printStackTrace();
 			throw e;
 		} finally{
-			output.close();
 			input.close();
 		}
 	}
 	
-	public User retriveProfile(String username) {
+	private User _retriveProfile(String username) {
 		String remoteUrl = getProfileUrl(username);
 		if (remoteUrl == null) {
 			return null;
@@ -149,10 +154,12 @@ public class ProfileManager {
 		DefaultHttpClient client = HttpClientConfig.getDefaultHttpClient();
 		try {
 			HttpGet request = new HttpGet(remoteUrl);
+			request.addHeader("username", username);
 			HttpResponse response = client.execute(request);
 			int responseCode = response.getStatusLine().getStatusCode();
 			switch(responseCode){
 			case HttpStatus.SC_OK:
+				EMLog.d(TAG, "retriveProfile SC_OK, " + username);
 				User user = onDownloadCompleted(username, response);
 				(new UserDao(context)).saveContact(user);
 				return user;
@@ -163,6 +170,35 @@ public class ProfileManager {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+    private Runnable getProfileRunnable(final String username, final EMCallBack callback){
+        return new Runnable(){
+            @Override
+            public void run() {
+            	User user = _retriveProfile(username);
+            	if (callback != null) {
+	            	if (user != null) {
+	            		callback.onSuccess();
+	            	} else {
+	            		callback.onError(EMCallBack.ERROR_EXCEPTION, "fail to retrive profile:" + username);
+	            	}
+            	}
+            }
+        };
+    }
+    
+    private Runnable postProfileRunnable(final User profile, final EMCallBack callback){
+        return new Runnable(){
+            @Override
+            public void run() {
+            	
+            }
+        };
+    }
+    
+	public void retriveProfile(String username, EMCallBack callback) {
+		singleThreadService.execute(getProfileRunnable(username, callback));
 	}
 	
 	public void postCurrentUserProfile() {

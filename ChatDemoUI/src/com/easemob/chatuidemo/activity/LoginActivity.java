@@ -39,6 +39,7 @@ import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.UserDao;
+import com.easemob.chatuidemo.domain.ProfileManager;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.uidemo.Constant;
@@ -239,6 +240,13 @@ public class LoginActivity extends BaseActivity {
 		UserDao dao = new UserDao(LoginActivity.this);
 		List<User> users = new ArrayList<User>(userlist.values());
 		dao.saveContactList(users);
+
+		Map<String, User> mapUsers = dao.getContactList();
+		for (User user : mapUsers.values()) {
+			if (user.getAvatarBlob() == null) {
+				ProfileManager.getInstance(this).retriveProfile(user.getUsername(), null);
+			}
+		}
 
 		// 获取黑名单列表
 		List<String> blackList = EMContactManager.getInstance().getBlackListUsernamesFromServer();

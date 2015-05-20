@@ -272,17 +272,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 			user.setAvatarBlob(avatarBlob);
 			dao.saveContact(user);
 			
-			ProfileManager.getInstance(getActivity()).setUrlGen(new ProfileUrlGen() {
-				@Override
-				public String getProfileUrl(String username) {
-					return "http://172.16.1.70:6666/MyApp";
-				}
-				
-				@Override
-				public String postProfileUrl(String username) {
-					return "http://172.16.1.70:6666/MyApp";
-				}
-			});
 			(new Thread(new Runnable() {
 					@Override
 					public void run() {

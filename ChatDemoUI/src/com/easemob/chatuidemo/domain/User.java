@@ -88,15 +88,12 @@ public class User extends EMContact {
 		User user = new User();
 		try {
 			user.username = json.getString("username");
-			String data = json.getString("avatar");
+			if (json.has("avatar")) {
+				String data = json.getString("avatar");
+				user.avatarBlob = Base64.decode(data, 0);
+			}
 			if (json.has("nick")) {
 				user.nick = json.getString("nick");
-			}
-			if (data != "") {
-//				byte[] byteData = Base64.decode(data, 0);
-//				InputStream stream = new ByteArrayInputStream(byteData);
-//				user.icon = BitmapFactory.decodeStream(stream);
-				user.avatarBlob = Base64.decode(data, 0);
 			}
 			return user;
 		} catch (JSONException e) {

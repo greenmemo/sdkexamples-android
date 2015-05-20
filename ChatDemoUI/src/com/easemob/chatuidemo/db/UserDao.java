@@ -15,8 +15,10 @@ package com.easemob.chatuidemo.db;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -53,6 +55,55 @@ public class UserDao {
 	public void saveContactList(List<User> contactList) {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		if (db.isOpen()) {
+			// delete list, add list
+//			Set<String> existContacts = new HashSet<String>();
+			List<String> deleteList = new ArrayList<String>();
+//			List<User> addList = new ArrayList<User>();
+
+			Cursor cursor = db.rawQuery("select * from " + TABLE_NAME /* + " desc" */, null);
+			while (cursor.moveToNext()) {
+				String username = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_ID));
+				if (!contactList.contains(username)) {
+					deleteList.add(username);
+				}
+//				existContacts.add(username);
+			}
+			cursor.close();
+			
+//			for (User contact : contactList) {
+//				if (!existContacts.contains(contact.getUsername())) {
+//					addList.add(contact);
+//				}
+//			}
+			
+			// add 
+			for (User user : contactList) {
+				ContentValues values = new ContentValues();
+				values.put(COLUMN_NAME_ID, user.getUsername());
+				if(user.getNick() != null)
+					values.put(COLUMN_NAME_NICK, user.getNick());
+				if(user.getAvatar() != null)
+				    values.put(COLUMN_NAME_AVATAR, user.getAvatar());
+				if(user.getAvatarBlob() != null)
+				    values.put(COLUMN_NAME_AVATAR_BLOB, user.getAvatarBlob());
+				db.replace(TABLE_NAME, null, values);
+			}
+			
+			// delete
+			StringBuffer deleteSetBuff = new StringBuffer();
+			for (String username : deleteList) {
+				deleteSetBuff.append(username).append(", ");
+			}			
+			if (deleteSetBuff.length() > 0) {
+				deleteSetBuff.delete(deleteSetBuff.length() - 2, deleteSetBuff.length());
+			}
+			String deleteSet = deleteSetBuff.toString();
+			
+			db.delete(TABLE_NAME, COLUMN_NAME_ID + " in (?)", new String[] {deleteSet});
+		}
+		
+		/*  ======= old code
+		if (db.isOpen()) {
 			db.delete(TABLE_NAME, null, null);
 			for (User user : contactList) {
 				ContentValues values = new ContentValues();
@@ -66,6 +117,7 @@ public class UserDao {
 				db.replace(TABLE_NAME, null, values);
 			}
 		}
+		*/
 	}
 
 	/**

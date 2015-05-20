@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import com.easemob.EMCallBack;
 import com.easemob.chatuidemo.domain.ProfileManager;
 import com.easemob.chatuidemo.domain.User;
+import com.easemob.chatuidemo.domain.ProfileManager.ProfileUrlGen;
 import com.easemob.widget.EMWidgetConfig;
 
 public class DemoApplication extends Application {
@@ -70,6 +71,19 @@ public class DemoApplication extends Application {
 				return ProfileManager.getInstance(applicationContext).getAvatar(username);
 			}
         });;
+        
+		ProfileManager.getInstance(applicationContext).setUrlGen(new ProfileUrlGen() {
+			@Override
+			public String getProfileUrl(String username) {
+				return "http://172.16.1.70:6666/MyApp";
+			}
+			
+			@Override
+			public String postProfileUrl(String username) {
+				return "http://172.16.1.70:6666/MyApp";
+			}
+		});
+
 	}
 
 	public static DemoApplication getInstance() {
