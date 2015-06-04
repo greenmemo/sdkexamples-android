@@ -1336,6 +1336,7 @@ public class MessageAdapter extends BaseAdapter{
 						ImageMessageBody body = (ImageMessageBody) message.getBody();
 						intent.putExtra("secret", body.getSecret());
 						intent.putExtra("remotepath", remote);
+						intent.putExtra("thumbnailpath", thumbernailPath);
 					}
 					if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked
 							&& message.getChatType() != ChatType.GroupChat && message.getChatType() != ChatType.ChatRoom) {

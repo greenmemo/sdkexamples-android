@@ -52,6 +52,7 @@ public class ShowBigImage extends BaseActivity {
 	private Bitmap bitmap;
 	private boolean isDownloaded;
 	private ProgressBar loadLocalPb;
+	private String thumbnailpath;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -65,6 +66,7 @@ public class ShowBigImage extends BaseActivity {
 		Uri uri = getIntent().getParcelableExtra("uri");
 		String remotepath = getIntent().getExtras().getString("remotepath");
 		String secret = getIntent().getExtras().getString("secret");
+		thumbnailpath = getIntent().getExtras().getString("thumbnailpath");
 		EMLog.d(TAG, "show big image uri:" + uri + " remotepath:" + remotepath);
 
 		//本地存在，直接显示本地的图片
@@ -94,7 +96,7 @@ public class ShowBigImage extends BaseActivity {
 			}
 			downloadImage(remotepath, maps);
 		} else {
-			image.setImageResource(default_res);
+			useThumbnail();
 		}
 
 		image.setOnClickListener(new OnClickListener() {
@@ -147,7 +149,7 @@ public class ShowBigImage extends BaseActivity {
 
 						bitmap = ImageUtils.decodeScaleImage(localFilePath, screenWidth, screenHeight);
 						if (bitmap == null) {
-							image.setImageResource(default_res);
+							useThumbnail();
 						} else {
 							image.setImageBitmap(bitmap);
 							ImageCache.getInstance().put(localFilePath, bitmap);
@@ -170,7 +172,7 @@ public class ShowBigImage extends BaseActivity {
 					@Override
 					public void run() {
 						pd.dismiss();
-						image.setImageResource(default_res);
+						useThumbnail();
 					}
 				});
 			}
@@ -192,6 +194,17 @@ public class ShowBigImage extends BaseActivity {
 
 	}
 
+	private void useThumbnail() {
+		if (thumbnailpath != null && thumbnailpath != "") {
+			Bitmap thumbnail = ImageCache.getInstance().get(thumbnailpath);
+			if (thumbnail != null) {
+				image.setImageBitmap(thumbnail);
+				return;
+			}
+		}
+		image.setImageResource(default_res);
+	}
+	
 	@Override
 	public void onBackPressed() {
 		if (isDownloaded)
