@@ -13,6 +13,7 @@
  */
 package com.easemob.chatuidemo.activity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.R.raw;
@@ -76,6 +77,8 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 	private RelativeLayout blockGroupMsgLayout;
 	private RelativeLayout showChatRoomIdLayout;
 	private TextView chatRoomIdTextView;
+	private RelativeLayout showChatRoomNickLayout;
+	private TextView chatRoomNickTextView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +87,8 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		instance = this;
 		st = getResources().getString(R.string.people);
 		clearAllHistory = (RelativeLayout) findViewById(R.id.clear_all_history);
+		clearAllHistory.setVisibility(View.GONE);
 		userGridview = (ExpandGridView) findViewById(R.id.gridview);
-		userGridview.setVisibility(View.GONE);
 		loadingPB = (ProgressBar) findViewById(R.id.progressBar);
 		exitBtn = (Button) findViewById(R.id.btn_exit_grp);
 		deleteBtn = (Button) findViewById(R.id.btn_exitdel_grp);
@@ -94,7 +97,9 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 		blockGroupMsgLayout = (RelativeLayout)findViewById(R.id.rl_switch_block_groupmsg);
 		showChatRoomIdLayout = (RelativeLayout)findViewById(R.id.rl_group_id);
+		showChatRoomNickLayout = (RelativeLayout)findViewById(R.id.rl_group_nick);
 		chatRoomIdTextView = (TextView)findViewById(R.id.tv_group_id);
+		chatRoomNickTextView = (TextView)findViewById(R.id.tv_group_nick_value);
 
 		Drawable referenceDrawable = getResources().getDrawable(R.drawable.smiley_add_btn);
 		referenceWidth = referenceDrawable.getIntrinsicWidth();
@@ -105,8 +110,10 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		 
 		 showChatRoomIdLayout.setVisibility(View.VISIBLE);
 		 chatRoomIdTextView.setText("聊天室ID："+roomId);
+		 showChatRoomNickLayout.setVisibility(View.VISIBLE);
 		 
 		 room = EMChatManager.getInstance().getChatRoom(roomId);
+		 chatRoomNickTextView.setText(room.getName());
 
 		exitBtn.setVisibility(View.GONE);
 		deleteBtn.setVisibility(View.GONE);
@@ -120,8 +127,11 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 			deleteBtn.setVisibility(View.GONE);
 		}
 		
-		((TextView) findViewById(R.id.group_name)).setText(room.getName() + "(" + room.getAffiliationsCount() + st);
-		adapter = new GridAdapter(this, R.layout.grid, room.getMembers());
+		((TextView) findViewById(R.id.group_name)).setText(room.getName());
+		List<String> owner = new ArrayList<String>();
+		owner.add(room.getOwner());
+		
+		adapter = new GridAdapter(this, R.layout.grid, owner);
 		userGridview.setAdapter(adapter);
 		
 		updateRoom();
@@ -260,8 +270,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 					runOnUiThread(new Runnable() {
 						public void run() {
-							((TextView) findViewById(R.id.group_name)).setText(returnRoom.getName() + "(" + returnRoom.getAffiliationsCount()
-									+ "人)");
+							((TextView) findViewById(R.id.group_name)).setText(returnRoom.getName());
 							loadingPB.setVisibility(View.INVISIBLE);
 							adapter.notifyDataSetChanged();
 							if (EMChatManager.getInstance().getCurrentUser().equals(returnRoom.getOwner())) {
