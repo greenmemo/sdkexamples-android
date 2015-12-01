@@ -91,8 +91,8 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 						if (message.getChatType() != ChatType.Chat) {
 							// delete the image from server after download
 						}
-						if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked && message.getChatType() != ChatType.GroupChat && message.getChatType() != ChatType.ChatRoom) {
-							message.isAcked = true;
+						if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked() && message.getChatType() != ChatType.GroupChat && message.getChatType() != ChatType.ChatRoom) {
+							message.setAcked(true);
 							try {
 								// 看了大图后发个已读回执给对方
 								EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
@@ -105,7 +105,7 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 				}
 			});
 		} else {
-			if (message.status == EMMessage.Status.FAIL) {
+			if (message.status() == EMMessage.Status.FAIL) {
 				if (CommonUtils.isNetWorkConnected(activity)) {
 					new Thread(new Runnable() {
 

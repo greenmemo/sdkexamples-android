@@ -172,7 +172,7 @@ public class DemoHXSDKHelper extends HXSDKHelper{
                     EMLog.d(TAG, "收到透传消息");
                     //获取消息body
                     CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
-                    final String action = cmdMsgBody.action;//获取自定义action
+                    final String action = cmdMsgBody.action();//获取自定义action
                     
                     //获取扩展属性 此处省略
                     //message.getStringAttribute("");

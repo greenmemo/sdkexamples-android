@@ -44,6 +44,7 @@ import android.text.ClipboardManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -96,7 +97,6 @@ import com.easemob.chatuidemo.adapter.MessageAdapter;
 import com.easemob.chatuidemo.adapter.VoicePlayClickListener;
 import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.chatuidemo.utils.CommonUtils;
-import com.easemob.chatuidemo.utils.ImageUtils;
 import com.easemob.chatuidemo.utils.SmileUtils;
 import com.easemob.chatuidemo.utils.UserUtils;
 import com.easemob.chatuidemo.widget.ExpandGridView;
@@ -548,7 +548,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
                    }
                });
         }
-        
+		
         @Override
         public void onError(final int error, String errorMsg) {
                 // TODO Auto-generated method stub
@@ -562,7 +562,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
                finish();
             }
         });
-	}
+    }
 	
 	/**
 	 * onActivityResult
@@ -815,12 +815,17 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
             refreshUI();
             break;
         }
+        case EventMessageChanged:
+        {
+            Log.d(TAG, "EventMessageChanged");
+            refreshUI();
+            break;
+        }
         default:
             break;
         }
         
     }
-	
 	
 	private void refreshUIWithNewMessage(){
 	    if(adapter == null){
@@ -921,8 +926,11 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			message.addBody(txtBody);
 			// 设置要发给谁,用户username或者群聊groupid
 			message.setReceipt(toChatUsername);
-			// 把messgage加到conversation中
-			conversation.addMessage(message);
+			try {
+				EMChatManager.getInstance().sendMessage(message);
+			} catch (EaseMobException e) {
+				e.printStackTrace();
+			}
 			// 通知adapter有消息变动，adapter会根据加入的这条message显示消息和调用sdk的发送方法
 			adapter.refreshSelectLast();
 			mEditTextContent.setText("");
@@ -959,7 +967,11 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			if(isRobot){
 				message.setAttribute("em_robot_message", true);
 			}
-			conversation.addMessage(message);
+			try {
+				EMChatManager.getInstance().sendMessage(message);
+			} catch (EaseMobException e) {
+				e.printStackTrace();
+			}
 			adapter.refreshSelectLast();
 			setResult(RESULT_OK);
 			// send file
@@ -993,7 +1005,11 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		if(isRobot){
 			message.setAttribute("em_robot_message", true);
 		}
-		conversation.addMessage(message);
+		try {
+			EMChatManager.getInstance().sendMessage(message);
+		} catch (EaseMobException e) {
+			e.printStackTrace();
+		}
 
 		listView.setAdapter(adapter);
 		adapter.refreshSelectLast();
@@ -1024,7 +1040,11 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			if(isRobot){
 				message.setAttribute("em_robot_message", true);
 			}
-			conversation.addMessage(message);
+			try {
+				EMChatManager.getInstance().sendMessage(message);
+			} catch (EaseMobException e) {
+				e.printStackTrace();
+			}
 			listView.setAdapter(adapter);
 			adapter.refreshSelectLast();
 			setResult(RESULT_OK);
@@ -1093,7 +1113,11 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		if(isRobot){
 			message.setAttribute("em_robot_message", true);
 		}
-		conversation.addMessage(message);
+		try {
+			EMChatManager.getInstance().sendMessage(message);
+		} catch (EaseMobException e) {
+			e.printStackTrace();
+		}
 		listView.setAdapter(adapter);
 		adapter.refreshSelectLast();
 		setResult(RESULT_OK);
@@ -1151,7 +1175,11 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		if(isRobot){
 			message.setAttribute("em_robot_message", true);
 		}
-		conversation.addMessage(message);
+		try {
+			EMChatManager.getInstance().sendMessage(message);
+		} catch (EaseMobException e) {
+			e.printStackTrace();
+		}
 		listView.setAdapter(adapter);
 		adapter.refreshSelectLast();
 		setResult(RESULT_OK);
@@ -1164,9 +1192,10 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		EMMessage msg = null;
 		msg = conversation.getMessage(resendPos);
 		// msg.setBackSend(true);
-		msg.status = EMMessage.Status.CREATE;
-
-		adapter.refreshSeekTo(resendPos);
+		if (msg != null) {
+			msg.setStatus(EMMessage.Status.CREATE);
+			adapter.refreshSeekTo(resendPos);
+		}
 	}
 
 	/**
@@ -1489,7 +1518,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		EMChatManager.getInstance().registerEventListener(
 				this,
 				new EMNotifierEvent.Event[] { EMNotifierEvent.Event.EventNewMessage,EMNotifierEvent.Event.EventOfflineMessage,
-						EMNotifierEvent.Event.EventDeliveryAck, EMNotifierEvent.Event.EventReadAck });
+						EMNotifierEvent.Event.EventDeliveryAck, EMNotifierEvent.Event.EventReadAck, EMNotifierEvent.Event.EventMessageChanged });
 	}
 
 	@Override
@@ -1690,7 +1719,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 				File file = new File(filePath);
 				if (!file.exists()) {
 					// 不存在大图发送缩略图
-					filePath = ImageUtils.getThumbnailImagePath(filePath);
+//					filePath = ImageUtils.getThumbnailImagePath(filePath);
+					filePath = ((ImageMessageBody) forward_msg.getBody()).thumbnailLocalPath();
 				}
 				sendPicture(filePath);
 			}

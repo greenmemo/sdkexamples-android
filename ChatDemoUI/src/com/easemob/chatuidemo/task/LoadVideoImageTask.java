@@ -64,8 +64,8 @@ public class LoadVideoImageTask extends AsyncTask<Object, Void, Bitmap> {
 						intent.putExtra("remotepath", videoBody.getRemoteUrl());
 						if (message != null
 								&& message.direct == EMMessage.Direct.RECEIVE
-								&& !message.isAcked) {
-							message.isAcked = true;
+								&& !message.isAcked()) {
+							message.setAcked(true);
 							try {
 								EMChatManager.getInstance().ackMessageRead(
 										message.getFrom(), message.getMsgId());
@@ -80,7 +80,7 @@ public class LoadVideoImageTask extends AsyncTask<Object, Void, Bitmap> {
 			});
 
 		} else {
-			if (message.status == EMMessage.Status.FAIL
+			if (message.status() == EMMessage.Status.FAIL
 					|| message.direct == EMMessage.Direct.RECEIVE) {
 				if (CommonUtils.isNetWorkConnected(activity)) {
 					new AsyncTask<Void, Void, Void>() {

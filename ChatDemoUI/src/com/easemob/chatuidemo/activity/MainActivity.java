@@ -66,6 +66,7 @@ import com.easemob.chatuidemo.domain.InviteMessage;
 import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.utils.CommonUtils;
+import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.easemob.util.HanziToPinyin;
 import com.easemob.util.NetUtils;
@@ -284,7 +285,12 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 
             @Override
             public void onSuccess(List<String> value) {
-                EMContactManager.getInstance().saveBlackList(value);
+                try {
+					EMContactManager.getInstance().saveBlackList(value);
+				} catch (EaseMobException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 HXSDKHelper.getInstance().notifyBlackListSyncListener(true);
             }
 
@@ -512,7 +518,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	 * 好友变化listener
 	 * 
 	 */
-	public class MyContactListener implements EMContactListener {
+	public class MyContactListener extends EMContactListener {
 
 		@Override
 		public void onContactAdded(List<String> usernameList) {			
@@ -616,7 +622,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	 * 连接监听listener
 	 * 
 	 */
-	public class MyConnectionListener implements EMConnectionListener {
+	public class MyConnectionListener extends EMConnectionListener {
 
 		@Override
 		public void onConnected() {
@@ -743,9 +749,11 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 						
 			// 提示用户被T了，demo省略此步骤
 			// 刷新ui
+			final String _groupName = groupName;
 			runOnUiThread(new Runnable() {
 				public void run() {
 					try {
+						Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.you_are_group) + ":" + _groupName, 1).show();
 						updateUnreadLabel();
 						if (currentTabIndex == 0)
 							chatHistoryFragment.refresh();

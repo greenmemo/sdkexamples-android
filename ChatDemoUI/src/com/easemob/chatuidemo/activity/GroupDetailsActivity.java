@@ -737,9 +737,10 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					final EMGroup returnGroup = EMGroupManager.getInstance().getGroupFromServer(groupId);
+					group = EMGroupManager.getInstance().getGroupFromServer(groupId);
 					// 更新本地数据
-					EMGroupManager.getInstance().createOrUpdateLocalGroup(returnGroup);
+					EMGroupManager.getInstance().createOrUpdateLocalGroup(group);
+					EMLog.d(TAG, "group msg is __blocked:" + group.isMsgBlocked());
 
 					runOnUiThread(new Runnable() {
 						public void run() {
@@ -758,7 +759,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 							}
 
 							// update block
-							EMLog.d(TAG, "group msg is blocked:" + group.getMsgBlocked());
+							EMLog.d(TAG, "group msg is blocked:" + group.isMsgBlocked());
 							if (group.isMsgBlocked()) {
 								iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
 								iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);

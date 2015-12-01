@@ -4,6 +4,12 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.easemob.EMCallBack;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chatuidemo.R;
+import com.easemob.util.EMLog;
+import com.easemob.util.PathUtil;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,15 +20,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-
-import com.easemob.EMCallBack;
-import com.easemob.chat.EMChatConfig;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chatuidemo.R;
-import com.easemob.cloud.CloudOperationCallback;
-import com.easemob.cloud.HttpFileManager;
-import com.easemob.util.EMLog;
-import com.easemob.util.PathUtil;
 
 /**
  * 展示视频内容

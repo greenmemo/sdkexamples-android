@@ -43,11 +43,11 @@ import com.easemob.util.DateUtils;
  * 聊天记录adpater
  * 
  */
-public class ChatHistoryAdapter extends ArrayAdapter<EMContact> {
+public class ChatHistoryAdapter extends ArrayAdapter<Object> {
 
 	private LayoutInflater inflater;
 
-	public ChatHistoryAdapter(Context context, int textViewResourceId, List<EMContact> objects) {
+	public ChatHistoryAdapter(Context context, int textViewResourceId, List<Object> objects) {
 		super(context, textViewResourceId, objects);
 		inflater = LayoutInflater.from(context);
 	}
@@ -77,18 +77,21 @@ public class ChatHistoryAdapter extends ArrayAdapter<EMContact> {
 		}
 		
 		
-		EMContact user = getItem(position);
+//		EMContact user = getItem(position);
+		Object user = getItem(position);
+		String username = "";
 		if(user instanceof EMGroup){
 			//群聊消息，显示群聊头像
 			holder.avatar.setImageResource(R.drawable.groups_icon);
+			username = ((EMGroup)user).getGroupName();
 		}else{
 			holder.avatar.setImageResource(R.drawable.default_avatar);
+			username = ((EMContact)user).getUsername();
 		}
 		
-		String username = user.getUsername();
 		// 获取与此用户/群组的会话
 		EMConversation conversation = EMChatManager.getInstance().getConversation(username);
-		holder.name.setText(user.getNick() != null ? user.getNick() : username);
+		holder.name.setText(username);
 		if (conversation.getUnreadMsgCount() > 0) {
 			// 显示与此用户的消息未读数
 			holder.unreadLabel.setText(String.valueOf(conversation.getUnreadMsgCount()));
@@ -104,7 +107,7 @@ public class ChatHistoryAdapter extends ArrayAdapter<EMContact> {
 					BufferType.SPANNABLE);
 
 			holder.time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
-			if (lastMessage.direct == EMMessage.Direct.SEND && lastMessage.status == EMMessage.Status.FAIL) {
+			if (lastMessage.direct == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {
 				holder.msgState.setVisibility(View.VISIBLE);
 			} else {
 				holder.msgState.setVisibility(View.GONE);

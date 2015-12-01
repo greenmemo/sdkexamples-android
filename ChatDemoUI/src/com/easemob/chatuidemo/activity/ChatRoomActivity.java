@@ -45,6 +45,7 @@ import com.easemob.chat.EMChatRoom;
 import com.easemob.chat.EMGroup;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.adapter.ChatRoomAdapter;
+import com.easemob.exceptions.EaseMobException;
 
 public class ChatRoomActivity extends BaseActivity {
 	private ListView chatListView;
@@ -95,7 +96,7 @@ public class ChatRoomActivity extends BaseActivity {
                     new Thread(){
                         @Override
                         public void run(){
-                            EMChatManager.getInstance().leaveChatRoom(roomId);
+							EMChatManager.getInstance().leaveChatRoom(roomId);
                         }
                     }.start();
                     

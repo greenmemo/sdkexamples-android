@@ -91,22 +91,19 @@ public class ChatAllHistoryFragment extends Fragment implements View.OnClickList
 				if (username.equals(DemoApplication.getInstance().getUserName()))
 					Toast.makeText(getActivity(), st2, 0).show();
 				else {
-				    // 进入聊天页面
-				    Intent intent = new Intent(getActivity(), ChatActivity.class);
-				    if(conversation.isGroup()){
-				        if(conversation.getType() == EMConversationType.ChatRoom){
-				         // it is group chat
-	                        intent.putExtra("chatType", ChatActivity.CHATTYPE_CHATROOM);
-	                        intent.putExtra("groupId", username);
-				        }else{
-				         // it is group chat
-	                        intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
-	                        intent.putExtra("groupId", username);
-				        }
-				        
-				    }else{
-				        // it is single chat
-                        intent.putExtra("userId", username);
+					// 进入聊天页面
+					Intent intent = new Intent(getActivity(), ChatActivity.class);
+					if(conversation.getType() == EMConversationType.ChatRoom){
+						// it is group chat
+						intent.putExtra("chatType", ChatActivity.CHATTYPE_CHATROOM);
+						intent.putExtra("groupId", username);
+					}else if (conversation.getType() == EMConversationType.GroupChat){
+						// it is group chat
+						intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
+						intent.putExtra("groupId", username);
+					}else if (conversation.getType() == EMConversationType.Chat){
+						// it is single chat
+						intent.putExtra("userId", username);
 				    }
 				    startActivity(intent);
 				}
