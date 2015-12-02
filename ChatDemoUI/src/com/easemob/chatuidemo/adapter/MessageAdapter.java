@@ -1016,7 +1016,7 @@ public class MessageAdapter extends BaseAdapter{
 			if (message.status() == EMMessage.Status.INPROGRESS) {
 				holder.pb.setVisibility(View.VISIBLE);
 				EMLog.d(TAG, "!!!! back receive");
-				((FileMessageBody) message.getBody()).setDownloadCallback(new EMCallBack() {
+				message.setMessageStatusCallback(new EMCallBack() {
 
 					@Override
 					public void onSuccess() {
@@ -1273,7 +1273,7 @@ public class MessageAdapter extends BaseAdapter{
 		if(holder.tv!=null)
 		holder.tv.setVisibility(View.VISIBLE);
 
-		msgbody.setDownloadCallback(new EMCallBack() {
+		message.setMessageStatusCallback(new EMCallBack() {
 
 			@Override
 			public void onSuccess() {

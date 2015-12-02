@@ -518,7 +518,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	 * 好友变化listener
 	 * 
 	 */
-	public class MyContactListener extends EMContactListener {
+	public class MyContactListener implements EMContactListener {
 
 		@Override
 		public void onContactAdded(List<String> usernameList) {			
@@ -622,7 +622,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	 * 连接监听listener
 	 * 
 	 */
-	public class MyConnectionListener extends EMConnectionListener {
+	public class MyConnectionListener implements EMConnectionListener {
 
 		@Override
 		public void onConnected() {

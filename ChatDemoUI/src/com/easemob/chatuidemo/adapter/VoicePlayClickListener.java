@@ -130,13 +130,13 @@ public class VoicePlayClickListener implements View.OnClickListener {
 			if (message.direct == EMMessage.Direct.RECEIVE) {
 				try {
 					if (!message.isAcked()) {
-						message.setIsAcked(true);
+						message.setAcked(true);
 						// 告知对方已读这条消息
 						if (chatType != ChatType.GroupChat && chatType != ChatType.ChatRoom)
 							EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
 					}
 				} catch (Exception e) {
-					message.setIsAcked(false);
+					message.setAcked(false);
 				}
 				if (!message.isListened() && iv_read_status != null && iv_read_status.getVisibility() == View.VISIBLE) {
 					// 隐藏自己未播放这条语音消息的标志
