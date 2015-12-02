@@ -103,7 +103,7 @@ public class ChatAllHistoryFragment extends Fragment implements View.OnClickList
                         	intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
                         	intent.putExtra("groupId", username);
                         }
-					else {
+					} else {
 						// it is single chat
 						intent.putExtra("userId", username);
 				    }
