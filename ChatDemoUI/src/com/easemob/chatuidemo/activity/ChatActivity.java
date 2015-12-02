@@ -926,11 +926,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			message.addBody(txtBody);
 			// 设置要发给谁,用户username或者群聊groupid
 			message.setReceipt(toChatUsername);
-			try {
-				EMChatManager.getInstance().sendMessage(message);
-			} catch (EaseMobException e) {
-				e.printStackTrace();
-			}
+			conversation.addMessage(message);
 			// 通知adapter有消息变动，adapter会根据加入的这条message显示消息和调用sdk的发送方法
 			adapter.refreshSelectLast();
 			mEditTextContent.setText("");
@@ -967,11 +963,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			if(isRobot){
 				message.setAttribute("em_robot_message", true);
 			}
-			try {
-				EMChatManager.getInstance().sendMessage(message);
-			} catch (EaseMobException e) {
-				e.printStackTrace();
-			}
+			conversation.addMessage(message);
 			adapter.refreshSelectLast();
 			setResult(RESULT_OK);
 			// send file
@@ -1005,11 +997,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		if(isRobot){
 			message.setAttribute("em_robot_message", true);
 		}
-		try {
-			EMChatManager.getInstance().sendMessage(message);
-		} catch (EaseMobException e) {
-			e.printStackTrace();
-		}
+		conversation.addMessage(message);
 
 		listView.setAdapter(adapter);
 		adapter.refreshSelectLast();
@@ -1040,11 +1028,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			if(isRobot){
 				message.setAttribute("em_robot_message", true);
 			}
-			try {
-				EMChatManager.getInstance().sendMessage(message);
-			} catch (EaseMobException e) {
-				e.printStackTrace();
-			}
+			conversation.addMessage(message);
 			listView.setAdapter(adapter);
 			adapter.refreshSelectLast();
 			setResult(RESULT_OK);
@@ -1113,11 +1097,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		if(isRobot){
 			message.setAttribute("em_robot_message", true);
 		}
-		try {
-			EMChatManager.getInstance().sendMessage(message);
-		} catch (EaseMobException e) {
-			e.printStackTrace();
-		}
+		conversation.addMessage(message);
 		listView.setAdapter(adapter);
 		adapter.refreshSelectLast();
 		setResult(RESULT_OK);
@@ -1175,11 +1155,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		if(isRobot){
 			message.setAttribute("em_robot_message", true);
 		}
-		try {
-			EMChatManager.getInstance().sendMessage(message);
-		} catch (EaseMobException e) {
-			e.printStackTrace();
-		}
+		conversation.addMessage(message);
 		listView.setAdapter(adapter);
 		adapter.refreshSelectLast();
 		setResult(RESULT_OK);
