@@ -43,11 +43,11 @@ import com.easemob.util.DateUtils;
  * 聊天记录adpater
  * 
  */
-public class ChatHistoryAdapter extends ArrayAdapter<Object> {
+public class ChatHistoryAdapter extends ArrayAdapter<EMContact> {
 
 	private LayoutInflater inflater;
 
-	public ChatHistoryAdapter(Context context, int textViewResourceId, List<Object> objects) {
+	public ChatHistoryAdapter(Context context, int textViewResourceId, List<EMContact> objects) {
 		super(context, textViewResourceId, objects);
 		inflater = LayoutInflater.from(context);
 	}
@@ -77,18 +77,15 @@ public class ChatHistoryAdapter extends ArrayAdapter<Object> {
 		}
 		
 		
-//		EMContact user = getItem(position);
-		Object user = getItem(position);
-		String username = "";
+		EMContact user = getItem(position);
 		if(user instanceof EMGroup){
 			//群聊消息，显示群聊头像
 			holder.avatar.setImageResource(R.drawable.groups_icon);
-			username = ((EMGroup)user).getGroupName();
 		}else{
 			holder.avatar.setImageResource(R.drawable.default_avatar);
-			username = ((EMContact)user).getUsername();
 		}
 		
+		String username = user.getUsername();
 		// 获取与此用户/群组的会话
 		EMConversation conversation = EMChatManager.getInstance().getConversation(username);
 		holder.name.setText(username);
