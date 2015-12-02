@@ -97,26 +97,19 @@ public class ChatHistoryFragment extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Object obj = adapter.getItem(position);
-				String username = "";
-				if (obj instanceof EMContact) {
-					username = ((EMContact)obj).getUsername();
-				} else {
-					username = ((EMGroup)obj).getGroupName();
-				}
-					
-				if (username.equals(DemoApplication.getInstance().getUserName()))
+			    EMContact emContact = adapter.getItem(position);
+			    if (adapter.getItem(position).getUsername().equals(DemoApplication.getInstance().getUserName()))
 					Toast.makeText(getActivity(), st, 0).show();
 				else {
 					// 进入聊天页面
 					Intent intent = new Intent(getActivity(), ChatActivity.class);
-					if (obj instanceof EMGroup) {
+					if (emContact instanceof EMGroup) {
 						//it is group chat
 						intent.putExtra("chatType", ChatActivity.CHATTYPE_GROUP);
-						intent.putExtra("groupId", ((EMGroup) obj).getGroupId());
+						intent.putExtra("groupId", ((EMGroup) emContact).getGroupId());
 					} else {
 						//it is single chat
-						intent.putExtra("userId", ((EMContact)obj).getUsername());
+						intent.putExtra("userId", ((EMContact)emContact).getUsername());
 					} 
 					startActivity(intent);
 				}
@@ -180,22 +173,14 @@ public class ChatHistoryFragment extends Fragment {
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.delete_message) {
-			Object tobeDeleteUser = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
+		    EMContact tobeDeleteUser = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
 			boolean isGroup = false;
 			if(tobeDeleteUser instanceof EMGroup)
 				isGroup = true;
 			// 删除此会话
-			
-			String username = "";
-			if (tobeDeleteUser instanceof EMContact) {
-				username = ((EMContact)tobeDeleteUser).getUsername();
-			} else {
-				username = ((EMGroup)tobeDeleteUser).getGroupName();
-			}
-			
-			EMChatManager.getInstance().deleteConversation(username,isGroup);
+			EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(),isGroup);
 			InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
-			inviteMessgeDao.deleteMessage(username);
+			inviteMessgeDao.deleteMessage(tobeDeleteUser.getUsername());
 			adapter.remove(tobeDeleteUser);
 			adapter.notifyDataSetChanged();
 
@@ -224,8 +209,8 @@ public class ChatHistoryFragment extends Fragment {
 	 * @param context
 	 * @return
 	 */
-	private List<Object> loadUsersWithRecentChat() {
-		List<Object> resultList = new ArrayList<Object>();
+	private List<EMContact> loadUsersWithRecentChat() {
+		List<EMContact> resultList = new ArrayList<EMContact>();
 		//获取有聊天记录的users，不包括陌生人
 		for (User user : contactList.values()) {
 			EMConversation conversation = EMChatManager.getInstance().getConversation(user.getUsername());
@@ -251,24 +236,12 @@ public class ChatHistoryFragment extends Fragment {
 	 * 
 	 * @param usernames
 	 */
-	private void sortUserByLastChatTime(List<Object> contactList) {
-		Collections.sort(contactList, new Comparator<Object>() {
+	private void sortUserByLastChatTime(List<EMContact> contactList) {
+		Collections.sort(contactList, new Comparator<EMContact>() {
 			@Override
-			public int compare(final Object user1, final Object user2) {
-				String username1 = "";
-				String username2 = "";
-				if (user1 instanceof EMContact) {
-					username1 = ((EMContact)user1).getUsername();
-				} else {
-					username1 = ((EMGroup)user1).getGroupName();
-				}
-				if (user2 instanceof EMContact) {
-					username2 = ((EMContact)user2).getUsername();
-				} else {
-					username2 = ((EMGroup)user2).getGroupName();
-				}
-				EMConversation conversation1 = EMChatManager.getInstance().getConversation(username1);
-				EMConversation conversation2 = EMChatManager.getInstance().getConversation(username2);
+			public int compare(final EMContact user1, final EMContact user2) {
+			    EMConversation conversation1 = EMChatManager.getInstance().getConversation(user1.getUsername());
+			    EMConversation conversation2 = EMChatManager.getInstance().getConversation(user2.getUsername());
 
 				EMMessage user2LastMessage = conversation2.getLastMessage();
 				EMMessage user1LastMessage = conversation1.getLastMessage();
