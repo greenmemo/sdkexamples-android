@@ -24,6 +24,7 @@ import com.easemob.EMError;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.utils.CommonUtils;
 import com.easemob.exceptions.EaseMobException;
 
 /**
@@ -50,6 +51,11 @@ public class RegisterActivity extends BaseActivity {
 	 * @param view
 	 */
 	public void register(View view) {
+        if (!CommonUtils.isNetWorkConnected(this)) {
+            Toast.makeText(this, R.string.network_isnot_available, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
 		final String username = userNameEditText.getText().toString().trim();
 		final String pwd = passwordEditText.getText().toString().trim();
 		String confirm_pwd = confirmPwdEditText.getText().toString().trim();

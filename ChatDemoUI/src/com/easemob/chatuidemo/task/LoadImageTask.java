@@ -56,7 +56,7 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 		if (file.exists()) {
 			return ImageUtils.decodeScaleImage(thumbnailPath, 160, 160);
 		} else {
-			if (message.direct == EMMessage.Direct.SEND) {
+			if (message.direct() == EMMessage.Direct.SEND) {
 				return ImageUtils.decodeScaleImage(localFullSizePath, 160, 160);
 			} else {
 				return null;
@@ -91,7 +91,7 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 						if (message.getChatType() != ChatType.Chat) {
 							// delete the image from server after download
 						}
-						if (message != null && message.direct == EMMessage.Direct.RECEIVE && !message.isAcked() && message.getChatType() != ChatType.GroupChat && message.getChatType() != ChatType.ChatRoom) {
+						if (message != null && message.direct() == EMMessage.Direct.RECEIVE && !message.isAcked() && message.getChatType() != ChatType.GroupChat && message.getChatType() != ChatType.ChatRoom) {
 							message.setAcked(true);
 							try {
 								// 看了大图后发个已读回执给对方
