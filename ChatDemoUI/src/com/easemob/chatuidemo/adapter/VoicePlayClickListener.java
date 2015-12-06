@@ -74,7 +74,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 
 	public void stopPlayVoice() {
 		voiceAnimation.stop();
-		if (message.direct == EMMessage.Direct.RECEIVE) {
+		if (message.direct() == EMMessage.Direct.RECEIVE) {
 			voiceIconView.setImageResource(R.drawable.chatfrom_voice_playing);
 		} else {
 			voiceIconView.setImageResource(R.drawable.chatto_voice_playing);
@@ -127,7 +127,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 			showAnimation();
 
 			// 如果是接收的消息
-			if (message.direct == EMMessage.Direct.RECEIVE) {
+			if (message.direct() == EMMessage.Direct.RECEIVE) {
 				try {
 					if (!message.isAcked()) {
 						message.setAcked(true);
@@ -153,7 +153,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 	// show the voice playing animation
 	private void showAnimation() {
 		// play voice, and start animation
-		if (message.direct == EMMessage.Direct.RECEIVE) {
+		if (message.direct() == EMMessage.Direct.RECEIVE) {
 			voiceIconView.setImageResource(R.anim.voice_from_icon);
 		} else {
 			voiceIconView.setImageResource(R.anim.voice_to_icon);
@@ -173,7 +173,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 			currentPlayListener.stopPlayVoice();
 		}
 
-		if (message.direct == EMMessage.Direct.SEND) {
+		if (message.direct() == EMMessage.Direct.SEND) {
 			// for sent msg, we will try to play the voice file directly
 			playVoice(voiceBody.getLocalUrl());
 		} else {

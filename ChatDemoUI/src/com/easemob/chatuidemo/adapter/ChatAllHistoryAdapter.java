@@ -144,7 +144,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
 					BufferType.SPANNABLE);
 
 			holder.time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
-			if (lastMessage.direct == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {
+			if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {
 				holder.msgState.setVisibility(View.VISIBLE);
 			} else {
 				holder.msgState.setVisibility(View.GONE);
@@ -165,7 +165,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
 		String digest = "";
 		switch (message.getType()) {
 		case LOCATION: // 位置消息
-			if (message.direct == EMMessage.Direct.RECEIVE) {
+			if (message.direct() == EMMessage.Direct.RECEIVE) {
 				// 从sdk中提到了ui中，使用更简单不犯错的获取string的方法
 				// digest = EasyUtils.getAppResourceString(context,
 				// "location_recv");

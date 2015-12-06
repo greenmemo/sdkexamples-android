@@ -63,7 +63,7 @@ public class LoadVideoImageTask extends AsyncTask<Object, Void, Bitmap> {
 						intent.putExtra("secret", videoBody.getSecret());
 						intent.putExtra("remotepath", videoBody.getRemoteUrl());
 						if (message != null
-								&& message.direct == EMMessage.Direct.RECEIVE
+								&& message.direct() == EMMessage.Direct.RECEIVE
 								&& !message.isAcked()) {
 							message.setAcked(true);
 							try {
@@ -81,7 +81,7 @@ public class LoadVideoImageTask extends AsyncTask<Object, Void, Bitmap> {
 
 		} else {
 			if (message.status() == EMMessage.Status.FAIL
-					|| message.direct == EMMessage.Direct.RECEIVE) {
+					|| message.direct() == EMMessage.Direct.RECEIVE) {
 				if (CommonUtils.isNetWorkConnected(activity)) {
 					new AsyncTask<Void, Void, Void>() {
 						 
