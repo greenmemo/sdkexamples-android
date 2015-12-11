@@ -67,7 +67,7 @@ public class LoadVideoImageTask extends AsyncTask<Object, Void, Bitmap> {
 								&& !message.isAcked()) {
 							message.setAcked(true);
 							try {
-								EMChatManager.getInstance().ackMessageRead(
+								EMClient.getInstance().chatManager().ackMessageRead(
 										message.getFrom(), message.getMsgId());
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -88,7 +88,7 @@ public class LoadVideoImageTask extends AsyncTask<Object, Void, Bitmap> {
 						
 						@Override
 						protected Void doInBackground(Void... params) {
-							EMChatManager.getInstance().asyncFetchMessage(
+							EMClient.getInstance().chatManager().asyncFetchMessage(
 									message);
 							return null;
 						}

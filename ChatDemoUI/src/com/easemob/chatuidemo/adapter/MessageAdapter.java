@@ -140,7 +140,7 @@ public class MessageAdapter extends BaseAdapter{
 		this.context = context;
 		inflater = LayoutInflater.from(context);
 		activity = (Activity) context;
-		this.conversation = EMChatManager.getInstance().getConversation(username);
+		this.conversation = EMClient.getInstance().chatManager().getConversation(username);
 	}
 	
 	Handler handler = new Handler() {
@@ -453,7 +453,7 @@ public class MessageAdapter extends BaseAdapter{
 				// 不是语音通话记录
 				if (!message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
 					try {
-						EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
+						EMClient.getInstance().chatManager().ackMessageRead(message.getFrom(), message.getMsgId());
 						// 发送已读回执
 						message.setAcked(true);
 					} catch (Exception e) {
@@ -1101,7 +1101,7 @@ public class MessageAdapter extends BaseAdapter{
 				}
 				if (message.direct() == EMMessage.Direct.RECEIVE && !message.isAcked() && message.getChatType() != ChatType.GroupChat && message.getChatType() != ChatType.ChatRoom) {
 					try {
-						EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
+						EMClient.getInstance().chatManager().ackMessageRead(message.getFrom(), message.getMsgId());
 						message.setAcked(true);
 					} catch (EaseMobException e) {
 						// TODO Auto-generated catch block
@@ -1237,7 +1237,7 @@ public class MessageAdapter extends BaseAdapter{
 
 		final long start = System.currentTimeMillis();
 		// 调用sdk发送异步发送方法
-		EMChatManager.getInstance().sendMessage(message, new EMCallBack() {
+		EMClient.getInstance().chatManager().sendMessage(message, new EMCallBack() {
 
 			@Override
 			public void onSuccess() {
@@ -1327,7 +1327,7 @@ public class MessageAdapter extends BaseAdapter{
 			
 			final long start = System.currentTimeMillis();
 			// if (chatType == ChatActivity.CHATTYPE_SINGLE) {
-			EMChatManager.getInstance().sendMessage(message, new EMCallBack() {
+			EMClient.getInstance().chatManager().sendMessage(message, new EMCallBack() {
 
 				@Override
 				public void onSuccess() {
@@ -1465,7 +1465,7 @@ public class MessageAdapter extends BaseAdapter{
 					if (message != null && message.direct() == EMMessage.Direct.RECEIVE && !message.isAcked()
 							&& message.getChatType() != ChatType.GroupChat && message.getChatType() != ChatType.ChatRoom) {
 						try {
-							EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
+							EMClient.getInstance().chatManager().ackMessageRead(message.getFrom(), message.getMsgId());
 							message.setAcked(true);
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -1514,7 +1514,7 @@ public class MessageAdapter extends BaseAdapter{
 							&& message.getChatType() != ChatType.GroupChat && message.getChatType() != ChatType.ChatRoom) {
 						message.setAcked(true);
 						try {
-							EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
+							EMClient.getInstance().chatManager().ackMessageRead(message.getFrom(), message.getMsgId());
 						} catch (Exception e) {
 							e.printStackTrace();
 						}

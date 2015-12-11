@@ -87,7 +87,7 @@ public class ChatHistoryAdapter extends ArrayAdapter<EMContact> {
 		
 		String username = user.getUsername();
 		// 获取与此用户/群组的会话
-		EMConversation conversation = EMChatManager.getInstance().getConversation(username);
+		EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
 		holder.name.setText(username);
 		if (conversation.getUnreadMsgCount() > 0) {
 			// 显示与此用户的消息未读数

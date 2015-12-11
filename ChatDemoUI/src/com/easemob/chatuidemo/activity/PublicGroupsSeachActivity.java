@@ -53,7 +53,7 @@ public class PublicGroupsSeachActivity extends BaseActivity{
 
             public void run() {
                 try {
-                    searchedGroup = EMGroupManager.getInstance().getGroupFromServer(idET.getText().toString());
+                    searchedGroup = EMClient.getInstance().groupManager().getGroupFromServer(idET.getText().toString());
                     runOnUiThread(new Runnable() {
                         public void run() {
                             pd.dismiss();

@@ -19,7 +19,6 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
-import android.R.bool;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -31,16 +30,14 @@ import android.widget.Toast;
 
 import com.easemob.EMCallBack;
 import com.easemob.EMChatRoomChangeListener;
-import com.easemob.EMEventListener;
-import com.easemob.EMNotifierEvent;
+import com.easemob.EMMessageListener;
 import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.applib.model.HXNotifier;
 import com.easemob.applib.model.HXNotifier.HXNotificationInfoProvider;
 import com.easemob.applib.model.HXSDKModel;
-import com.easemob.chat.CmdMessageBody;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMChatOptions;
+import com.easemob.chat.EMClient;
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.EMOptions;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMMessage.Type;
 import com.easemob.chatuidemo.activity.ChatActivity;
@@ -66,7 +63,7 @@ public class DemoHXSDKHelper extends HXSDKHelper{
     /**
      * EMEventListener
      */
-    protected EMEventListener eventListener = null;
+    protected EMMessageListener eventListener = null;
 
     /**
      * contact list in cache
@@ -103,7 +100,7 @@ public class DemoHXSDKHelper extends HXSDKHelper{
             
             //if your app is supposed to user Google Push, please set project number
             String projectNumber = "562451699741";
-            EMChatManager.getInstance().setGCMProjectNumber(projectNumber);
+            EMClient.getInstance().setGCMProjectNumber(projectNumber);
             return true;
         }
         
@@ -111,18 +108,17 @@ public class DemoHXSDKHelper extends HXSDKHelper{
     }
     
     @Override
-    protected void initHXOptions(){
-        super.initHXOptions();
-
+    protected EMOptions initHXOptions(){
+        EMOptions options =  super.initHXOptions();
         // you can also get EMChatOptions to set related SDK options
-        EMChatOptions options = EMChatManager.getInstance().getChatOptions();
         options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());  
+        return options;
     }
 
     @Override
     protected void initListener(){
         super.initListener();
-        IntentFilter callFilter = new IntentFilter(EMChatManager.getInstance().getIncomingCallBroadcastAction());
+        IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
         if(callReceiver == null){
             callReceiver = new CallReceiver();
         }
@@ -139,86 +135,41 @@ public class DemoHXSDKHelper extends HXSDKHelper{
      * activityList.size() <= 0 意味着所有页面都已经在后台运行，或者已经离开Activity Stack
      */
     protected void initEventListener() {
-        eventListener = new EMEventListener() {
-            private BroadcastReceiver broadCastReceiver = null;
+        eventListener = new EMMessageListener() {
             
             @Override
-            public void onEvent(EMNotifierEvent event) {
-                EMMessage message = null;
-                if(event.getData() instanceof EMMessage){
-                    message = (EMMessage)event.getData();
-                    EMLog.d(TAG, "receive the event : " + event.getEvent() + ",id : " + message.getMsgId());
+            public void onMessageReceived(List<EMMessage> messages) {
+                if(activityList.size() <= 0){
+                    EMLog.d(TAG, "received  messages");
+                    HXSDKHelper.getInstance().getNotifier().onNewMesg(messages);
                 }
-                
-                switch (event.getEvent()) {
-                case EventNewMessage:
-                    //应用在后台，不需要刷新UI,通知栏提示新消息
-                    if(activityList.size() <= 0){
-                        HXSDKHelper.getInstance().getNotifier().onNewMsg(message);
-                    }
-                    break;
-                case EventOfflineMessage:
-                    if(activityList.size() <= 0){
-                        EMLog.d(TAG, "received offline messages");
-                        List<EMMessage> messages = (List<EMMessage>) event.getData();
-                        HXSDKHelper.getInstance().getNotifier().onNewMesg(messages);
-                    }
-                    break;
-                // below is just giving a example to show a cmd toast, the app should not follow this
-                // so be careful of this
-                case EventNewCMDMessage:
-                {
-                    
-                    EMLog.d(TAG, "收到透传消息");
-                    //获取消息body
-                    CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
-                    final String action = cmdMsgBody.action();//获取自定义action
-                    
-                    //获取扩展属性 此处省略
-                    //message.getStringAttribute("");
-                    EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action,message.toString()));
-                    final String str = appContext.getString(R.string.receive_the_passthrough);
-                    
-                    final String CMD_TOAST_BROADCAST = "easemob.demo.cmd.toast";
-                    IntentFilter cmdFilter = new IntentFilter(CMD_TOAST_BROADCAST);
-                    
-                    if(broadCastReceiver == null){
-                        broadCastReceiver = new BroadcastReceiver(){
-
-                            @Override
-                            public void onReceive(Context context, Intent intent) {
-                                // TODO Auto-generated method stub
-                                Toast.makeText(appContext, intent.getStringExtra("cmd_value"), Toast.LENGTH_SHORT).show();
-                            }
-                        };
-                        
-                      //注册广播接收者
-                        appContext.registerReceiver(broadCastReceiver,cmdFilter);
-                    }
-
-                    Intent broadcastIntent = new Intent(CMD_TOAST_BROADCAST);
-                    broadcastIntent.putExtra("cmd_value", str+action);
-                    appContext.sendBroadcast(broadcastIntent, null);
-                    
-                    break;
-                }
-                case EventDeliveryAck:
-                    message.setDelivered(true);
-                    break;
-                case EventReadAck:
-                    message.setAcked(true);
-                    break;
-                // add other events in case you are interested in
-                default:
-                    break;
-                }
+            }
+            
+            @Override
+            public void onCmdMessageReceived(List<EMMessage> messages) {
+                EMLog.d(TAG, "received cmd messages");
+            }
+            
+            @Override
+            public void onMessageReadAckReceived(List<EMMessage> messages) {
                 
             }
+            
+            @Override
+            public void onMessageDeliveryAckReceived(List<EMMessage> messages) {
+                
+            }
+            
+            @Override
+            public void onMessageChanged(EMMessage message, Object change) {
+                
+            }
+           
         };
         
-        EMChatManager.getInstance().registerEventListener(eventListener);
+        EMClient.getInstance().chatManager().addMessageListener(eventListener);
         
-        EMChatManager.getInstance().addChatRoomChangeListener(new EMChatRoomChangeListener(){
+        EMClient.getInstance().chatroomManager().addChatRoomChangeListener(new EMChatRoomChangeListener(){
             private final static String ROOM_CHANGE_BROADCAST = "easemob.demo.chatroom.changeevent.toast";
             private final IntentFilter filter = new IntentFilter(ROOM_CHANGE_BROADCAST);
             private boolean registered = false;
@@ -380,7 +331,7 @@ public class DemoHXSDKHelper extends HXSDKHelper{
     public HXNotifier createNotifier(){
         return new HXNotifier(){
             public synchronized void onNewMsg(final EMMessage message) {
-                if(EMChatManager.getInstance().isSlientMessage(message)){
+                if(EMClient.getInstance().chatManager().isSlientMessage(message)){
                     return;
                 }
                 
@@ -526,7 +477,7 @@ public class DemoHXSDKHelper extends HXSDKHelper{
     
     void endCall(){
         try {
-            EMChatManager.getInstance().endCall();
+            EMClient.getInstance().callManager().endCall();
         } catch (Exception e) {
             e.printStackTrace();
         }

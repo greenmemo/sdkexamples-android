@@ -68,26 +68,21 @@ import android.widget.Toast;
 
 import com.easemob.EMChatRoomChangeListener;
 import com.easemob.EMError;
-import com.easemob.EMEventListener;
-import com.easemob.EMNotifierEvent;
 import com.easemob.EMValueCallBack;
 import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.applib.model.GroupRemoveListener;
-import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatRoom;
-import com.easemob.chat.EMContactManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chat.EMConversation;
-import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
+import com.easemob.chat.EMImageMessageBody;
+import com.easemob.chat.EMLocationMessageBody;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
-import com.easemob.chat.ImageMessageBody;
-import com.easemob.chat.LocationMessageBody;
-import com.easemob.chat.NormalFileMessageBody;
-import com.easemob.chat.TextMessageBody;
-import com.easemob.chat.VideoMessageBody;
-import com.easemob.chat.VoiceMessageBody;
+import com.easemob.chat.EMNormalFileMessageBody;
+import com.easemob.chat.EMTextMessageBody;
+import com.easemob.chat.EMVideoMessageBody;
+import com.easemob.chat.EMVoiceMessageBody;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
@@ -110,7 +105,7 @@ import com.easemob.util.VoiceRecorder;
  * 聊天页面
  * 
  */
-public class ChatActivity extends BaseActivity implements OnClickListener, EMEventListener{
+public class ChatActivity extends BaseActivity implements OnClickListener{
 	private static final String TAG = "ChatActivity";
 	private static final int REQUEST_CODE_EMPTY_HISTORY = 2;
 	public static final int REQUEST_CODE_CONTEXT_MENU = 3;
@@ -334,12 +329,12 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		                                 if (listView.getFirstVisiblePosition() == 0 && !isloading && haveMoreData) {
 		                                         List<EMMessage> messages;
 		                                         try {
-	                                                 if (chatType == CHATTYPE_SINGLE){
+//	                                                 if (chatType == CHATTYPE_SINGLE){
                                                          messages = conversation.loadMoreMsgFromDB(adapter.getItem(0).getMsgId(), pagesize);
-	                                                 }
-	                                                 else{
-                                                         messages = conversation.loadMoreGroupMsgFromDB(adapter.getItem(0).getMsgId(), pagesize);
-	                                                 }
+//	                                                 }
+//	                                                 else{
+//                                                         messages = conversation.loadMoreGroupMsgFromDB(adapter.getItem(0).getMsgId(), pagesize);
+//	                                                 }
 		                                         } catch (Exception e1) {
 	                                                 swipeRefreshLayout.setRefreshing(false);
 	                                                 return;
@@ -424,14 +419,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	}
 
 	protected void onConversationInit(){
-	    if(chatType == CHATTYPE_SINGLE){
-	        conversation = EMChatManager.getInstance().getConversationByType(toChatUsername,EMConversationType.Chat);
-	    }else if(chatType == CHATTYPE_GROUP){
-	        conversation = EMChatManager.getInstance().getConversationByType(toChatUsername,EMConversationType.GroupChat);
-	    }else if(chatType == CHATTYPE_CHATROOM){
-	        conversation = EMChatManager.getInstance().getConversationByType(toChatUsername,EMConversationType.ChatRoom);
-	    }
-	     
+        conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, CommonUtils.getConversationType(chatType));
         // 把此会话的未读数置为0
         conversation.markAllMessagesAsRead();
 
@@ -444,14 +432,14 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
             if (msgs != null && msgs.size() > 0) {
                 msgId = msgs.get(0).getMsgId();
             }
-            if (chatType == CHATTYPE_SINGLE) {
+//            if (chatType == CHATTYPE_SINGLE) {
                 conversation.loadMoreMsgFromDB(msgId, pagesize);
-            } else {
-                conversation.loadMoreGroupMsgFromDB(msgId, pagesize);
-            }
+//            } else {
+//                conversation.loadMoreGroupMsgFromDB(msgId, pagesize);
+//            }
         }
         
-        EMChatManager.getInstance().addChatRoomChangeListener(new EMChatRoomChangeListener(){
+        EMClient.getInstance().chatroomManager().addChatRoomChangeListener(new EMChatRoomChangeListener(){
 
             @Override
             public void onChatRoomDestroyed(String roomId, String roomName) {
@@ -474,9 +462,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
             public void onMemberKicked(String roomId, String roomName,
                     String participant) {
                 if(roomId.equals(toChatUsername)){
-                    String curUser = EMChatManager.getInstance().getCurrentUser();
+                    String curUser = EMClient.getInstance().getCurrentUser();
                     if(curUser.equals(participant)){
-                        EMChatManager.getInstance().leaveChatRoom(toChatUsername);
+                        EMClient.getInstance().chatroomManager().leaveChatRoom(toChatUsername);
                         finish();
                     }
                 }
@@ -509,7 +497,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	}
 	
 	protected void onGroupViewCreation(){
-	    group = EMGroupManager.getInstance().getGroup(toChatUsername);
+	    group = EMClient.getInstance().groupManager().getGroup(toChatUsername);
         
         if (group != null){
             ((TextView) findViewById(R.id.name)).setText(group.getGroupName());
@@ -519,13 +507,13 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
         
         // 监听当前会话的群聊解散被T事件
         groupListener = new GroupListener();
-        EMGroupManager.getInstance().addGroupChangeListener(groupListener);
+        EMClient.getInstance().groupManager().addGroupChangeListener(groupListener);
 	}
 	
 	protected void onChatRoomViewCreation(){
         
         final ProgressDialog pd = ProgressDialog.show(this, "", "Joining......");
-        EMChatManager.getInstance().joinChatRoom(toChatUsername, new EMValueCallBack<EMChatRoom>() {
+        EMClient.getInstance().chatroomManager().joinChatRoom(toChatUsername, new EMValueCallBack<EMChatRoom>() {
         
         @Override
         public void onSuccess(EMChatRoom value) {
@@ -534,7 +522,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
                    @Override
                    public void run(){
                         pd.dismiss();
-                        room = EMChatManager.getInstance().getChatRoom(toChatUsername);
+                        room = EMClient.getInstance().chatroomManager().getChatRoom(toChatUsername);
                         if(room !=null){
                             ((TextView) findViewById(R.id.name)).setText(room.getName());
                         }else{
@@ -580,7 +568,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 				EMMessage copyMsg = ((EMMessage) adapter.getItem(data.getIntExtra("position", -1)));
 				// clipboard.setText(SmileUtils.getSmiledText(ChatActivity.this,
 				// ((TextMessageBody) copyMsg.getBody()).getMessage()));
-				clipboard.setText(((TextMessageBody) copyMsg.getBody()).getMessage());
+				clipboard.setText(((EMTextMessageBody) copyMsg.getBody()).getMessage());
 				break;
 			case RESULT_CODE_DELETE: // 删除消息
 				EMMessage deleteMsg = (EMMessage) adapter.getItem(data.getIntExtra("position", -1));
@@ -603,7 +591,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		if (resultCode == RESULT_OK) { // 清空消息
 			if (requestCode == REQUEST_CODE_EMPTY_HISTORY) {
 				// 清空会话
-				EMChatManager.getInstance().clearConversation(toChatUsername);
+				EMClient.getInstance().chatManager().deleteConversation(toChatUsername, true);
 				adapter.refresh();
 			} else if (requestCode == REQUEST_CODE_CAMERA) { // 发送照片
 				if (cameraFile != null && cameraFile.exists())
@@ -691,7 +679,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			} else if (requestCode == REQUEST_CODE_ADD_TO_BLACKLIST) { // 移入黑名单
 				EMMessage deleteMsg = (EMMessage) adapter.getItem(data.getIntExtra("position", -1));
 				addUserToBlacklist(deleteMsg.getFrom());
-			} else if (conversation.getMsgCount() > 0) {
+			} else if (conversation.getAllMessages().size() > 0) {
 				adapter.refresh();
 				setResult(RESULT_OK);
 			} else if (requestCode == REQUEST_CODE_GROUP_DETAIL) {
@@ -739,7 +727,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		} else if (id == R.id.btn_file) { // 点击文件图标
 			selectFileFromLocal();
 		} else if (id == R.id.btn_voice_call) { // 点击语音电话图标
-			if (!EMChatManager.getInstance().isConnected())
+			if (!EMClient.getInstance().isConnected())
 				Toast.makeText(this, st1, 0).show();
 			else{
 				startActivity(new Intent(ChatActivity.this, VoiceCallActivity.class).putExtra("username",
@@ -748,7 +736,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 				toggleMore(null);
 			}
 		} else if (id == R.id.btn_video_call) { // 视频通话
-			if (!EMChatManager.getInstance().isConnected())
+			if (!EMClient.getInstance().isConnected())
 				Toast.makeText(this, st1, 0).show();
 			else{
 				startActivity(new Intent(this, VideoCallActivity.class).putExtra("username", toChatUsername).putExtra(
@@ -921,7 +909,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			if(isRobot){
 				message.setAttribute("em_robot_message", true);
 			}
-			TextMessageBody txtBody = new TextMessageBody(content);
+			EMTextMessageBody txtBody = new EMTextMessageBody(content);
 			// 设置消息body
 			message.addBody(txtBody);
 			// 设置要发给谁,用户username或者群聊groupid
@@ -958,7 +946,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 				}
 			message.setReceipt(toChatUsername);
 			int len = Integer.parseInt(length);
-			VoiceMessageBody body = new VoiceMessageBody(new File(filePath), len);
+			EMVoiceMessageBody body = new EMVoiceMessageBody(new File(filePath), len);
 			message.addBody(body);
 			if(isRobot){
 				message.setAttribute("em_robot_message", true);
@@ -990,7 +978,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		}
 
 		message.setReceipt(to);
-		ImageMessageBody body = new ImageMessageBody(new File(filePath));
+		EMImageMessageBody body = new EMImageMessageBody(new File(filePath));
 		// 默认超过100k的图片会压缩后发给对方，可以设置成发送原图
 		// body.setSendOriginalImage(true);
 		message.addBody(body);
@@ -1023,7 +1011,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			}
 			String to = toChatUsername;
 			message.setReceipt(to);
-			VideoMessageBody body = new VideoMessageBody(videoFile, thumbPath, length, videoFile.length());
+			EMVideoMessageBody body = new EMVideoMessageBody(videoFile, thumbPath, length, videoFile.length());
 			message.addBody(body);
 			if(isRobot){
 				message.setAttribute("em_robot_message", true);
@@ -1091,7 +1079,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		}else if(chatType == CHATTYPE_CHATROOM){
 		    message.setChatType(ChatType.ChatRoom);
 		}
-		LocationMessageBody locBody = new LocationMessageBody(locationAddress, latitude, longitude);
+		EMLocationMessageBody locBody = new EMLocationMessageBody(locationAddress, latitude, longitude);
 		message.addBody(locBody);
 		message.setReceipt(toChatUsername);
 		if(isRobot){
@@ -1150,7 +1138,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 
 		message.setReceipt(toChatUsername);
 		// add message body
-		NormalFileMessageBody body = new NormalFileMessageBody(new File(filePath));
+		EMNormalFileMessageBody body = new EMNormalFileMessageBody(new File(filePath));
 		message.addBody(body);
 		if(isRobot){
 			message.setAttribute("em_robot_message", true);
@@ -1472,7 +1460,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		super.onDestroy();
 		activityInstance = null;
 		if(groupListener != null){
-		    EMGroupManager.getInstance().removeGroupChangeListener(groupListener);
+		    EMClient.getInstance().groupManager().removeGroupChangeListener(groupListener);
 		}
 	}
 
@@ -1491,17 +1479,14 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		DemoHXSDKHelper sdkHelper = (DemoHXSDKHelper) DemoHXSDKHelper.getInstance();
 		sdkHelper.pushActivity(this);
 		// register the event listener when enter the foreground
-		EMChatManager.getInstance().registerEventListener(
-				this,
-				new EMNotifierEvent.Event[] { EMNotifierEvent.Event.EventNewMessage,EMNotifierEvent.Event.EventOfflineMessage,
-						EMNotifierEvent.Event.EventDeliveryAck, EMNotifierEvent.Event.EventReadAck, EMNotifierEvent.Event.EventMessageChanged });
+		EMClient.getInstance().chatManager().addMessageListener(this);
 	}
 
 	@Override
 	protected void onStop() {
 		// unregister this event listener when this activity enters the
 		// background
-		EMChatManager.getInstance().unregisterEventListener(this);
+		EMClient.getInstance().chatManager().unregisterEventListener(this);
 
 		DemoHXSDKHelper sdkHelper = (DemoHXSDKHelper) DemoHXSDKHelper.getInstance();
 
@@ -1554,7 +1539,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					EMContactManager.getInstance().addUserToBlackList(username, false);
+					EMClient.getInstance().contactManager().addUserToBlackList(username, false);
 					runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
@@ -1580,9 +1565,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	 * @param view
 	 */
 	public void back(View view) {
-		EMChatManager.getInstance().unregisterEventListener(this);
+		EMClient.getInstance().chatManager().unregisterEventListener(this);
 		if(chatType == CHATTYPE_CHATROOM){
-			EMChatManager.getInstance().leaveChatRoom(toChatUsername);
+			EMClient.getInstance().chatroomManager().leaveChatRoom(toChatUsername);
 		}
 		finish();
 	}
@@ -1599,7 +1584,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		} else {
 			super.onBackPressed();
 			if(chatType == CHATTYPE_CHATROOM){
-				EMChatManager.getInstance().leaveChatRoom(toChatUsername);
+				EMClient.getInstance().chatroomManager().leaveChatRoom(toChatUsername);
 			}
 		}
 	}
@@ -1680,23 +1665,23 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	 * @param forward_msg_id
 	 */
 	protected void forwardMessage(String forward_msg_id) {
-		final EMMessage forward_msg = EMChatManager.getInstance().getMessage(forward_msg_id);
+		final EMMessage forward_msg = EMClient.getInstance().chatManager().getMessage(forward_msg_id);
 		EMMessage.Type type = forward_msg.getType();
 		switch (type) {
 		case TXT:
 			// 获取消息内容，发送消息
-			String content = ((TextMessageBody) forward_msg.getBody()).getMessage();
+			String content = ((EMTextMessageBody) forward_msg.getBody()).getMessage();
 			sendText(content);
 			break;
 		case IMAGE:
 			// 发送图片
-			String filePath = ((ImageMessageBody) forward_msg.getBody()).getLocalUrl();
+			String filePath = ((EMImageMessageBody) forward_msg.getBody()).getLocalUrl();
 			if (filePath != null) {
 				File file = new File(filePath);
 				if (!file.exists()) {
 					// 不存在大图发送缩略图
 //					filePath = ImageUtils.getThumbnailImagePath(filePath);
-					filePath = ((ImageMessageBody) forward_msg.getBody()).thumbnailLocalPath();
+					filePath = ((EMImageMessageBody) forward_msg.getBody()).thumbnailLocalPath();
 				}
 				sendPicture(filePath);
 			}
@@ -1706,7 +1691,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		}
 		
 		if(forward_msg.getChatType() == EMMessage.ChatType.ChatRoom){
-			EMChatManager.getInstance().leaveChatRoom(forward_msg.getTo());
+			EMClient.getInstance().chatroomManager().leaveChatRoom(forward_msg.getTo());
 		}
 	}
 	

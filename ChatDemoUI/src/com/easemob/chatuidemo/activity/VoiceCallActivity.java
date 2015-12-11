@@ -124,7 +124,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 			}, 300);
 			try {
 				// 拨打语音电话
-				EMChatManager.getInstance().makeVoiceCall(username);
+				EMClient.getInstance().chatManager().makeVoiceCall(username);
 			} catch (EMServiceNotReadyException e) {
 				e.printStackTrace();
 				final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
@@ -192,7 +192,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                             if(!isHandsfreeState)
                                 closeSpeakerOn();
                             //显示是否为直连，方便测试
-                            ((TextView)findViewById(R.id.tv_is_p2p)).setText(EMChatManager.getInstance().isDirectCall()
+                            ((TextView)findViewById(R.id.tv_is_p2p)).setText(EMClient.getInstance().chatManager().isDirectCall()
                                     ? R.string.direct_call : R.string.relay_call);
                             chronometer.setVisibility(View.VISIBLE);
                             chronometer.setBase(SystemClock.elapsedRealtime());
@@ -289,7 +289,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 
             }
         };
-		EMChatManager.getInstance().addCallStateChangeListener(callStateListener);
+		EMClient.getInstance().chatManager().addCallStateChangeListener(callStateListener);
 	}
 
 	@Override
@@ -300,7 +300,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 			if (ringtone != null)
 				ringtone.stop();
 			try {
-				EMChatManager.getInstance().rejectCall();
+				EMClient.getInstance().chatManager().rejectCall();
 			} catch (Exception e1) {
 				e1.printStackTrace();
 				saveCallRecord(0);
@@ -316,7 +316,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 			if (isInComingCall) {
 				try {
 				    callStateTextView.setText("正在接听...");
-					EMChatManager.getInstance().answerCall();
+					EMClient.getInstance().chatManager().answerCall();
 					isAnswered = true;
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -340,7 +340,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 			endCallTriggerByMe = true;
 			callStateTextView.setText(getResources().getString(R.string.hanging_up));
 			try {
-				EMChatManager.getInstance().endCall();
+				EMClient.getInstance().chatManager().endCall();
 			} catch (Exception e) {
 				e.printStackTrace();
 				saveCallRecord(0);
@@ -388,7 +388,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 
 	@Override
 	public void onBackPressed() {
-		EMChatManager.getInstance().endCall();
+		EMClient.getInstance().chatManager().endCall();
 		callDruationText = chronometer.getText().toString();
 		saveCallRecord(0);
 		finish();

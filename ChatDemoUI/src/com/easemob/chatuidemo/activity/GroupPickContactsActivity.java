@@ -61,7 +61,7 @@ public class GroupPickContactsActivity extends BaseActivity {
 			isCreatingNewGroup = true;
 		} else {
 			// 获取此群组的成员列表
-			EMGroup group = EMGroupManager.getInstance().getGroup(groupId);
+			EMGroup group = EMClient.getInstance().groupManager().getGroup(groupId);
 			exitingMembers = group.getMembers();
 		}
 		if(exitingMembers == null)

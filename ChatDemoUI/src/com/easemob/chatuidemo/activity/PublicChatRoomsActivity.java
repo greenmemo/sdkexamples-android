@@ -138,7 +138,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
         //获取及显示数据
         loadAndShowData();
         
-        EMChatManager.getInstance().addChatRoomChangeListener(new EMChatRoomChangeListener(){
+        EMClient.getInstance().chatManager().addChatRoomChangeListener(new EMChatRoomChangeListener(){
             @Override
             public void onChatRoomDestroyed(String roomId, String roomName) {
                 chatRoomList.clear();
@@ -214,7 +214,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
             public void run() {
                 try {
                     isLoading = true;
-                    final EMCursorResult<EMChatRoom> result = EMChatManager.getInstance().fetchPublicChatRoomsFromServer(pagesize, cursor);
+                    final EMCursorResult<EMChatRoom> result = EMClient.getInstance().chatManager().fetchPublicChatRoomsFromServer(pagesize, cursor);
                     //获取group list
                     final List<EMChatRoom> chatRooms = result.getData();
                     runOnUiThread(new Runnable() {

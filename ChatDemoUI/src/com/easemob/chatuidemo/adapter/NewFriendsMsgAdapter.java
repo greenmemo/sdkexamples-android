@@ -149,9 +149,9 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 				// 调用sdk的同意方法
 				try {
 					if(msg.getGroupId() == null) //同意好友请求
-						EMChatManager.getInstance().acceptInvitation(msg.getFrom());
+						EMClient.getInstance().chatManager().acceptInvitation(msg.getFrom());
 					else //同意加群申请
-					    EMGroupManager.getInstance().acceptApplication(msg.getFrom(), msg.getGroupId());
+					    EMClient.getInstance().groupManager().acceptApplication(msg.getFrom(), msg.getGroupId());
 					((Activity) context).runOnUiThread(new Runnable() {
 
 						@Override

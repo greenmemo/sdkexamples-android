@@ -76,11 +76,11 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			iconRightArrow.setVisibility(View.INVISIBLE);
 		}
 		if (username == null) {
-			tvUsername.setText(EMChatManager.getInstance().getCurrentUser());
+			tvUsername.setText(EMClient.getInstance().chatManager().getCurrentUser());
 			UserUtils.setCurrentUserNick(tvNickName);
 			UserUtils.setCurrentUserAvatar(this, headAvatar);
-		} else if (username.equals(EMChatManager.getInstance().getCurrentUser())) {
-			tvUsername.setText(EMChatManager.getInstance().getCurrentUser());
+		} else if (username.equals(EMClient.getInstance().chatManager().getCurrentUser())) {
+			tvUsername.setText(EMClient.getInstance().chatManager().getCurrentUser());
 			UserUtils.setCurrentUserNick(tvNickName);
 			UserUtils.setCurrentUserAvatar(this, headAvatar);
 		} else {

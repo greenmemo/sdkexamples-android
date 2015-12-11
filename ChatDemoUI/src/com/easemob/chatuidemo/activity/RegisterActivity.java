@@ -85,7 +85,7 @@ public class RegisterActivity extends BaseActivity {
 				public void run() {
 					try {
 						// 调用sdk注册方法
-						EMChatManager.getInstance().createAccountOnServer(username, pwd);
+						EMClient.getInstance().chatManager().createAccountOnServer(username, pwd);
 						runOnUiThread(new Runnable() {
 							public void run() {
 								if (!RegisterActivity.this.isFinishing())

@@ -102,11 +102,11 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
 		if (conversation.getType() == EMConversationType.GroupChat) {
 			// 群聊消息，显示群聊头像
 			holder.avatar.setImageResource(R.drawable.group_icon);
-			EMGroup group = EMGroupManager.getInstance().getGroup(username);
+			EMGroup group = EMClient.getInstance().groupManager().getGroup(username);
 			holder.name.setText(group != null ? group.getGroupName() : username);
 		} else if(conversation.getType() == EMConversationType.ChatRoom){
 		    holder.avatar.setImageResource(R.drawable.group_icon);
-            EMChatRoom room = EMChatManager.getInstance().getChatRoom(username);
+            EMChatRoom room = EMClient.getInstance().chatManager().getChatRoom(username);
             holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
 		}else {
 		    UserUtils.setUserAvatar(getContext(), username, holder.avatar);
@@ -269,7 +269,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
 					final EMConversation value = mOriginalValues.get(i);
 					String username = value.getUserName();
 					
-					EMGroup group = EMGroupManager.getInstance().getGroup(username);
+					EMGroup group = EMClient.getInstance().groupManager().getGroup(username);
 					if(group != null){
 						username = group.getGroupName();
 					}

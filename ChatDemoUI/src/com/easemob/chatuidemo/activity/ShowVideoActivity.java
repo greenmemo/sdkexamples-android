@@ -147,7 +147,7 @@ public class ShowVideoActivity extends BaseActivity{
 			}
 		};
 
-		EMChatManager.getInstance().downloadFile(remoteUrl, localFilePath, header, callback);
+		EMClient.getInstance().chatManager().downloadFile(remoteUrl, localFilePath, header, callback);
 	}
 
 	@Override

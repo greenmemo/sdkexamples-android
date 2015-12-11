@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.applib.controller.HXSDKHelper;
+import com.easemob.chat.EMClient;
 import com.easemob.chat.EMContactManager;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
@@ -100,7 +101,7 @@ public class AddContactActivity extends BaseActivity{
 		
 		if(((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().containsKey(nameText.getText().toString())){
 		    //提示已在好友列表中，无需添加
-		    if(EMContactManager.getInstance().getBlackListUsernames().contains(nameText.getText().toString())){
+		    if(EMClient.getInstance().contactManager().getBlackListUsernames().contains(nameText.getText().toString())){
 		        startActivity(new Intent(this, AlertDialog.class).putExtra("msg", "此用户已是你好友(被拉黑状态)，从黑名单列表中移出即可"));
 		        return;
 		    }
@@ -121,7 +122,7 @@ public class AddContactActivity extends BaseActivity{
 				try {
 					//demo写死了个reason，实际应该让用户手动填入
 					String s = getResources().getString(R.string.Add_a_friend);
-					EMContactManager.getInstance().addContact(toAddUsername, s);
+					EMClient.getInstance().contactManager().addContact(toAddUsername, s);
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();

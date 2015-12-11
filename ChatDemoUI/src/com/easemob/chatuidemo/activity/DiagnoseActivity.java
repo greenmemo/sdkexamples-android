@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.EMCallBack;
-import com.easemob.chat.EMChat;
+import com.easemob.chat.EMClient;
 import com.easemob.chatuidemo.R;
 import com.easemob.util.EMLog;
 
@@ -96,7 +96,7 @@ public class DiagnoseActivity extends BaseActivity implements OnClickListener {
 		progressDialog.setCancelable(false);
 		progressDialog.show();
 		final String st = getResources().getString(R.string.Log_uploaded_successfully);
-		EMChat.getInstance().uploadLog(new EMCallBack() {
+		EMClient.getInstance().uploadLog(new EMCallBack() {
 
 			@Override
 			public void onSuccess() {

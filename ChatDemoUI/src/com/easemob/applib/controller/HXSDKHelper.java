@@ -17,12 +17,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import android.R.bool;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.easemob.EMCallBack;
 import com.easemob.EMConnectionListener;
@@ -32,12 +30,12 @@ import com.easemob.applib.model.DefaultHXSDKModel;
 import com.easemob.applib.model.HXNotifier;
 import com.easemob.applib.model.HXNotifier.HXNotificationInfoProvider;
 import com.easemob.applib.model.HXSDKModel;
-import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatConfig.EMEnvMode;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMChatOptions;
+import com.easemob.chat.EMClient;
 import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMGroupManager;
+import com.easemob.chat.EMOptions;
 import com.easemob.exceptions.EaseMobException;
 
 /**
@@ -189,16 +187,17 @@ public abstract class HXSDKHelper {
         }
 
         // 初始化环信SDK,一定要先调用init()
-        EMChat.getInstance().init(context);
+        EMOptions options = initHXOptions();
+        EMClient.getInstance().init(context, options);
         
         // 设置sandbox测试环境
         if(hxModel.isSandboxMode()){
-            EMChat.getInstance().setEnv(EMEnvMode.EMSandboxMode);
+            EMClient.getInstance().setEnv(EMEnvMode.EMSandboxMode);
         }
         
         if(hxModel.isDebugMode()){
             // set debug mode in development process
-            EMChat.getInstance().setDebugMode(true);    
+            EMClient.getInstance().setDebugMode(true);    
         }
 
         Log.d(TAG, "initialize EMChat SDK");
@@ -270,17 +269,15 @@ public abstract class HXSDKHelper {
     
     /**
      * please make sure you have to get EMChatOptions by following method and set related options
-     *      EMChatOptions options = EMChatManager.getInstance().getChatOptions();
+     *      EMChatOptions options = EMClient.getInstance().chatManager().getChatOptions();
      */
-    protected void initHXOptions(){
+    protected EMOptions initHXOptions(){
         Log.d(TAG, "init HuanXin Options");
         
         // 获取到EMChatOptions对象
-        EMChatOptions options = EMChatManager.getInstance().getChatOptions();
+        EMOptions options = new EMOptions();
         // 默认添加好友时，是不需要验证的，改成需要验证
         options.setAcceptInvitationAlways(hxModel.getAcceptInvitationAlways());
-        // 默认环信是不维护好友关系列表的，如果app依赖环信的好友关系，把这个属性设置为true
-        options.setUseRoster(hxModel.getUseHXRoster());
         // 设置是否需要已读回执
         options.setRequireAck(hxModel.getRequireReadAck());
         // 设置是否需要已送达回执
@@ -292,6 +289,7 @@ public abstract class HXSDKHelper {
         notifier.init(appContext);
         
         notifier.setNotificationInfoProvider(getNotificationListener());
+        return options;
     }
     
     /**
@@ -313,7 +311,7 @@ public abstract class HXSDKHelper {
     public void logout(final boolean unbindDeviceToken,final EMCallBack callback){
         setPassword(null);
         reset();
-        EMChatManager.getInstance().logout(unbindDeviceToken,new EMCallBack(){
+        EMClient.getInstance().logout(unbindDeviceToken,new EMCallBack(){
 
             @Override
             public void onSuccess() {
@@ -344,7 +342,7 @@ public abstract class HXSDKHelper {
      * @return
      */
     public boolean isLogined(){
-       return EMChat.getInstance().isLoggedIn();
+       return EMClient.getInstance().isLoggedInBefore();
     }
     
     protected HXNotificationInfoProvider getNotificationListener(){
@@ -377,7 +375,7 @@ public abstract class HXSDKHelper {
         };
         
         //注册连接监听
-        EMChatManager.getInstance().addConnectionListener(connectionListener);       
+        EMClient.getInstance().addConnectionListener(connectionListener);       
     }
 
     /**
@@ -504,10 +502,10 @@ public abstract class HXSDKHelper {
             @Override
             public void run(){
                 try {
-                    EMGroupManager.getInstance().getGroupsFromServer();
+                    EMClient.getInstance().groupManager().getGroupsFromServer();
                     
                     // in case that logout already before server returns, we should return immediately
-                    if(!EMChat.getInstance().isLoggedIn()){
+                    if(!EMClient.getInstance().isLoggedInBefore()){
                         return;
                     }
                     
@@ -549,10 +547,10 @@ public abstract class HXSDKHelper {
             public void run(){
                 List<String> usernames = null;
                 try {
-                    usernames = EMContactManager.getInstance().getContactUserNames();
+                    usernames = EMClient.getInstance().contactManager().getAllContacts();
                     
                     // in case that logout already before server returns, we should return immediately
-                    if(!EMChat.getInstance().isLoggedIn()){
+                    if(!EMClient.getInstance().isLoggedInBefore()){
                         return;
                     }
                     
@@ -596,10 +594,10 @@ public abstract class HXSDKHelper {
             public void run(){
                 try {
                     List<String> usernames = null;
-                    usernames = EMContactManager.getInstance().getBlackListUsernamesFromServer();
+                    usernames = EMClient.getInstance().contactManager().getBlackListFromServer();
                     
                     // in case that logout already before server returns, we should return immediately
-                    if(!EMChat.getInstance().isLoggedIn()){
+                    if(!EMClient.getInstance().isLoggedInBefore()){
                         return;
                     }
                     
@@ -662,7 +660,7 @@ public abstract class HXSDKHelper {
         }
         
         // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
-        EMChat.getInstance().setAppInited();
+        EMClient.getInstance().setAppInited();
         alreadyNotified = true;
     }
     

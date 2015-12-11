@@ -95,7 +95,7 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 							message.setAcked(true);
 							try {
 								// 看了大图后发个已读回执给对方
-								EMChatManager.getInstance().ackMessageRead(message.getFrom(), message.getMsgId());
+								EMClient.getInstance().chatManager().ackMessageRead(message.getFrom(), message.getMsgId());
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -111,7 +111,7 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 
 						@Override
 						public void run() {
-							EMChatManager.getInstance().asyncFetchMessage(message);
+							EMClient.getInstance().chatManager().asyncFetchMessage(message);
 						}
 					}).start();
 				}

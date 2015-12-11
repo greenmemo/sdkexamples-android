@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chatuidemo.Constant;
@@ -184,7 +186,7 @@ public class ChatAllHistoryFragment extends Fragment implements View.OnClickList
 		}
 		EMConversation tobeDeleteCons = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
 		// 删除此会话
-		EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup(), deleteMessage);
+		EMClient.getInstance().chatManager().deleteConversation(tobeDeleteCons.getUserName(), deleteMessage);
 		InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
 		inviteMessgeDao.deleteMessage(tobeDeleteCons.getUserName());
 		adapter.remove(tobeDeleteCons);
@@ -214,7 +216,7 @@ public class ChatAllHistoryFragment extends Fragment implements View.OnClickList
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         +	 */
 	private List<EMConversation> loadConversationsWithRecentChat() {
 		// 获取所有会话，包括陌生人
-		Hashtable<String, EMConversation> conversations = EMChatManager.getInstance().getAllConversations();
+		Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
 		// 过滤掉messages size为0的conversation
 		/**
 		 * 如果在排序过程中有新消息收到，lastMsgTime会发生变化

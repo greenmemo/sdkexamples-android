@@ -164,7 +164,7 @@ public class RobotsActivity extends BaseActivity {
 			@Override
 			public void run() {
 				try {
-					List<EMContact> mList = EMChatManager.getInstance().getRobotsFromServer();
+					List<EMContact> mList = EMClient.getInstance().chatManager().getRobotsFromServer();
 					callback.onSuccess(mList);
 				} catch (EaseMobException e) {
 					e.printStackTrace();

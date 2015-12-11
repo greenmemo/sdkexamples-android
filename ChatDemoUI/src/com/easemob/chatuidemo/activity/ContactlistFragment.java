@@ -120,7 +120,7 @@ public class ContactlistFragment extends Fragment {
 
                 @Override
                 public void run() {
-                    blackList = EMContactManager.getInstance().getBlackListUsernames();
+                    blackList = EMClient.getInstance().contactManager().getBlackListUsernames();
                     refresh();
                 }
                 
@@ -165,7 +165,7 @@ public class ContactlistFragment extends Fragment {
 		sidebar.setListView(listView);
         
 		//黑名单列表
-		blackList = EMContactManager.getInstance().getBlackListUsernames();
+		blackList = EMClient.getInstance().contactManager().getBlackListUsernames();
 		contactList = new ArrayList<User>();
 		// 获取设置contactlist
 		getContactList();
@@ -332,7 +332,7 @@ public class ContactlistFragment extends Fragment {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					EMContactManager.getInstance().deleteContact(tobeDeleteUser.getUsername());
+					EMClient.getInstance().contactManager().deleteContact(tobeDeleteUser.getUsername());
 					// 删除db和内存中此用户的数据
 					UserDao dao = new UserDao(getActivity());
 					dao.deleteContact(tobeDeleteUser.getUsername());
@@ -375,7 +375,7 @@ public class ContactlistFragment extends Fragment {
 			public void run() {
 				try {
 					//加入到黑名单
-					EMContactManager.getInstance().addUserToBlackList(username,false);
+					EMClient.getInstance().contactManager().addUserToBlackList(username,false);
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();

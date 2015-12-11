@@ -34,7 +34,7 @@ public class ShowNormalFileActivity extends BaseActivity {
 		}
 		
 		//下载文件
-		EMChatManager.getInstance().downloadFile(messageBody.getRemoteUrl(), messageBody.getLocalUrl(), maps,
+		EMClient.getInstance().chatManager().downloadFile(messageBody.getRemoteUrl(), messageBody.getLocalUrl(), maps,
                 new EMCallBack() {
                     
                     @Override

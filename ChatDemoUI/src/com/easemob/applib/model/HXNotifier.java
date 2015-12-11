@@ -30,7 +30,7 @@ import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 
 import com.easemob.applib.controller.HXSDKHelper;
-import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chat.EMMessage;
 import com.easemob.util.EMLog;
 import com.easemob.util.EasyUtils;
@@ -123,7 +123,7 @@ public class HXNotifier {
      * @param message
      */
     public synchronized void onNewMsg(EMMessage message) {
-        if(EMChatManager.getInstance().isSlientMessage(message)){
+        if(EMClient.getInstance().chatManager().isSlientMessage(message)){
             return;
         }
         
@@ -140,7 +140,7 @@ public class HXNotifier {
     }
     
     public synchronized void onNewMesg(List<EMMessage> messages) {
-        if(EMChatManager.getInstance().isSlientMessage(messages.get(messages.size()-1))){
+        if(EMClient.getInstance().chatManager().isSlientMessage(messages.get(messages.size()-1))){
             return;
         }
         // 判断app是否在后台
@@ -286,7 +286,7 @@ public class HXNotifier {
      */
     public void viberateAndPlayTone(EMMessage message) {
         if(message != null){
-            if(EMChatManager.getInstance().isSlientMessage(message)){
+            if(EMClient.getInstance().chatManager().isSlientMessage(message)){
                 return;
             } 
         }

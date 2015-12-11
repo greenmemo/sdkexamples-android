@@ -8,7 +8,7 @@ import android.content.Context;
 import com.easemob.EMValueCallBack;
 import com.easemob.applib.controller.HXSDKHelper.HXSyncListener;
 import com.easemob.applib.utils.HXPreferenceUtils;
-import com.easemob.chat.EMChat;
+import com.easemob.chat.EMClient;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.parse.ParseManager;
@@ -78,7 +78,7 @@ public class UserProfileManager {
 				isSyncingContactInfosWithServer = false;
 				// in case that logout already before server returns,we should
 				// return immediately
-				if (!EMChat.getInstance().isLoggedIn()) {
+				if (!EMClient.getInstance().isLoggedInBefore()) {
 					return;
 				}
 				if (callback != null) {
@@ -116,7 +116,7 @@ public class UserProfileManager {
 
 	public synchronized User getCurrentUserInfo() {
 		if (currentUser == null) {
-			String username = EMChatManager.getInstance().getCurrentUser();
+			String username = EMClient.getInstance().getCurrentUser();
 			currentUser = new User(username);
 			String nick = getCurrentUserNick();
 			currentUser.setNick((nick != null) ? nick : username);

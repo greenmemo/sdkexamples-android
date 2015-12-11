@@ -112,7 +112,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		 chatRoomIdTextView.setText("聊天室ID："+roomId);
 		 showChatRoomNickLayout.setVisibility(View.VISIBLE);
 		 
-		 room = EMChatManager.getInstance().getChatRoom(roomId);
+		 room = EMClient.getInstance().chatManager().getChatRoom(roomId);
 		 chatRoomNickTextView.setText(room.getName());
 
 		exitBtn.setVisibility(View.GONE);
@@ -122,7 +122,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		blockGroupMsgLayout.setVisibility(View.GONE);
 		
 		// 如果自己是群主，显示解散按钮
-		if (EMChatManager.getInstance().getCurrentUser().equals(room.getOwner())) {
+		if (EMClient.getInstance().chatManager().getCurrentUser().equals(room.getOwner())) {
 			exitBtn.setVisibility(View.GONE);
 			deleteBtn.setVisibility(View.GONE);
 		}
@@ -227,7 +227,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 	 * 清空群聊天记录
 	 */
 	public void clearGroupHistory() {
-		EMChatManager.getInstance().clearConversation(room.getId());
+		EMClient.getInstance().chatManager().clearConversation(room.getId());
 		progressDialog.dismiss();
 	}
 
@@ -240,7 +240,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					EMChatManager.getInstance().leaveChatRoom(roomId);
+					EMClient.getInstance().chatManager().leaveChatRoom(roomId);
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
@@ -266,14 +266,14 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					final EMChatRoom returnRoom = EMChatManager.getInstance().fetchChatRoomFromServer(roomId);
+					final EMChatRoom returnRoom = EMClient.getInstance().chatManager().fetchChatRoomFromServer(roomId);
 
 					runOnUiThread(new Runnable() {
 						public void run() {
 							((TextView) findViewById(R.id.group_name)).setText(returnRoom.getName());
 							loadingPB.setVisibility(View.INVISIBLE);
 							adapter.notifyDataSetChanged();
-							if (EMChatManager.getInstance().getCurrentUser().equals(returnRoom.getOwner())) {
+							if (EMClient.getInstance().chatManager().getCurrentUser().equals(returnRoom.getOwner())) {
 								// 显示解散按钮
 								exitBtn.setVisibility(View.GONE);
 								deleteBtn.setVisibility(View.GONE);
@@ -356,7 +356,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 			    holder.imageView.setImageResource(R.drawable.smiley_minus_btn);
 //				button.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.smiley_minus_btn, 0, 0);
 				// 如果不是创建者或者没有相应权限，不提供加减人按钮
-				if (!room.getOwner().equals(EMChatManager.getInstance().getCurrentUser())) {
+				if (!room.getOwner().equals(EMClient.getInstance().chatManager().getCurrentUser())) {
 					// if current user is not room admin, hide add/remove btn
 					convertView.setVisibility(View.INVISIBLE);
 				} else { // 显示删除按钮
@@ -383,7 +383,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 			    holder.imageView.setImageResource(R.drawable.smiley_add_btn);
 //				button.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.smiley_add_btn, 0, 0);
 				// 如果不是创建者或者没有相应权限
-				if (!room.getOwner().equals(EMChatManager.getInstance().getCurrentUser())) {
+				if (!room.getOwner().equals(EMClient.getInstance().chatManager().getCurrentUser())) {
 					// if current user is not room admin, hide add/remove btn
 					convertView.setVisibility(View.INVISIBLE);
 				} else {
@@ -431,7 +431,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 					public void onClick(View v) {
 						if (isInDeleteMode) {
 							// 如果是删除自己，return
-							if (EMChatManager.getInstance().getCurrentUser().equals(username)) {
+							if (EMClient.getInstance().chatManager().getCurrentUser().equals(username)) {
 								startActivity(new Intent(ChatRoomDetailsActivity.this, AlertDialog.class).putExtra("msg", st12));
 								return;
 							}

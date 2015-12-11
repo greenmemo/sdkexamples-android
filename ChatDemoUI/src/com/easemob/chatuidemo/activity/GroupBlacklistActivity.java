@@ -44,7 +44,7 @@ public class GroupBlacklistActivity extends BaseActivity {
 
 			public void run() {
 				try {
-					List<String> blockedList = EMGroupManager.getInstance().getBlockedUsers(groupId);
+					List<String> blockedList = EMClient.getInstance().groupManager().getBlockedUsers(groupId);
 					if(blockedList != null){
 						Collections.sort(blockedList);
 						adapter = new BlacklistAdapter(GroupBlacklistActivity.this, 1, blockedList);
@@ -94,7 +94,7 @@ public class GroupBlacklistActivity extends BaseActivity {
 		final String st2 = getResources().getString(R.string.Removed_from_the_failure);
 		try {
 			// 移出黑民单
-		    EMGroupManager.getInstance().unblockUser(groupId, tobeRemoveUser);
+		    EMClient.getInstance().groupManager().unblockUser(groupId, tobeRemoveUser);
 			adapter.remove(tobeRemoveUser);
 		} catch (EaseMobException e) {
 			e.printStackTrace();

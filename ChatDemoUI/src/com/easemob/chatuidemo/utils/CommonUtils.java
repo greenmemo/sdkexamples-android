@@ -21,10 +21,12 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chat.EMMessage;
-import com.easemob.chat.TextMessageBody;
+import com.easemob.chat.EMTextMessageBody;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.activity.ChatActivity;
 import com.easemob.util.EMLog;
 
 public class CommonUtils {
@@ -93,10 +95,10 @@ public class CommonUtils {
             break;
         case TXT: // 文本消息
             if(!message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL,false)){
-                TextMessageBody txtBody = (TextMessageBody) message.getBody();
+                EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
                 digest = txtBody.getMessage();
             }else{
-                TextMessageBody txtBody = (TextMessageBody) message.getBody();
+                EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
                 digest = getString(context, R.string.voice_call) + txtBody.getMessage();
             }
             break;
@@ -126,4 +128,19 @@ public class CommonUtils {
 			return "";
 	}
 
+	
+	/**
+     * 将应用的会话类型转化为SDK的会话类型
+     * @param chatType
+     * @return
+     */
+    public static EMConversationType getConversationType(int chatType) {
+        if (chatType == ChatActivity.CHATTYPE_SINGLE) {
+            return EMConversationType.Chat;
+        } else if (chatType == ChatActivity.CHATTYPE_GROUP) {
+            return EMConversationType.GroupChat;
+        } else {
+            return EMConversationType.ChatRoom;
+        }
+    }
 }

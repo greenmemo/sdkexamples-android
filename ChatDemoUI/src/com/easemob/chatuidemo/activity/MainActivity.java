@@ -156,15 +156,15 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 
 	private void init() {     
 		// setContactListener监听联系人的变化等
-		EMContactManager.getInstance().setContactListener(new MyContactListener());
+		EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
 		// 注册一个监听连接状态的listener
 		
 		connectionListener = new MyConnectionListener();
-		EMChatManager.getInstance().addConnectionListener(connectionListener);
+		EMClient.getInstance().chatManager().addConnectionListener(connectionListener);
 		
 		groupChangeListener = new MyGroupChangeListener();
 		// 注册群聊相关的listener
-        EMGroupManager.getInstance().addGroupChangeListener(groupChangeListener);
+        EMClient.getInstance().groupManager().addGroupChangeListener(groupChangeListener);
 		
 		
 		//内部测试方法，请忽略
@@ -286,7 +286,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
             @Override
             public void onSuccess(List<String> value) {
                 try {
-					EMContactManager.getInstance().saveBlackList(value);
+					EMClient.getInstance().contactManager().saveBlackList(value);
 				} catch (EaseMobException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -438,11 +438,11 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		}
 
 		if(connectionListener != null){
-		    EMChatManager.getInstance().removeConnectionListener(connectionListener);
+		    EMClient.getInstance().chatManager().removeConnectionListener(connectionListener);
 		}
 		
 		if(groupChangeListener != null){
-		    EMGroupManager.getInstance().removeGroupChangeListener(groupChangeListener);
+		    EMClient.getInstance().groupManager().removeGroupChangeListener(groupChangeListener);
 		}
 		
 		try {
@@ -503,8 +503,8 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	public int getUnreadMsgCountTotal() {
 		int unreadMsgCountTotal = 0;
 		int chatroomUnreadMsgCount = 0;
-		unreadMsgCountTotal = EMChatManager.getInstance().getUnreadMsgsCount();
-		for(EMConversation conversation:EMChatManager.getInstance().getAllConversations().values()){
+		unreadMsgCountTotal = EMClient.getInstance().chatManager().getUnreadMsgsCount();
+		for(EMConversation conversation:EMClient.getInstance().chatManager().getAllConversations().values()){
 			if(conversation.getType() == EMConversationType.ChatRoom)
 			chatroomUnreadMsgCount=chatroomUnreadMsgCount+conversation.getUnreadMsgCount();
 		}
@@ -698,7 +698,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
 			
 			boolean hasGroup = false;
-			for (EMGroup group : EMGroupManager.getInstance().getAllGroups()) {
+			for (EMGroup group : EMClient.getInstance().groupManager().getAllGroups()) {
 				if (group.getGroupId().equals(groupId)) {
 					hasGroup = true;
 					break;
@@ -716,7 +716,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			msg.setMsgId(UUID.randomUUID().toString());
 			msg.addBody(new TextMessageBody(inviter + " " +st3));
 			// 保存邀请消息
-			EMChatManager.getInstance().saveMessage(msg);
+			EMClient.getInstance().chatManager().saveMessage(msg);
 			// 提醒新消息
 			HXSDKHelper.getInstance().getNotifier().viberateAndPlayTone(msg);
 
@@ -813,7 +813,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			msg.setMsgId(UUID.randomUUID().toString());
 			msg.addBody(new TextMessageBody(accepter + " " +st4));
 			// 保存同意消息
-			EMChatManager.getInstance().saveMessage(msg);
+			EMClient.getInstance().chatManager().saveMessage(msg);
 			// 提醒新消息
 			HXSDKHelper.getInstance().getNotifier().viberateAndPlayTone(msg);
 
@@ -903,7 +903,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		if (!isConflict && !isCurrentAccountRemoved) {
 			updateUnreadLabel();
 			updateUnreadAddressLable();
-			EMChatManager.getInstance().activityResumed();
+			EMClient.getInstance().chatManager().activityResumed();
 		}
 
 		// unregister this event listener when this activity enters the
@@ -912,13 +912,13 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		sdkHelper.pushActivity(this);
 
 		// register the event listener when enter the foreground
-		EMChatManager.getInstance().registerEventListener(this,
+		EMClient.getInstance().chatManager().registerEventListener(this,
 				new EMNotifierEvent.Event[] { EMNotifierEvent.Event.EventNewMessage ,EMNotifierEvent.Event.EventOfflineMessage, EMNotifierEvent.Event.EventConversationListChanged});
 	}
 
 	@Override
 	protected void onStop() {
-		EMChatManager.getInstance().unregisterEventListener(this);
+		EMClient.getInstance().chatManager().unregisterEventListener(this);
 		DemoHXSDKHelper sdkHelper = (DemoHXSDKHelper) DemoHXSDKHelper.getInstance();
 		sdkHelper.popActivity(this);
 

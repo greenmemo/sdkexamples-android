@@ -178,7 +178,7 @@ public class ChatHistoryFragment extends Fragment {
 			if(tobeDeleteUser instanceof EMGroup)
 				isGroup = true;
 			// 删除此会话
-			EMChatManager.getInstance().deleteConversation(tobeDeleteUser.getUsername(),isGroup);
+			EMClient.getInstance().chatManager().deleteConversation(tobeDeleteUser.getUsername(),isGroup);
 			InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
 			inviteMessgeDao.deleteMessage(tobeDeleteUser.getUsername());
 			adapter.remove(tobeDeleteUser);
@@ -213,13 +213,13 @@ public class ChatHistoryFragment extends Fragment {
 		List<EMContact> resultList = new ArrayList<EMContact>();
 		//获取有聊天记录的users，不包括陌生人
 		for (User user : contactList.values()) {
-			EMConversation conversation = EMChatManager.getInstance().getConversation(user.getUsername());
+			EMConversation conversation = EMClient.getInstance().chatManager().getConversation(user.getUsername());
 			if (conversation.getMsgCount() > 0) {
 				resultList.add(user);
 			}
 		}
-		for(EMGroup group : EMGroupManager.getInstance().getAllGroups()){
-			EMConversation conversation = EMChatManager.getInstance().getConversation(group.getGroupId());
+		for(EMGroup group : EMClient.getInstance().groupManager().getAllGroups()){
+			EMConversation conversation = EMClient.getInstance().chatManager().getConversation(group.getGroupId());
 			if(conversation.getMsgCount() > 0){
 				resultList.add(group);
 			}
@@ -240,8 +240,8 @@ public class ChatHistoryFragment extends Fragment {
 		Collections.sort(contactList, new Comparator<EMContact>() {
 			@Override
 			public int compare(final EMContact user1, final EMContact user2) {
-			    EMConversation conversation1 = EMChatManager.getInstance().getConversation(user1.getUsername());
-			    EMConversation conversation2 = EMChatManager.getInstance().getConversation(user2.getUsername());
+			    EMConversation conversation1 = EMClient.getInstance().chatManager().getConversation(user1.getUsername());
+			    EMConversation conversation2 = EMClient.getInstance().chatManager().getConversation(user2.getUsername());
 
 				EMMessage user2LastMessage = conversation2.getLastMessage();
 				EMMessage user1LastMessage = conversation1.getLastMessage();

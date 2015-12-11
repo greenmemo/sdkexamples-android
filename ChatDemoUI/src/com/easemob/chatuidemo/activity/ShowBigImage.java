@@ -195,7 +195,7 @@ public class ShowBigImage extends BaseActivity {
 			}
 		};
 
-	    EMChatManager.getInstance().downloadFile(remoteFilePath, localFilePath, headers, callback);
+	    EMClient.getInstance().chatManager().downloadFile(remoteFilePath, localFilePath, headers, callback);
 
 	}
 

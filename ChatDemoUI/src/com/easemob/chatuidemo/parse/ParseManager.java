@@ -52,7 +52,7 @@ public class ParseManager {
 	}
 
 	public boolean updateParseNickName(final String nickname) {
-		String username = EMChatManager.getInstance().getCurrentUser();
+		String username = EMClient.getInstance().chatManager().getCurrentUser();
 		ParseQuery<ParseObject> pQuery = ParseQuery.getQuery(CONFIG_TABLE_NAME);
 		pQuery.whereEqualTo(CONFIG_USERNAME, username);
 		ParseObject pUser = null;
@@ -138,7 +138,7 @@ public class ParseManager {
     }
 	
 	public void asyncGetCurrentUserInfo(final EMValueCallBack<User> callback){
-		final String username = EMChatManager.getInstance().getCurrentUser();
+		final String username = EMClient.getInstance().chatManager().getCurrentUser();
 		asyncGetUserInfo(username, new EMValueCallBack<User>() {
 
 			@Override
@@ -198,7 +198,7 @@ public class ParseManager {
 	}
 
 	public String uploadParseAvatar(byte[] data) {
-		String username = EMChatManager.getInstance().getCurrentUser();
+		String username = EMClient.getInstance().chatManager().getCurrentUser();
 		ParseQuery<ParseObject> pQuery = ParseQuery.getQuery(CONFIG_TABLE_NAME);
 		pQuery.whereEqualTo(CONFIG_USERNAME, username);
 		ParseObject pUser = null;
