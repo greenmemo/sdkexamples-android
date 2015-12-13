@@ -15,37 +15,23 @@ package com.easemob.chatuidemo.activity;
 
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnLongClickListener;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 
-import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatRoom;
-import com.easemob.chat.EMGroup;
+import com.easemob.chat.EMClient;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.adapter.ChatRoomAdapter;
-import com.easemob.exceptions.EaseMobException;
 
 public class ChatRoomActivity extends BaseActivity {
 	private ListView chatListView;
@@ -61,7 +47,7 @@ public class ChatRoomActivity extends BaseActivity {
 
 		instance = this;
 		inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		roomList = EMClient.getInstance().chatManager().getAllChatRooms();
+		roomList = EMClient.getInstance().chatroomManager().getAllChatRooms();
 		chatListView = (ListView) findViewById(R.id.list);
 		chatRoomAdapter = new ChatRoomAdapter(this, 1, roomList);
 		chatListView.setAdapter(chatRoomAdapter);
@@ -96,7 +82,7 @@ public class ChatRoomActivity extends BaseActivity {
                     new Thread(){
                         @Override
                         public void run(){
-							EMClient.getInstance().chatManager().leaveChatRoom(roomId);
+							EMClient.getInstance().chatroomManager().leaveChatRoom(roomId);
                         }
                     }.start();
                     
@@ -136,7 +122,7 @@ public class ChatRoomActivity extends BaseActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		roomList = EMClient.getInstance().chatManager().getAllChatRooms();
+		roomList = EMClient.getInstance().chatroomManager().getAllChatRooms();
 		chatRoomAdapter = new ChatRoomAdapter(this, 1, roomList);
 		chatListView.setAdapter(chatRoomAdapter);
 		chatRoomAdapter.notifyDataSetChanged();

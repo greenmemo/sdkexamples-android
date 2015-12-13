@@ -27,10 +27,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.easemob.applib.controller.HXSDKHelper;
-import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
-import com.easemob.chat.VoiceMessageBody;
+import com.easemob.chat.EMVoiceMessageBody;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.activity.ChatActivity;
 import com.easemob.util.EMLog;
@@ -38,7 +38,7 @@ import com.easemob.util.EMLog;
 public class VoicePlayClickListener implements View.OnClickListener {
 	private static final String TAG = "VoicePlayClickListener";
 	EMMessage message;
-	VoiceMessageBody voiceBody;
+	EMVoiceMessageBody voiceBody;
 	ImageView voiceIconView;
 
 	private AnimationDrawable voiceAnimation = null;
@@ -64,7 +64,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 	public VoicePlayClickListener(EMMessage message, ImageView v, ImageView iv_read_status, BaseAdapter adapter, Activity activity,
 			String username) {
 		this.message = message;
-		voiceBody = (VoiceMessageBody) message.getBody();
+		voiceBody = (EMVoiceMessageBody) message.getBody();
 		this.iv_read_status = iv_read_status;
 		this.adapter = adapter;
 		voiceIconView = v;
@@ -194,7 +194,7 @@ public class VoicePlayClickListener implements View.OnClickListener {
 
 					@Override
 					protected Void doInBackground(Void... params) {
-						EMClient.getInstance().chatManager().asyncFetchMessage(message);
+						EMClient.getInstance().chatManager().downloadAttachment(message);
 						return null;
 					}
 

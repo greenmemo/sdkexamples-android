@@ -26,11 +26,10 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ProgressBar;
 
 import com.easemob.EMCallBack;
-import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.task.LoadLocalBigImgTask;
 import com.easemob.chatuidemo.utils.ImageCache;

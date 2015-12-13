@@ -33,8 +33,7 @@ import android.widget.Toast;
 
 import com.easemob.EMCallBack;
 import com.easemob.applib.controller.HXSDKHelper;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMGroupManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
@@ -134,7 +133,7 @@ public class LoginActivity extends BaseActivity {
 
 		final long start = System.currentTimeMillis();
 		// 调用sdk登陆方法登陆聊天服务器
-		EMClient.getInstance().chatManager().login(currentUsername, currentPassword, new EMCallBack() {
+		EMClient.getInstance().login(currentUsername, currentPassword, new EMCallBack() {
 
 			@Override
 			public void onSuccess() {
@@ -165,7 +164,7 @@ public class LoginActivity extends BaseActivity {
 					return;
 				}
 				// 更新当前用户的nickname 此方法的作用是在ios离线推送时能够显示用户nick
-				boolean updatenick = EMClient.getInstance().chatManager().updateCurrentUserNick(
+				boolean updatenick = EMClient.getInstance().updateCurrentUserNick(
 						DemoApplication.currentUserNick.trim());
 				if (!updatenick) {
 					Log.e("LoginActivity", "update current user nick fail");
@@ -204,25 +203,22 @@ public class LoginActivity extends BaseActivity {
 	private void initializeContacts() {
 		Map<String, User> userlist = new HashMap<String, User>();
 		// 添加user"申请与通知"
-		User newFriends = new User();
-		newFriends.setUsername(Constant.NEW_FRIENDS_USERNAME);
+		User newFriends = new User(Constant.NEW_FRIENDS_USERNAME);
 		String strChat = getResources().getString(
 				R.string.Application_and_notify);
 		newFriends.setNick(strChat);
 
 		userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
 		// 添加"群聊"
-		User groupUser = new User();
+		User groupUser = new User(Constant.GROUP_USERNAME);
 		String strGroup = getResources().getString(R.string.group_chat);
-		groupUser.setUsername(Constant.GROUP_USERNAME);
 		groupUser.setNick(strGroup);
 		groupUser.setHeader("");
 		userlist.put(Constant.GROUP_USERNAME, groupUser);
 		
 		// 添加"Robot"
-		User robotUser = new User();
+		User robotUser = new User(Constant.CHAT_ROBOT);
 		String strRobot = getResources().getString(R.string.robot_chat);
-		robotUser.setUsername(Constant.CHAT_ROBOT);
 		robotUser.setNick(strRobot);
 		robotUser.setHeader("");
 		userlist.put(Constant.CHAT_ROBOT, robotUser);

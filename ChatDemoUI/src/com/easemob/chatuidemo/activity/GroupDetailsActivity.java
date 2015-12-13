@@ -38,9 +38,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.utils.UserUtils;
 import com.easemob.chatuidemo.widget.ExpandGridView;
@@ -132,14 +131,14 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 		idText.setText(groupId);
 		if (group.getOwner() == null || "".equals(group.getOwner())
-				|| !group.getOwner().equals(EMClient.getInstance().chatManager().getCurrentUser())) {
+				|| !group.getOwner().equals(EMClient.getInstance().getCurrentUser())) {
 			exitBtn.setVisibility(View.GONE);
 			deleteBtn.setVisibility(View.GONE);
 			blacklistLayout.setVisibility(View.GONE);
 			changeGroupNameLayout.setVisibility(View.GONE);
 		}
 		// 如果自己是群主，显示解散按钮
-		if (EMClient.getInstance().chatManager().getCurrentUser().equals(group.getOwner())) {
+		if (EMClient.getInstance().getCurrentUser().equals(group.getOwner())) {
 			exitBtn.setVisibility(View.GONE);
 			deleteBtn.setVisibility(View.VISIBLE);
 		}
@@ -325,7 +324,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	 */
 	public void clearGroupHistory() {
 
-		EMClient.getInstance().chatManager().clearConversation(group.getGroupId());
+		EMClient.getInstance().chatManager().deleteConversation(group.getGroupId(), true);
 		progressDialog.dismiss();
 		// adapter.refresh(EMClient.getInstance().chatManager().getConversation(toChatUsername));
 
@@ -407,7 +406,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			public void run() {
 				try {
 					// 创建者调用add方法
-					if (EMClient.getInstance().chatManager().getCurrentUser().equals(group.getOwner())) {
+					if (EMClient.getInstance().getCurrentUser().equals(group.getOwner())) {
 					    EMClient.getInstance().groupManager().addUsersToGroup(groupId, newmembers);
 					} else {
 						// 一般成员调用invite方法
@@ -570,7 +569,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			    holder.imageView.setImageResource(R.drawable.smiley_minus_btn);
 //				button.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.smiley_minus_btn, 0, 0);
 				// 如果不是创建者或者没有相应权限，不提供加减人按钮
-				if (!group.getOwner().equals(EMClient.getInstance().chatManager().getCurrentUser())) {
+				if (!group.getOwner().equals(EMClient.getInstance().getCurrentUser())) {
 					// if current user is not group admin, hide add/remove btn
 					convertView.setVisibility(View.INVISIBLE);
 				} else { // 显示删除按钮
@@ -597,7 +596,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			    holder.imageView.setImageResource(R.drawable.smiley_add_btn);
 //				button.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.smiley_add_btn, 0, 0);
 				// 如果不是创建者或者没有相应权限
-				if (!group.isAllowInvites() && !group.getOwner().equals(EMClient.getInstance().chatManager().getCurrentUser())) {
+				if (!group.isAllowInvites() && !group.getOwner().equals(EMClient.getInstance().getCurrentUser())) {
 					// if current user is not group admin, hide add/remove btn
 					convertView.setVisibility(View.INVISIBLE);
 				} else {
@@ -645,7 +644,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					public void onClick(View v) {
 						if (isInDeleteMode) {
 							// 如果是删除自己，return
-							if (EMClient.getInstance().chatManager().getCurrentUser().equals(username)) {
+							if (EMClient.getInstance().getCurrentUser().equals(username)) {
 								startActivity(new Intent(GroupDetailsActivity.this, AlertDialog.class).putExtra("msg", st12));
 								return;
 							}
@@ -711,9 +710,9 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 					@Override
 					public boolean onLongClick(View v) {
-					    if(EMClient.getInstance().chatManager().getCurrentUser().equals(username))
+					    if(EMClient.getInstance().getCurrentUser().equals(username))
 					        return true;
-						if (group.getOwner().equals(EMClient.getInstance().chatManager().getCurrentUser())) {
+						if (group.getOwner().equals(EMClient.getInstance().getCurrentUser())) {
 							Intent intent = new Intent(GroupDetailsActivity.this, AlertDialog.class);
 							intent.putExtra("msg", st15);
 							intent.putExtra("cancel", true);
@@ -748,7 +747,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 									+ ")");
 							loadingPB.setVisibility(View.INVISIBLE);
 							refreshMembers();
-							if (EMClient.getInstance().chatManager().getCurrentUser().equals(group.getOwner())) {
+							if (EMClient.getInstance().getCurrentUser().equals(group.getOwner())) {
 								// 显示解散按钮
 								exitBtn.setVisibility(View.GONE);
 								deleteBtn.setVisibility(View.VISIBLE);

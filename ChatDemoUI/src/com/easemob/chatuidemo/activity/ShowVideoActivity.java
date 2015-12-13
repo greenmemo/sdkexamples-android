@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chatuidemo.R;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;

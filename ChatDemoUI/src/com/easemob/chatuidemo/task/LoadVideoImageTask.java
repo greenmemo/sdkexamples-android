@@ -10,9 +10,9 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chat.EMMessage;
-import com.easemob.chat.VideoMessageBody;
+import com.easemob.chat.EMVideoMessageBody;
 import com.easemob.chatuidemo.activity.ShowVideoActivity;
 import com.easemob.chatuidemo.utils.CommonUtils;
 import com.easemob.chatuidemo.utils.ImageCache;
@@ -55,7 +55,7 @@ public class LoadVideoImageTask extends AsyncTask<Object, Void, Bitmap> {
 				@Override
 				public void onClick(View v) {
 					if (thumbnailPath != null) {
-						VideoMessageBody videoBody = (VideoMessageBody) message
+						EMVideoMessageBody videoBody = (EMVideoMessageBody) message
 								.getBody();
 						Intent intent = new Intent(activity,
 								ShowVideoActivity.class);
@@ -88,7 +88,7 @@ public class LoadVideoImageTask extends AsyncTask<Object, Void, Bitmap> {
 						
 						@Override
 						protected Void doInBackground(Void... params) {
-							EMClient.getInstance().chatManager().asyncFetchMessage(
+							EMClient.getInstance().chatManager().downloadThumbnail(
 									message);
 							return null;
 						}

@@ -18,8 +18,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -33,15 +31,14 @@ import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
 import com.easemob.applib.controller.HXSDKHelper;
-import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatRoom;
+import com.easemob.chat.EMClient;
 import com.easemob.chat.EMConversation;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.ImageMessageBody;
-import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.EMConversation.EMConversationType;
+import com.easemob.chat.EMGroup;
+import com.easemob.chat.EMImageMessageBody;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.EMTextMessageBody;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
@@ -106,7 +103,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
 			holder.name.setText(group != null ? group.getGroupName() : username);
 		} else if(conversation.getType() == EMConversationType.ChatRoom){
 		    holder.avatar.setImageResource(R.drawable.group_icon);
-            EMChatRoom room = EMClient.getInstance().chatManager().getChatRoom(username);
+            EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(username);
             holder.name.setText(room != null && !TextUtils.isEmpty(room.getName()) ? room.getName() : username);
 		}else {
 		    UserUtils.setUserAvatar(getContext(), username, holder.avatar);
@@ -137,7 +134,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
 			holder.unreadLabel.setVisibility(View.INVISIBLE);
 		}
 
-		if (conversation.getMsgCount() != 0) {
+		if (conversation.getAllMsgCount() != 0) {
 			// 把最后一条消息的内容作为item的message内容
 			EMMessage lastMessage = conversation.getLastMessage();
 			holder.message.setText(SmileUtils.getSmiledText(getContext(), getMessageDigest(lastMessage, (this.getContext()))),
@@ -179,7 +176,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
 			}
 			break;
 		case IMAGE: // 图片消息
-			ImageMessageBody imageBody = (ImageMessageBody) message.getBody();
+			EMImageMessageBody imageBody = (EMImageMessageBody) message.getBody();
 			digest = getStrng(context, R.string.picture) + imageBody.getFileName();
 			break;
 		case VOICE:// 语音消息
@@ -193,10 +190,10 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
 			if(((DemoHXSDKHelper)HXSDKHelper.getInstance()).isRobotMenuMessage(message)){
 				digest = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getRobotMenuMessageDigest(message);
 			}else if(message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL,false)){
-				TextMessageBody txtBody = (TextMessageBody) message.getBody();
+				EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
 				digest = getStrng(context, R.string.voice_call) + txtBody.getMessage();
 			}else{
-				TextMessageBody txtBody = (TextMessageBody) message.getBody();
+				EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
 				digest = txtBody.getMessage();
 			}
 			break;

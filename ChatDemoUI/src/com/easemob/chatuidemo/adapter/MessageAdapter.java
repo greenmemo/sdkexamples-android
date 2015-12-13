@@ -25,47 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 
-import com.easemob.EMCallBack;
-import com.easemob.EMError;
-import com.easemob.applib.controller.HXSDKHelper;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMConversation;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.EMMessage.ChatType;
-import com.easemob.chat.EMMessage.Direct;
-import com.easemob.chat.EMMessage.Type;
-import com.easemob.chat.FileMessageBody;
-import com.easemob.chat.ImageMessageBody;
-import com.easemob.chat.LocationMessageBody;
-import com.easemob.chat.NormalFileMessageBody;
-import com.easemob.chat.TextMessageBody;
-import com.easemob.chat.VideoMessageBody;
-import com.easemob.chat.VoiceMessageBody;
-import com.easemob.chatuidemo.Constant;
-import com.easemob.chatuidemo.DemoHXSDKHelper;
-import com.easemob.chatuidemo.R;
-import com.easemob.chatuidemo.activity.AlertDialog;
-import com.easemob.chatuidemo.activity.BaiduMapActivity;
-import com.easemob.chatuidemo.activity.ChatActivity;
-import com.easemob.chatuidemo.activity.ContextMenu;
-import com.easemob.chatuidemo.activity.ShowBigImage;
-import com.easemob.chatuidemo.activity.ShowNormalFileActivity;
-import com.easemob.chatuidemo.activity.ShowVideoActivity;
-import com.easemob.chatuidemo.activity.UserProfileActivity;
-import com.easemob.chatuidemo.task.LoadImageTask;
-import com.easemob.chatuidemo.task.LoadVideoImageTask;
-import com.easemob.chatuidemo.utils.DateUtils;
-import com.easemob.chatuidemo.utils.ImageCache;
-import com.easemob.chatuidemo.utils.ImageUtils;
-import com.easemob.chatuidemo.utils.SmileUtils;
-import com.easemob.chatuidemo.utils.UserUtils;
-import com.easemob.exceptions.EaseMobException;
-import com.easemob.util.DensityUtil;
-import com.easemob.util.EMLog;
-import com.easemob.util.FileUtils;
-import com.easemob.util.LatLng;
-import com.easemob.util.TextFormater;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -91,6 +50,47 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 import android.widget.Toast;
+
+import com.easemob.EMCallBack;
+import com.easemob.EMError;
+import com.easemob.applib.controller.HXSDKHelper;
+import com.easemob.chat.EMClient;
+import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMFileMessageBody;
+import com.easemob.chat.EMImageMessageBody;
+import com.easemob.chat.EMLocationMessageBody;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.EMMessage.ChatType;
+import com.easemob.chat.EMMessage.Direct;
+import com.easemob.chat.EMMessage.Type;
+import com.easemob.chat.EMNormalFileMessageBody;
+import com.easemob.chat.EMTextMessageBody;
+import com.easemob.chat.EMVideoMessageBody;
+import com.easemob.chat.EMVoiceMessageBody;
+import com.easemob.chatuidemo.Constant;
+import com.easemob.chatuidemo.DemoHXSDKHelper;
+import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.activity.AlertDialog;
+import com.easemob.chatuidemo.activity.BaiduMapActivity;
+import com.easemob.chatuidemo.activity.ChatActivity;
+import com.easemob.chatuidemo.activity.ContextMenu;
+import com.easemob.chatuidemo.activity.ShowBigImage;
+import com.easemob.chatuidemo.activity.ShowNormalFileActivity;
+import com.easemob.chatuidemo.activity.ShowVideoActivity;
+import com.easemob.chatuidemo.activity.UserProfileActivity;
+import com.easemob.chatuidemo.task.LoadImageTask;
+import com.easemob.chatuidemo.task.LoadVideoImageTask;
+import com.easemob.chatuidemo.utils.DateUtils;
+import com.easemob.chatuidemo.utils.ImageCache;
+import com.easemob.chatuidemo.utils.ImageUtils;
+import com.easemob.chatuidemo.utils.SmileUtils;
+import com.easemob.chatuidemo.utils.UserUtils;
+import com.easemob.exceptions.EaseMobException;
+import com.easemob.util.DensityUtil;
+import com.easemob.util.EMLog;
+import com.easemob.util.FileUtils;
+import com.easemob.util.LatLng;
+import com.easemob.util.TextFormater;
 
 public class MessageAdapter extends BaseAdapter{
 
@@ -597,7 +597,7 @@ public class MessageAdapter extends BaseAdapter{
 	 * @param position
 	 */
 	private void handleTextMessage(EMMessage message, ViewHolder holder, final int position) {
-		TextMessageBody txtBody = (TextMessageBody) message.getBody();
+		EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
 		Spannable span = SmileUtils.getSmiledText(context, txtBody.getMessage());
 		// 设置内容
 		holder.tv.setText(span, BufferType.SPANNABLE);
@@ -706,7 +706,7 @@ public class MessageAdapter extends BaseAdapter{
 	 * @param position
 	 */
 	private void handleCallMessage(EMMessage message, ViewHolder holder, final int position) {
-		TextMessageBody txtBody = (TextMessageBody) message.getBody();
+		EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
 		holder.tv.setText(txtBody.getMessage());
 
 	}
@@ -744,7 +744,7 @@ public class MessageAdapter extends BaseAdapter{
 				holder.pb.setVisibility(View.GONE);
 				holder.tv.setVisibility(View.GONE);
 				holder.iv.setImageResource(R.drawable.default_image);
-				ImageMessageBody imgBody = (ImageMessageBody) message.getBody();
+				EMImageMessageBody imgBody = (EMImageMessageBody) message.getBody();
 				if (imgBody.getLocalUrl() != null) {
 					// String filePath = imgBody.getLocalUrl();
 					String remotePath = imgBody.getRemoteUrl();
@@ -764,7 +764,7 @@ public class MessageAdapter extends BaseAdapter{
 		// 发送的消息
 		// process send message
 		// send pic, show the pic directly
-		ImageMessageBody imgBody = (ImageMessageBody) message.getBody();
+		EMImageMessageBody imgBody = (EMImageMessageBody) message.getBody();
 		String filePath = imgBody.getLocalUrl();
 		if (filePath != null && new File(filePath).exists()) {
 			showImageView(ImageUtils.getThumbnailImagePath(filePath), holder.iv, filePath, null, message);
@@ -839,7 +839,7 @@ public class MessageAdapter extends BaseAdapter{
 	 */
 	private void handleVideoMessage(final EMMessage message, final ViewHolder holder, final int position, View convertView) {
 
-		VideoMessageBody videoBody = (VideoMessageBody) message.getBody();
+		EMVideoMessageBody videoBody = (EMVideoMessageBody) message.getBody();
 		// final File image=new File(PathUtil.getInstance().getVideoPath(),
 		// videoBody.getFileName());
 		String localThumb = videoBody.getLocalThumb();
@@ -967,7 +967,7 @@ public class MessageAdapter extends BaseAdapter{
 	 * @param convertView
 	 */
 	private void handleVoiceMessage(final EMMessage message, final ViewHolder holder, final int position, View convertView) {
-		VoiceMessageBody voiceBody = (VoiceMessageBody) message.getBody();
+		EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) message.getBody();
 		int len = voiceBody.getLength();
 		if(len>0){
 			holder.tv.setText(voiceBody.getLength() + "\"");
@@ -1083,7 +1083,7 @@ public class MessageAdapter extends BaseAdapter{
 	 * @param convertView
 	 */
 	private void handleFileMessage(final EMMessage message, final ViewHolder holder, int position, View convertView) {
-		final NormalFileMessageBody fileMessageBody = (NormalFileMessageBody) message.getBody();
+		final EMNormalFileMessageBody fileMessageBody = (EMNormalFileMessageBody) message.getBody();
 		final String filePath = fileMessageBody.getLocalUrl();
 		holder.tv_file_name.setText(fileMessageBody.getFileName());
 		holder.tv_file_size.setText(TextFormater.getDataSize(fileMessageBody.getFileSize()));
@@ -1189,7 +1189,7 @@ public class MessageAdapter extends BaseAdapter{
 	 */
 	private void handleLocationMessage(final EMMessage message, final ViewHolder holder, final int position, View convertView) {
 		TextView locationView = ((TextView) convertView.findViewById(R.id.tv_location));
-		LocationMessageBody locBody = (LocationMessageBody) message.getBody();
+		EMLocationMessageBody locBody = (EMLocationMessageBody) message.getBody();
 		locationView.setText(locBody.getAddress());
 		LatLng loc = new LatLng(locBody.getLatitude(), locBody.getLongitude());
 		locationView.setOnClickListener(new MapClickListener(loc, locBody.getAddress()));
@@ -1237,25 +1237,7 @@ public class MessageAdapter extends BaseAdapter{
 
 		final long start = System.currentTimeMillis();
 		// 调用sdk发送异步发送方法
-		EMClient.getInstance().chatManager().sendMessage(message, new EMCallBack() {
-
-			@Override
-			public void onSuccess() {
-				
-				updateSendedView(message, holder);
-			}
-
-			@Override
-			public void onError(int code, String error) {
-				
-				updateSendedView(message, holder);
-			}
-
-			@Override
-			public void onProgress(int progress, String status) {
-			}
-
-		});
+		EMClient.getInstance().chatManager().sendMessage(message);
 
 	}
 
@@ -1267,7 +1249,7 @@ public class MessageAdapter extends BaseAdapter{
 		EMLog.d(TAG, "!!! show download image progress");
 		// final ImageMessageBody msgbody = (ImageMessageBody)
 		// message.getBody();
-		final FileMessageBody msgbody = (FileMessageBody) message.getBody();
+		final EMFileMessageBody msgbody = (EMFileMessageBody) message.getBody();
 		if(holder.pb!=null)
 		holder.pb.setVisibility(View.VISIBLE);
 		if(holder.tv!=null)

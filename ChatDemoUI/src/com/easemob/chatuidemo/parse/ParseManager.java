@@ -7,9 +7,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.easemob.EMValueCallBack;
-import com.easemob.applib.utils.HXPreferenceUtils;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chatuidemo.Constant;
+import com.easemob.chat.EMClient;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.utils.UserUtils;
 import com.easemob.util.EMLog;
@@ -52,7 +50,7 @@ public class ParseManager {
 	}
 
 	public boolean updateParseNickName(final String nickname) {
-		String username = EMClient.getInstance().chatManager().getCurrentUser();
+		String username = EMClient.getInstance().getCurrentUser();
 		ParseQuery<ParseObject> pQuery = ParseQuery.getQuery(CONFIG_TABLE_NAME);
 		pQuery.whereEqualTo(CONFIG_USERNAME, username);
 		ParseObject pUser = null;
@@ -94,13 +92,12 @@ public class ParseManager {
 				if (arg0 != null) {
 					List<User> mList = new ArrayList<User>();
 					for (ParseObject pObject : arg0) {
-						User user = new User();
+						User user = new User(pObject.getString(CONFIG_USERNAME));
 						ParseFile parseFile = pObject.getParseFile(CONFIG_AVATAR);
 						if (parseFile != null) {
 							user.setAvatar(parseFile.getUrl());
 						}
 						user.setNick(pObject.getString(CONFIG_NICK));
-						user.setUsername(pObject.getString(CONFIG_USERNAME));
 						setUserHearder(user);
 						mList.add(user);
 					}
@@ -138,7 +135,7 @@ public class ParseManager {
     }
 	
 	public void asyncGetCurrentUserInfo(final EMValueCallBack<User> callback){
-		final String username = EMClient.getInstance().chatManager().getCurrentUser();
+		final String username = EMClient.getInstance().getCurrentUser();
 		asyncGetUserInfo(username, new EMValueCallBack<User>() {
 
 			@Override
@@ -198,7 +195,7 @@ public class ParseManager {
 	}
 
 	public String uploadParseAvatar(byte[] data) {
-		String username = EMClient.getInstance().chatManager().getCurrentUser();
+		String username = EMClient.getInstance().getCurrentUser();
 		ParseQuery<ParseObject> pQuery = ParseQuery.getQuery(CONFIG_TABLE_NAME);
 		pQuery.whereEqualTo(CONFIG_USERNAME, username);
 		ParseObject pUser = null;

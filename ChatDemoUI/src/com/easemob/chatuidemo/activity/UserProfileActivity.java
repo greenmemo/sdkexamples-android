@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import com.easemob.EMValueCallBack;
 import com.easemob.applib.controller.HXSDKHelper;
-import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.domain.User;
@@ -76,11 +76,11 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			iconRightArrow.setVisibility(View.INVISIBLE);
 		}
 		if (username == null) {
-			tvUsername.setText(EMClient.getInstance().chatManager().getCurrentUser());
+			tvUsername.setText(EMClient.getInstance().getCurrentUser());
 			UserUtils.setCurrentUserNick(tvNickName);
 			UserUtils.setCurrentUserAvatar(this, headAvatar);
-		} else if (username.equals(EMClient.getInstance().chatManager().getCurrentUser())) {
-			tvUsername.setText(EMClient.getInstance().chatManager().getCurrentUser());
+		} else if (username.equals(EMClient.getInstance().getCurrentUser())) {
+			tvUsername.setText(EMClient.getInstance().getCurrentUser());
 			UserUtils.setCurrentUserNick(tvNickName);
 			UserUtils.setCurrentUserAvatar(this, headAvatar);
 		} else {

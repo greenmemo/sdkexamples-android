@@ -21,7 +21,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.easemob.EMError;
-import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.utils.CommonUtils;
@@ -85,7 +85,7 @@ public class RegisterActivity extends BaseActivity {
 				public void run() {
 					try {
 						// 调用sdk注册方法
-						EMClient.getInstance().chatManager().createAccountOnServer(username, pwd);
+						EMClient.getInstance().createAccount(username, pwd);
 						runOnUiThread(new Runnable() {
 							public void run() {
 								if (!RegisterActivity.this.isFinishing())

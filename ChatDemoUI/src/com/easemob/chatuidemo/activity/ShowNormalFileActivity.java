@@ -10,8 +10,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.easemob.EMCallBack;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.FileMessageBody;
+import com.easemob.chat.EMClient;
+import com.easemob.chat.EMFileMessageBody;
 import com.easemob.chatuidemo.R;
 import com.easemob.util.FileUtils;
 
@@ -25,7 +25,7 @@ public class ShowNormalFileActivity extends BaseActivity {
 		setContentView(R.layout.activity_show_file);
 		progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-		final FileMessageBody messageBody = getIntent().getParcelableExtra("msgbody");
+		final EMFileMessageBody messageBody = getIntent().getParcelableExtra("msgbody");
 		file = new File(messageBody.getLocalUrl());
 		//set head map
 		final Map<String, String> maps = new HashMap<String, String>();

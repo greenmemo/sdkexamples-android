@@ -1,8 +1,5 @@
 package com.easemob.chatuidemo.activity;
 
-import com.easemob.chat.EMChatManager;
-import com.easemob.chatuidemo.R;
-
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.easemob.chat.EMClient;
+import com.easemob.chatuidemo.R;
 
 public class OfflinePushNickActivity extends BaseActivity {
 
@@ -44,7 +44,7 @@ public class OfflinePushNickActivity extends BaseActivity {
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-						boolean updatenick = EMClient.getInstance().chatManager().updateCurrentUserNick(
+						boolean updatenick = EMClient.getInstance().updateCurrentUserNick(
 								inputNickName.getText().toString());
 						if (!updatenick) {
 							runOnUiThread(new Runnable() {

@@ -31,11 +31,8 @@ import android.widget.Toast;
 
 import com.easemob.EMCallBack;
 import com.easemob.applib.controller.HXSDKHelper;
-import com.easemob.applib.model.HXSDKModel;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMChatOptions;
+import com.easemob.chat.EMClient;
 import com.easemob.chatuidemo.Constant;
-import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.DemoHXSDKModel;
 import com.easemob.chatuidemo.R;
@@ -116,7 +113,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	private ImageView iv_switch_room_owner_leave_allow;
 	private ImageView iv_switch_room_owner_leave_disallow;
 	
-	private EMChatOptions chatOptions;
  
 	/**
 	 * 诊断
@@ -159,8 +155,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		
 		
 		logoutBtn = (Button) getView().findViewById(R.id.btn_logout);
-		if(!TextUtils.isEmpty(EMClient.getInstance().chatManager().getCurrentUser())){
-			logoutBtn.setText(getString(R.string.button_logout) + "(" + EMClient.getInstance().chatManager().getCurrentUser() + ")");
+		if(!TextUtils.isEmpty(EMClient.getInstance().getCurrentUser())){
+			logoutBtn.setText(getString(R.string.button_logout) + "(" + EMClient.getInstance().getCurrentUser() + ")");
 		}
 
 		textview1 = (TextView) getView().findViewById(R.id.textview1);
@@ -181,8 +177,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		llDiagnose.setOnClickListener(this);
 		pushNick.setOnClickListener(this);
 		rl_switch_chatroom_leave.setOnClickListener(this);
-		
-		chatOptions = EMClient.getInstance().chatManager().getChatOptions();
 		
 		model = (DemoHXSDKModel) HXSDKHelper.getInstance().getModel();
 		
@@ -248,8 +242,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				rl_switch_vibrate.setVisibility(View.GONE);
 				textview1.setVisibility(View.GONE);
 				textview2.setVisibility(View.GONE);
-				chatOptions.setNotificationEnable(false);
-				EMClient.getInstance().chatManager().setChatOptions(chatOptions);
 
 				HXSDKHelper.getInstance().getModel().setSettingMsgNotification(false);
 			} else {
@@ -259,8 +251,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				rl_switch_vibrate.setVisibility(View.VISIBLE);
 				textview1.setVisibility(View.VISIBLE);
 				textview2.setVisibility(View.VISIBLE);
-				chatOptions.setNotificationEnable(true);
-				EMClient.getInstance().chatManager().setChatOptions(chatOptions);
 				HXSDKHelper.getInstance().getModel().setSettingMsgNotification(true);
 			}
 			break;
@@ -268,14 +258,10 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 			if (iv_switch_open_sound.getVisibility() == View.VISIBLE) {
 				iv_switch_open_sound.setVisibility(View.INVISIBLE);
 				iv_switch_close_sound.setVisibility(View.VISIBLE);
-				chatOptions.setNoticeBySound(false);
-				EMClient.getInstance().chatManager().setChatOptions(chatOptions);
 				HXSDKHelper.getInstance().getModel().setSettingMsgSound(false);
 			} else {
 				iv_switch_open_sound.setVisibility(View.VISIBLE);
 				iv_switch_close_sound.setVisibility(View.INVISIBLE);
-				chatOptions.setNoticeBySound(true);
-				EMClient.getInstance().chatManager().setChatOptions(chatOptions);
 				HXSDKHelper.getInstance().getModel().setSettingMsgSound(true);
 			}
 			break;
@@ -283,14 +269,10 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 			if (iv_switch_open_vibrate.getVisibility() == View.VISIBLE) {
 				iv_switch_open_vibrate.setVisibility(View.INVISIBLE);
 				iv_switch_close_vibrate.setVisibility(View.VISIBLE);
-				chatOptions.setNoticedByVibrate(false);
-				EMClient.getInstance().chatManager().setChatOptions(chatOptions);
 				HXSDKHelper.getInstance().getModel().setSettingMsgVibrate(false);
 			} else {
 				iv_switch_open_vibrate.setVisibility(View.VISIBLE);
 				iv_switch_close_vibrate.setVisibility(View.INVISIBLE);
-				chatOptions.setNoticedByVibrate(true);
-				EMClient.getInstance().chatManager().setChatOptions(chatOptions);
 				HXSDKHelper.getInstance().getModel().setSettingMsgVibrate(true);
 			}
 			break;
@@ -298,14 +280,10 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 			if (iv_switch_open_speaker.getVisibility() == View.VISIBLE) {
 				iv_switch_open_speaker.setVisibility(View.INVISIBLE);
 				iv_switch_close_speaker.setVisibility(View.VISIBLE);
-				chatOptions.setUseSpeaker(false);
-				EMClient.getInstance().chatManager().setChatOptions(chatOptions);
 				HXSDKHelper.getInstance().getModel().setSettingMsgSpeaker(false);
 			} else {
 				iv_switch_open_speaker.setVisibility(View.VISIBLE);
 				iv_switch_close_speaker.setVisibility(View.INVISIBLE);
-				chatOptions.setUseSpeaker(true);
-				EMClient.getInstance().chatManager().setChatOptions(chatOptions);
 				HXSDKHelper.getInstance().getModel().setSettingMsgVibrate(true);
 			}
 			break;
@@ -313,15 +291,11 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		    if(this.iv_switch_room_owner_leave_allow.getVisibility() == View.VISIBLE){
 		        iv_switch_room_owner_leave_allow.setVisibility(View.INVISIBLE);
                 iv_switch_room_owner_leave_disallow.setVisibility(View.VISIBLE);
-                chatOptions.allowChatroomOwnerLeave(false);
-                EMClient.getInstance().chatManager().setChatOptions(chatOptions);
                 model.allowChatroomOwnerLeave(false);
 
 		    }else{
 		        iv_switch_room_owner_leave_allow.setVisibility(View.VISIBLE);
                 iv_switch_room_owner_leave_disallow.setVisibility(View.INVISIBLE);
-                chatOptions.allowChatroomOwnerLeave(true);
-                EMClient.getInstance().chatManager().setChatOptions(chatOptions);
                 model.allowChatroomOwnerLeave(true);
 		    }
 		    break;

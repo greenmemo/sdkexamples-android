@@ -40,24 +40,19 @@ import android.widget.Toast;
 import com.easemob.EMCallBack;
 import com.easemob.EMConnectionListener;
 import com.easemob.EMError;
-import com.easemob.EMEventListener;
 import com.easemob.EMGroupChangeListener;
-import com.easemob.EMNotifierEvent;
 import com.easemob.EMValueCallBack;
 import com.easemob.applib.controller.HXSDKHelper;
-import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chat.EMContactListener;
-import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMMessage.Type;
-import com.easemob.chat.TextMessageBody;
+import com.easemob.chat.EMTextMessageBody;
 import com.easemob.chatuidemo.Constant;
-import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
@@ -160,7 +155,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		// 注册一个监听连接状态的listener
 		
 		connectionListener = new MyConnectionListener();
-		EMClient.getInstance().chatManager().addConnectionListener(connectionListener);
+		EMClient.getInstance().addConnectionListener(connectionListener);
 		
 		groupChangeListener = new MyGroupChangeListener();
 		// 注册群聊相关的listener
@@ -209,38 +204,33 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                 EMLog.d("roster", "contacts size: " + usernames.size());
                 Map<String, User> userlist = new HashMap<String, User>();
                 for (String username : usernames) {
-                    User user = new User();
-                    user.setUsername(username);
+                    User user = new User(username);
                     setUserHearder(username, user);
                     userlist.put(username, user);
                 }
                 // 添加user"申请与通知"
-                User newFriends = new User();
-                newFriends.setUsername(Constant.NEW_FRIENDS_USERNAME);
+                User newFriends = new User(Constant.NEW_FRIENDS_USERNAME);
                 String strChat = context.getString(R.string.Application_and_notify);
                 newFriends.setNick(strChat);
         
                 userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
                 // 添加"群聊"
-                User groupUser = new User();
+                User groupUser = new User(Constant.GROUP_USERNAME);
                 String strGroup = context.getString(R.string.group_chat);
-                groupUser.setUsername(Constant.GROUP_USERNAME);
                 groupUser.setNick(strGroup);
                 groupUser.setHeader("");
                 userlist.put(Constant.GROUP_USERNAME, groupUser);
                 
                  // 添加"聊天室"
-                User chatRoomItem = new User();
+                User chatRoomItem = new User(Constant.CHAT_ROOM);
                 String strChatRoom = context.getString(R.string.chat_room);
-                chatRoomItem.setUsername(Constant.CHAT_ROOM);
                 chatRoomItem.setNick(strChatRoom);
                 chatRoomItem.setHeader("");
                 userlist.put(Constant.CHAT_ROOM, chatRoomItem);
                 
                 // 添加"Robot"
-        		User robotUser = new User();
+        		User robotUser = new User(Constant.CHAT_ROBOT);
         		String strRobot = context.getString(R.string.robot_chat);
-        		robotUser.setUsername(Constant.CHAT_ROBOT);
         		robotUser.setNick(strRobot);
         		robotUser.setHeader("");
         		userlist.put(Constant.CHAT_ROBOT, robotUser);
@@ -714,7 +704,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			msg.setFrom(inviter);
 			msg.setTo(groupId);
 			msg.setMsgId(UUID.randomUUID().toString());
-			msg.addBody(new TextMessageBody(inviter + " " +st3));
+			msg.addBody(new EMTextMessageBody(inviter + " " +st3));
 			// 保存邀请消息
 			EMClient.getInstance().chatManager().saveMessage(msg);
 			// 提醒新消息
@@ -811,7 +801,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			msg.setFrom(accepter);
 			msg.setTo(groupId);
 			msg.setMsgId(UUID.randomUUID().toString());
-			msg.addBody(new TextMessageBody(accepter + " " +st4));
+			msg.addBody(new EMTextMessageBody(accepter + " " +st4));
 			// 保存同意消息
 			EMClient.getInstance().chatManager().saveMessage(msg);
 			// 提醒新消息
@@ -874,8 +864,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	 * @return
 	 */
 	User setUserHead(String username) {
-		User user = new User();
-		user.setUsername(username);
+		User user = new User(username);
 		String headerName = null;
 		if (!TextUtils.isEmpty(user.getNick())) {
 			headerName = user.getNick();

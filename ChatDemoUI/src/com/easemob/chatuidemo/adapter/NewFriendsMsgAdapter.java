@@ -30,8 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMGroupManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
@@ -149,7 +148,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 				// 调用sdk的同意方法
 				try {
 					if(msg.getGroupId() == null) //同意好友请求
-						EMClient.getInstance().chatManager().acceptInvitation(msg.getFrom());
+						EMClient.getInstance().contactManager().acceptInvitation(msg.getFrom());
 					else //同意加群申请
 					    EMClient.getInstance().groupManager().acceptApplication(msg.getFrom(), msg.getGroupId());
 					((Activity) context).runOnUiThread(new Runnable() {

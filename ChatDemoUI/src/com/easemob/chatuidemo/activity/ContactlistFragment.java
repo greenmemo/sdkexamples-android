@@ -51,7 +51,7 @@ import android.widget.Toast;
 
 import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.applib.controller.HXSDKHelper.HXSyncListener;
-import com.easemob.chat.EMContactManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;

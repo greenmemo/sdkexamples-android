@@ -22,9 +22,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout.LayoutParams;
 
-import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chatuidemo.activity.ShowBigImage;
@@ -111,7 +110,7 @@ public class LoadImageTask extends AsyncTask<Object, Void, Bitmap> {
 
 						@Override
 						public void run() {
-							EMClient.getInstance().chatManager().asyncFetchMessage(message);
+							EMClient.getInstance().chatManager().downloadThumbnail(message);
 						}
 					}).start();
 				}
