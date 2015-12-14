@@ -15,10 +15,6 @@ package com.easemob.chatuidemo.adapter;
 
 import java.io.File;
 import java.util.Date;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,7 +52,6 @@ import com.easemob.EMError;
 import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMClient;
 import com.easemob.chat.EMConversation;
-import com.easemob.chat.EMFileMessageBody;
 import com.easemob.chat.EMImageMessageBody;
 import com.easemob.chat.EMLocationMessageBody;
 import com.easemob.chat.EMMessage;
@@ -133,7 +128,9 @@ public class MessageAdapter extends BaseAdapter{
 
 	private Context context;
 
-	private Map<String, Timer> timers = new Hashtable<String, Timer>();
+	
+	private EMCallBack messageSendCallback;
+	private EMCallBack messageReceiveCallback;
 
 	public MessageAdapter(Context context, String username, int chatType) {
 		this.username = username;
@@ -588,7 +585,94 @@ public class MessageAdapter extends BaseAdapter{
 			}
 		});
 	}
+	
+	 /**
+     * 设置消息发送callback
+	 * @param message 
+	 * @param holder 
+     */
+    protected void setMessageSendCallback(final EMMessage message, final TextView percentageView){
+        if(messageSendCallback == null){
+            messageSendCallback = new EMCallBack() {
+                
+                @Override
+                public void onSuccess() {
+                    updateView(message);
+                }
+                
+                @Override
+                public void onProgress(final int progress, String status) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(percentageView != null)
+                                percentageView.setText(progress + "%");
 
+                        }
+                    });
+                }
+                
+                @Override
+                public void onError(int code, String error) {
+                    updateView(message);
+                }
+            };
+        }
+        message.setMessageStatusCallback(messageSendCallback);
+    }
+    
+    /**
+     * 设置消息接收callback
+     */
+    protected void setMessageReceiveCallback(final EMMessage message, final TextView percentageView){
+        if(messageReceiveCallback == null){
+            messageReceiveCallback = new EMCallBack() {
+                
+                @Override
+                public void onSuccess() {
+                    updateView(message);
+                }
+                
+                @Override
+                public void onProgress(final int progress, String status) {
+                    activity.runOnUiThread(new Runnable() {
+                        public void run() {
+                            if(percentageView != null){
+                                percentageView.setText(progress + "%");
+                            }
+                        }
+                    });
+                }
+                
+                @Override
+                public void onError(int code, String error) {
+                    updateView(message);
+                }
+            };
+        }
+        message.setMessageStatusCallback(messageReceiveCallback);
+    }
+
+    private void updateView(final EMMessage message) {
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                if (message.status() == EMMessage.Status.FAIL) {
+
+                    if (message.getError() == EMError.MESSAGE_SEND_INVALID_CONTENT) {
+                        Toast.makeText(activity,activity.getString(R.string.send_fail) + activity.getString(R.string.error_send_invalid_content), 0).show();
+                    } else if (message.getError() == EMError.MESSAGE_SEND_NOT_IN_THE_GROUP) {
+                        Toast.makeText(activity,activity.getString(R.string.send_fail) + activity.getString(R.string.error_send_not_in_the_group), 0).show();
+                    } else {
+                        Toast.makeText(activity,activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0).show();
+                    }
+                }
+
+                notifyDataSetChanged();
+            }
+        });
+
+    }
+    
 	/**
 	 * 文本消息
 	 * 
@@ -613,6 +697,8 @@ public class MessageAdapter extends BaseAdapter{
 		});
 
 		if (message.direct() == EMMessage.Direct.SEND) {
+		    //设置消息发送回调
+		    setMessageSendCallback(message,null);
 			switch (message.status()) {
 			case SUCCESS: // 发送成功
 				holder.pb.setVisibility(View.GONE);
@@ -627,8 +713,7 @@ public class MessageAdapter extends BaseAdapter{
 				holder.staus_iv.setVisibility(View.GONE);
 				break;
 			default:
-				// 发送消息
-				sendMsgInBackground(message, holder);
+			    break;
 			}
 		}
 	}
@@ -678,6 +763,7 @@ public class MessageAdapter extends BaseAdapter{
 			e.printStackTrace();
 		}
 		if (message.direct() == EMMessage.Direct.SEND) {
+		    setMessageSendCallback(message, null);
 			switch (message.status()) {
 			case SUCCESS: // 发送成功
 				holder.pb.setVisibility(View.GONE);
@@ -692,8 +778,7 @@ public class MessageAdapter extends BaseAdapter{
 				holder.staus_iv.setVisibility(View.GONE);
 				break;
 			default:
-				// 发送消息
-				sendMsgInBackground(message, holder);
+			    break;
 			}
 		}
 	}
@@ -735,10 +820,8 @@ public class MessageAdapter extends BaseAdapter{
 		if (message.direct() == EMMessage.Direct.RECEIVE) {
 			// "it is receive msg";
 			if (message.status() == EMMessage.Status.INPROGRESS) {
-				// "!!!! back receive";
 				holder.iv.setImageResource(R.drawable.default_image);
-				showDownloadImageProgress(message, holder);
-				// downloadImage(message, holder);
+				setMessageReceiveCallback(message, holder.tv);
 			} else {
 				// "!!!! not back receive, show image directly");
 				holder.pb.setVisibility(View.GONE);
@@ -771,7 +854,9 @@ public class MessageAdapter extends BaseAdapter{
 		} else {
 			showImageView(ImageUtils.getThumbnailImagePath(filePath), holder.iv, filePath, IMAGE_DIR, message);
 		}
-
+		
+		//设置消息接收回调
+		setMessageSendCallback(message, holder.tv);
 		switch (message.status()) {
 		case SUCCESS:
 			holder.pb.setVisibility(View.GONE);
@@ -787,45 +872,9 @@ public class MessageAdapter extends BaseAdapter{
 			holder.staus_iv.setVisibility(View.GONE);
 			holder.pb.setVisibility(View.VISIBLE);
 			holder.tv.setVisibility(View.VISIBLE);
-			if (timers.containsKey(message.getMsgId()))
-				return;
-			// set a timer
-			final Timer timer = new Timer();
-			timers.put(message.getMsgId(), timer);
-			timer.schedule(new TimerTask() {
-
-				@Override
-				public void run() {
-					activity.runOnUiThread(new Runnable() {
-						public void run() {
-							holder.pb.setVisibility(View.VISIBLE);
-							holder.tv.setVisibility(View.VISIBLE);
-							holder.tv.setText(message.progress() + "%");
-							if (message.status() == EMMessage.Status.SUCCESS) {
-								holder.pb.setVisibility(View.GONE);
-								holder.tv.setVisibility(View.GONE);
-								// message.setSendingStatus(Message.SENDING_STATUS_SUCCESS);
-								timer.cancel();
-							} else if (message.status() == EMMessage.Status.FAIL) {
-								holder.pb.setVisibility(View.GONE);
-								holder.tv.setVisibility(View.GONE);
-								// message.setSendingStatus(Message.SENDING_STATUS_FAIL);
-								// message.setProgress(0);
-								holder.staus_iv.setVisibility(View.VISIBLE);
-								Toast.makeText(activity,
-										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0)
-										.show();
-								timer.cancel();
-							}
-
-						}
-					});
-
-				}
-			}, 0, 500);
 			break;
 		default:
-			sendPictureMessage(message, holder);
+		    break;
 		}
 	}
 
@@ -883,7 +932,7 @@ public class MessageAdapter extends BaseAdapter{
 			if (message.status() == EMMessage.Status.INPROGRESS) {
 				// System.err.println("!!!! back receive");
 				holder.iv.setImageResource(R.drawable.default_image);
-				showDownloadImageProgress(message, holder);
+				setMessageReceiveCallback(message, holder.tv);
 
 			} else {
 				// System.err.println("!!!! not back receive, show image directly");
@@ -899,6 +948,7 @@ public class MessageAdapter extends BaseAdapter{
 		holder.pb.setTag(position);
 
 		// until here ,deal with send video msg
+		setMessageSendCallback(message, holder.tv);
 		switch (message.status()) {
 		case SUCCESS:
 			holder.pb.setVisibility(View.GONE);
@@ -911,49 +961,13 @@ public class MessageAdapter extends BaseAdapter{
 			holder.staus_iv.setVisibility(View.VISIBLE);
 			break;
 		case INPROGRESS:
-			if (timers.containsKey(message.getMsgId()))
-				return;
-			// set a timer
-			final Timer timer = new Timer();
-			timers.put(message.getMsgId(), timer);
-			timer.schedule(new TimerTask() {
-
-				@Override
-				public void run() {
-					activity.runOnUiThread(new Runnable() {
-
-						@Override
-						public void run() {
-							holder.pb.setVisibility(View.VISIBLE);
-							holder.tv.setVisibility(View.VISIBLE);
-							holder.tv.setText(message.progress() + "%");
-							if (message.status() == EMMessage.Status.SUCCESS) {
-								holder.pb.setVisibility(View.GONE);
-								holder.tv.setVisibility(View.GONE);
-								// message.setSendingStatus(Message.SENDING_STATUS_SUCCESS);
-								timer.cancel();
-							} else if (message.status() == EMMessage.Status.FAIL) {
-								holder.pb.setVisibility(View.GONE);
-								holder.tv.setVisibility(View.GONE);
-								// message.setSendingStatus(Message.SENDING_STATUS_FAIL);
-								// message.setProgress(0);
-								holder.staus_iv.setVisibility(View.VISIBLE);
-								Toast.makeText(activity,
-										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0)
-										.show();
-								timer.cancel();
-							}
-
-						}
-					});
-
-				}
-			}, 0, 500);
+		    holder.pb.setVisibility(View.VISIBLE);
+            holder.tv.setVisibility(View.VISIBLE);
+            holder.tv.setText(message.progress() + "%");
+            holder.staus_iv.setVisibility(View.GONE);
 			break;
 		default:
-			// sendMsgInBackground(message, holder);
-			sendPictureMessage(message, holder);
-
+		    break;
 		}
 
 	}
@@ -1015,39 +1029,7 @@ public class MessageAdapter extends BaseAdapter{
 			EMLog.d(TAG, "it is receive msg");
 			if (message.status() == EMMessage.Status.INPROGRESS) {
 				holder.pb.setVisibility(View.VISIBLE);
-				EMLog.d(TAG, "!!!! back receive");
-				message.setMessageStatusCallback(new EMCallBack() {
-
-					@Override
-					public void onSuccess() {
-						activity.runOnUiThread(new Runnable() {
-
-							@Override
-							public void run() {
-								holder.pb.setVisibility(View.INVISIBLE);
-								notifyDataSetChanged();
-							}
-						});
-
-					}
-
-					@Override
-					public void onProgress(int progress, String status) {
-					}
-
-					@Override
-					public void onError(int code, String message) {
-						activity.runOnUiThread(new Runnable() {
-
-							@Override
-							public void run() {
-								holder.pb.setVisibility(View.INVISIBLE);
-							}
-						});
-
-					}
-				});
-
+				setMessageReceiveCallback(message, null);
 			} else {
 				holder.pb.setVisibility(View.INVISIBLE);
 
@@ -1070,7 +1052,7 @@ public class MessageAdapter extends BaseAdapter{
 			holder.staus_iv.setVisibility(View.GONE);
 			break;
 		default:
-			sendMsgInBackground(message, holder);
+		    break;
 		}
 	}
 
@@ -1124,6 +1106,7 @@ public class MessageAdapter extends BaseAdapter{
 		}
 
 		// until here, deal with send voice msg
+		setMessageSendCallback(message, holder.tv);
 		switch (message.status()) {
 		case SUCCESS:
 			holder.pb.setVisibility(View.INVISIBLE);
@@ -1136,45 +1119,13 @@ public class MessageAdapter extends BaseAdapter{
 			holder.staus_iv.setVisibility(View.VISIBLE);
 			break;
 		case INPROGRESS:
-			if (timers.containsKey(message.getMsgId()))
-				return;
-			// set a timer
-			final Timer timer = new Timer();
-			timers.put(message.getMsgId(), timer);
-			timer.schedule(new TimerTask() {
-
-				@Override
-				public void run() {
-					activity.runOnUiThread(new Runnable() {
-
-						@Override
-						public void run() {
-							holder.pb.setVisibility(View.VISIBLE);
-							holder.tv.setVisibility(View.VISIBLE);
-							holder.tv.setText(message.progress() + "%");
-							if (message.status() == EMMessage.Status.SUCCESS) {
-								holder.pb.setVisibility(View.INVISIBLE);
-								holder.tv.setVisibility(View.INVISIBLE);
-								timer.cancel();
-							} else if (message.status() == EMMessage.Status.FAIL) {
-								holder.pb.setVisibility(View.INVISIBLE);
-								holder.tv.setVisibility(View.INVISIBLE);
-								holder.staus_iv.setVisibility(View.VISIBLE);
-								Toast.makeText(activity,
-										activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0)
-										.show();
-								timer.cancel();
-							}
-
-						}
-					});
-
-				}
-			}, 0, 500);
+		    holder.pb.setVisibility(View.VISIBLE);
+            holder.tv.setVisibility(View.VISIBLE);
+            holder.staus_iv.setVisibility(View.INVISIBLE);
 			break;
 		default:
 			// 发送消息
-			sendMsgInBackground(message, holder);
+		    break;
 		}
 
 	}
@@ -1207,6 +1158,7 @@ public class MessageAdapter extends BaseAdapter{
 			return;
 		}
 		// deal with send message
+		setMessageSendCallback(message, null);
 		switch (message.status()) {
 		case SUCCESS:
 			holder.pb.setVisibility(View.GONE);
@@ -1218,189 +1170,13 @@ public class MessageAdapter extends BaseAdapter{
 			break;
 		case INPROGRESS:
 			holder.pb.setVisibility(View.VISIBLE);
+			holder.staus_iv.setVisibility(View.GONE);
 			break;
 		default:
-			sendMsgInBackground(message, holder);
+		    break;
 		}
 	}
 
-	/**
-	 * 发送消息
-	 * 
-	 * @param message
-	 * @param holder
-	 * @param position
-	 */
-	public void sendMsgInBackground(final EMMessage message, final ViewHolder holder) {
-		holder.staus_iv.setVisibility(View.GONE);
-		holder.pb.setVisibility(View.VISIBLE);
-
-		final long start = System.currentTimeMillis();
-		// 调用sdk发送异步发送方法
-		EMClient.getInstance().chatManager().sendMessage(message);
-
-	}
-
-	/*
-	 * chat sdk will automatic download thumbnail image for the image message we
-	 * need to register callback show the download progress
-	 */
-	private void showDownloadImageProgress(final EMMessage message, final ViewHolder holder) {
-		EMLog.d(TAG, "!!! show download image progress");
-		// final ImageMessageBody msgbody = (ImageMessageBody)
-		// message.getBody();
-		final EMFileMessageBody msgbody = (EMFileMessageBody) message.getBody();
-		if(holder.pb!=null)
-		holder.pb.setVisibility(View.VISIBLE);
-		if(holder.tv!=null)
-		holder.tv.setVisibility(View.VISIBLE);
-
-		message.setMessageStatusCallback(new EMCallBack() {
-
-			@Override
-			public void onSuccess() {
-				activity.runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						// message.setBackReceive(false);
-						if (message.getType() == EMMessage.Type.IMAGE) {
-							holder.pb.setVisibility(View.GONE);
-							holder.tv.setVisibility(View.GONE);
-						}
-						notifyDataSetChanged();
-					}
-				});
-			}
-
-			@Override
-			public void onError(int code, String message) {
-
-			}
-
-			@Override
-			public void onProgress(final int progress, String status) {
-				if (message.getType() == EMMessage.Type.IMAGE) {
-					activity.runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							holder.tv.setText(progress + "%");
-
-						}
-					});
-				}
-
-			}
-
-		});
-	}
-
-	/*
-	 * send message with new sdk
-	 */
-	private void sendPictureMessage(final EMMessage message, final ViewHolder holder) {
-		try {
-			String to = message.getTo();
-
-			// before send, update ui
-			holder.staus_iv.setVisibility(View.GONE);
-			holder.pb.setVisibility(View.VISIBLE);
-			holder.tv.setVisibility(View.VISIBLE);
-			holder.tv.setText("0%");
-			
-			final long start = System.currentTimeMillis();
-			// if (chatType == ChatActivity.CHATTYPE_SINGLE) {
-			EMClient.getInstance().chatManager().sendMessage(message, new EMCallBack() {
-
-				@Override
-				public void onSuccess() {
-					Log.d(TAG, "send image message successfully");
-					activity.runOnUiThread(new Runnable() {
-						public void run() {
-							// send success
-							holder.pb.setVisibility(View.GONE);
-							holder.tv.setVisibility(View.GONE);
-						}
-					});
-				}
-
-				@Override
-				public void onError(int code, String error) {
-					
-					activity.runOnUiThread(new Runnable() {
-						public void run() {
-							holder.pb.setVisibility(View.GONE);
-							holder.tv.setVisibility(View.GONE);
-							// message.setSendingStatus(Message.SENDING_STATUS_FAIL);
-							holder.staus_iv.setVisibility(View.VISIBLE);
-							Toast.makeText(activity,
-									activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0).show();
-						}
-					});
-				}
-
-				@Override
-				public void onProgress(final int progress, String status) {
-					activity.runOnUiThread(new Runnable() {
-						public void run() {
-							holder.tv.setText(progress + "%");
-						}
-					});
-				}
-
-			});
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * 更新ui上消息发送状态
-	 * 
-	 * @param message
-	 * @param holder
-	 */
-	private void updateSendedView(final EMMessage message, final ViewHolder holder) {
-		activity.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				// send success
-				if (message.getType() == EMMessage.Type.VIDEO) {
-					holder.tv.setVisibility(View.GONE);
-				}
-				EMLog.d(TAG, "message status : " + message.status());
-				if (message.status() == EMMessage.Status.SUCCESS) {
-					// if (message.getType() == EMMessage.Type.FILE) {
-					// holder.pb.setVisibility(View.INVISIBLE);
-					// holder.staus_iv.setVisibility(View.INVISIBLE);
-					// } else {
-					// holder.pb.setVisibility(View.GONE);
-					// holder.staus_iv.setVisibility(View.GONE);
-					// }
-
-				} else if (message.status() == EMMessage.Status.FAIL) {
-					// if (message.getType() == EMMessage.Type.FILE) {
-					// holder.pb.setVisibility(View.INVISIBLE);
-					// } else {
-					// holder.pb.setVisibility(View.GONE);
-					// }
-					// holder.staus_iv.setVisibility(View.VISIBLE);
-				    
-				    if(message.getError() == EMError.MESSAGE_SEND_INVALID_CONTENT){
-				        Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.error_send_invalid_content), 0)
-                        .show();
-				    }else if(message.getError() == EMError.MESSAGE_SEND_NOT_IN_THE_GROUP){
-				        Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.error_send_not_in_the_group), 0)
-                        .show();
-				    }else{
-				        Toast.makeText(activity, activity.getString(R.string.send_fail) + activity.getString(R.string.connect_failuer_toast), 0)
-                        .show();
-				    }
-				}
-
-				notifyDataSetChanged();
-			}
-		});
-	}
 
 	/**
 	 * load image into image view
@@ -1440,7 +1216,7 @@ public class MessageAdapter extends BaseAdapter{
 						// ShowBigImage needs to download it from the server
 						// first
 						// intent.putExtra("", message.get);
-						ImageMessageBody body = (ImageMessageBody) message.getBody();
+						EMImageMessageBody body = (EMImageMessageBody) message.getBody();
 						intent.putExtra("secret", body.getSecret());
 						intent.putExtra("remotepath", remote);
 					}
@@ -1486,7 +1262,7 @@ public class MessageAdapter extends BaseAdapter{
 
 				@Override
 				public void onClick(View v) {
-					VideoMessageBody videoBody = (VideoMessageBody) message.getBody();
+					EMVideoMessageBody videoBody = (EMVideoMessageBody) message.getBody();
 					EMLog.d(TAG, "video view is on click");
 					Intent intent = new Intent(activity, ShowVideoActivity.class);
 					intent.putExtra("localpath", videoBody.getLocalUrl());

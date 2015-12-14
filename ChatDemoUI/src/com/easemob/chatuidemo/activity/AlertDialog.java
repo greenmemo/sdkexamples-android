@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.easemob.chat.EMMessage;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.task.DownloadImageTask;
 import com.easemob.chatuidemo.utils.ImageCache;
@@ -33,10 +34,10 @@ import com.easemob.util.ImageUtils;
 public class AlertDialog extends BaseActivity {
 	private TextView mTextView;
 	private Button mButton;
-	private int position;
 	private ImageView imageView;
 	private EditText editText;
 	private boolean isEditextShow;
+    private EMMessage message;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class AlertDialog extends BaseActivity {
 		String msg = getIntent().getStringExtra("msg");
 		//提示标题
 		String title = getIntent().getStringExtra("title");
-		position = getIntent().getIntExtra("position", -1);
+		message = getIntent().getParcelableExtra("message");
 		//是否显示取消标题
 		boolean isCanceTitle=getIntent().getBooleanExtra("titleIsCancel", false);
 		//是否显示取消按钮
@@ -93,11 +94,10 @@ public class AlertDialog extends BaseActivity {
 	}
 	
 	public void ok(View view){
-		setResult(RESULT_OK,new Intent().putExtra("position", position).
+		setResult(RESULT_OK,new Intent().putExtra("message", message).
 				putExtra("edittext", editText.getText().toString())
 				/*.putExtra("voicePath", voicePath)*/);
-		if(position != -1)
-			ChatActivity.resendPos = position;
+		
 		finish();
 		
 	}

@@ -139,7 +139,7 @@ public class HXNotifier {
         viberateAndPlayTone(message);
     }
     
-    public synchronized void onNewMesg(List<EMMessage> messages) {
+    public synchronized void onNewMsg(List<EMMessage> messages) {
         if(EMClient.getInstance().chatManager().isSlientMessage(messages.get(messages.size()-1))){
             return;
         }

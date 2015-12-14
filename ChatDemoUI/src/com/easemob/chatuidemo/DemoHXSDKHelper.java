@@ -141,7 +141,7 @@ public class DemoHXSDKHelper extends HXSDKHelper{
             public void onMessageReceived(List<EMMessage> messages) {
                 if(activityList.size() <= 0){
                     EMLog.d(TAG, "received  messages");
-                    HXSDKHelper.getInstance().getNotifier().onNewMesg(messages);
+                    HXSDKHelper.getInstance().getNotifier().onNewMsg(messages);
                 }
             }
             

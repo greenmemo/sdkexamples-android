@@ -17,4 +17,4 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 #libeasemob.so
-include $(LOCAL_PATH)/../../../../emclient-linux/Android.mk
+include $(LOCAL_PATH)/../../../emclient-linux/Android.mk
