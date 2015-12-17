@@ -75,7 +75,6 @@ public class ContactlistFragment extends Fragment {
 	private boolean hidden;
 	private Sidebar sidebar;
 	private InputMethodManager inputMethodManager;
-	private List<String> blackList;
 	ImageButton clearSearch;
 	EditText query;
 	HXContactSyncListener contactSyncListener;
@@ -120,7 +119,6 @@ public class ContactlistFragment extends Fragment {
 
                 @Override
                 public void run() {
-                    blackList = EMClient.getInstance().contactManager().getBlackListUsernames();
                     refresh();
                 }
                 
@@ -164,8 +162,6 @@ public class ContactlistFragment extends Fragment {
 		sidebar = (Sidebar) getView().findViewById(R.id.sidebar);
 		sidebar.setListView(listView);
         
-		//黑名单列表
-		blackList = EMClient.getInstance().contactManager().getBlackListUsernames();
 		contactList = new ArrayList<User>();
 		// 获取设置contactlist
 		getContactList();
@@ -400,10 +396,10 @@ public class ContactlistFragment extends Fragment {
 	// 刷新ui
 	public void refresh() {
 		try {
+		    getContactList();
 			// 可能会在子线程中调到这方法
 			getActivity().runOnUiThread(new Runnable() {
 				public void run() {
-					getContactList();
 					adapter.notifyDataSetChanged();
 				}
 			});
@@ -446,6 +442,7 @@ public class ContactlistFragment extends Fragment {
 		contactList.clear();
 		//获取本地好友列表
 		Map<String, User> users = ((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList();
+		List<String> blackList = EMClient.getInstance().contactManager().getBlackListUsernames();
 		Iterator<Entry<String, User>> iterator = users.entrySet().iterator();
 		while (iterator.hasNext()) {
 			Entry<String, User> entry = iterator.next();

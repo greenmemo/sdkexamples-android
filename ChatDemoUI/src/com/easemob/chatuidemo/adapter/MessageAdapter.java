@@ -52,6 +52,7 @@ import com.easemob.EMError;
 import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMClient;
 import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMFileMessageBody;
 import com.easemob.chat.EMImageMessageBody;
 import com.easemob.chat.EMLocationMessageBody;
 import com.easemob.chat.EMMessage;
@@ -89,7 +90,7 @@ import com.easemob.util.TextFormater;
 
 public class MessageAdapter extends BaseAdapter{
 
-	private final static String TAG = "msg";
+	private final static String TAG = "MessageAdapter";
 
 	private static final int MESSAGE_TYPE_RECV_TXT = 0;
 	private static final int MESSAGE_TYPE_SENT_TXT = 1;
@@ -819,15 +820,16 @@ public class MessageAdapter extends BaseAdapter{
 		// 接收方向的消息
 		if (message.direct() == EMMessage.Direct.RECEIVE) {
 			// "it is receive msg";
-			if (message.status() == EMMessage.Status.INPROGRESS) {
+		    EMImageMessageBody imgBody = (EMImageMessageBody) message.getBody();
+		    //根据缩略图状态设置监听
+		    if (imgBody.thumbnailDownloadStatus() == EMFileMessageBody.EMDownloadStatus.DOWNLOADING ||
+                    imgBody.thumbnailDownloadStatus() == EMFileMessageBody.EMDownloadStatus.PENDING) {
 				holder.iv.setImageResource(R.drawable.default_image);
 				setMessageReceiveCallback(message, holder.tv);
 			} else {
-				// "!!!! not back receive, show image directly");
 				holder.pb.setVisibility(View.GONE);
 				holder.tv.setVisibility(View.GONE);
 				holder.iv.setImageResource(R.drawable.default_image);
-				EMImageMessageBody imgBody = (EMImageMessageBody) message.getBody();
 				if (imgBody.getLocalUrl() != null) {
 					// String filePath = imgBody.getLocalUrl();
 					String remotePath = imgBody.getRemoteUrl();
@@ -928,8 +930,8 @@ public class MessageAdapter extends BaseAdapter{
 
 		if (message.direct() == EMMessage.Direct.RECEIVE) {
 
-			// System.err.println("it is receive msg");
-			if (message.status() == EMMessage.Status.INPROGRESS) {
+		    if (videoBody.thumbnailDownloadStatus() == EMFileMessageBody.EMDownloadStatus.DOWNLOADING ||
+		            videoBody.thumbnailDownloadStatus() == EMFileMessageBody.EMDownloadStatus.PENDING) {
 				// System.err.println("!!!! back receive");
 				holder.iv.setImageResource(R.drawable.default_image);
 				setMessageReceiveCallback(message, holder.tv);
@@ -1027,7 +1029,8 @@ public class MessageAdapter extends BaseAdapter{
 				holder.iv_read_status.setVisibility(View.VISIBLE);
 			}
 			EMLog.d(TAG, "it is receive msg");
-			if (message.status() == EMMessage.Status.INPROGRESS) {
+			if (voiceBody.downloadStatus() == EMFileMessageBody.EMDownloadStatus.DOWNLOADING ||
+			        voiceBody.downloadStatus() == EMFileMessageBody.EMDownloadStatus.PENDING) {
 				holder.pb.setVisibility(View.VISIBLE);
 				setMessageReceiveCallback(message, null);
 			} else {
