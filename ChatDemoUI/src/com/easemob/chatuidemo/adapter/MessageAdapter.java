@@ -910,8 +910,8 @@ public class MessageAdapter extends BaseAdapter{
 
 			showVideoThumbView(localThumb, holder.iv, videoBody.getThumbnailUrl(), message);
 		}
-		if (videoBody.getLength() > 0) {
-			String time = DateUtils.toTimeBySecond(videoBody.getLength());
+		if (videoBody.getDuration() > 0) {
+			String time = DateUtils.toTimeBySecond(videoBody.getDuration());
 			holder.timeLength.setText(time);
 		}
 		holder.playBtn.setImageResource(R.drawable.video_download_btn_nor);
