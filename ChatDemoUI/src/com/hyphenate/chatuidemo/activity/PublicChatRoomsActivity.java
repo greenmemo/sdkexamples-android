@@ -47,7 +47,7 @@ import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.exceptions.EaseMobException;
+import com.hyphenate.exceptions.HyphenateException;
 
 public class PublicChatRoomsActivity extends BaseActivity {
 	private ProgressBar pb;
@@ -246,7 +246,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
                             isLoading = false;
                         }
                     });
-                } catch (EaseMobException e) {
+                } catch (HyphenateException e) {
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {
                         public void run() {

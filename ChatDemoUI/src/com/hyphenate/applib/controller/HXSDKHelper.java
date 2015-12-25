@@ -17,11 +17,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import android.app.ActivityManager;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.util.Log;
-
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
@@ -31,12 +26,14 @@ import com.hyphenate.applib.model.HXNotifier;
 import com.hyphenate.applib.model.HXNotifier.HXNotificationInfoProvider;
 import com.hyphenate.applib.model.HXSDKModel;
 import com.hyphenate.chat.EMChatConfig.EMEnvMode;
-import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMContactManager;
-import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMOptions;
-import com.hyphenate.exceptions.EaseMobException;
+import com.hyphenate.exceptions.HyphenateException;
+
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.util.Log;
 
 /**
  * The developer can derive from this class to talk with HuanXin SDK
@@ -489,7 +486,7 @@ public abstract class HXSDKHelper {
      * 同步操作，从服务器获取群组列表
      * 该方法会记录更新状态，可以通过isSyncingGroupsFromServer获取是否正在更新
      * 和HXPreferenceUtils.getInstance().getSettingSyncGroupsFinished()获取是否更新已经完成
-     * @throws EaseMobException
+     * @throws HyphenateException
      */
     public synchronized void asyncFetchGroupsFromServer(final EMCallBack callback){
         if(isSyncingGroupsWithServer){
@@ -516,7 +513,7 @@ public abstract class HXSDKHelper {
                     if(callback != null){
                         callback.onSuccess();
                     }
-                } catch (EaseMobException e) {
+                } catch (HyphenateException e) {
                     hxModel.setGroupsSynced(false);
                     isGroupsSyncedWithServer = false;
                     isSyncingGroupsWithServer = false;
@@ -561,7 +558,7 @@ public abstract class HXSDKHelper {
                     if(callback != null){
                         callback.onSuccess(usernames);
                     }
-                } catch (EaseMobException e) {
+                } catch (HyphenateException e) {
                     hxModel.setContactSynced(false);
                     isContactsSyncedWithServer = false;
                     isSyncingContactsWithServer = false;
@@ -608,7 +605,7 @@ public abstract class HXSDKHelper {
                     if(callback != null){
                         callback.onSuccess(usernames);
                     }
-                } catch (EaseMobException e) {
+                } catch (HyphenateException e) {
                     hxModel.setBlacklistSynced(false);
                     
                     isBlackListSyncedWithServer = false;

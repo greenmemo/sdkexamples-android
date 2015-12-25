@@ -81,7 +81,7 @@ import com.hyphenate.chatuidemo.utils.ImageCache;
 import com.hyphenate.chatuidemo.utils.ImageUtils;
 import com.hyphenate.chatuidemo.utils.SmileUtils;
 import com.hyphenate.chatuidemo.utils.UserUtils;
-import com.hyphenate.exceptions.EaseMobException;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.DensityUtil;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.FileUtils;
@@ -1088,7 +1088,7 @@ public class MessageAdapter extends BaseAdapter{
 					try {
 						EMClient.getInstance().chatManager().ackMessageRead(message.getFrom(), message.getMsgId());
 						message.setAcked(true);
-					} catch (EaseMobException e) {
+					} catch (HyphenateException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}

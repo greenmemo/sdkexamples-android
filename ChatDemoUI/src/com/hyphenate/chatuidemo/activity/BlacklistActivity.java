@@ -3,6 +3,10 @@ package com.hyphenate.chatuidemo.activity;
 import java.util.Collections;
 import java.util.List;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.exceptions.HyphenateException;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,10 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.exceptions.EaseMobException;
 
 /**
  * 黑名单列表页面
@@ -90,7 +90,7 @@ public class BlacklistActivity extends Activity {
                             adapter.remove(tobeRemoveUser);
                         }
                     });
-                } catch (EaseMobException e) {
+                } catch (HyphenateException e) {
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {
                         public void run() {

@@ -39,7 +39,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMGroupInfo;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.exceptions.EaseMobException;
+import com.hyphenate.exceptions.HyphenateException;
 
 public class PublicGroupsActivity extends BaseActivity {
 	private ProgressBar pb;
@@ -155,7 +155,7 @@ public class PublicGroupsActivity extends BaseActivity {
                             isLoading = false;
                         }
                     });
-                } catch (EaseMobException e) {
+                } catch (HyphenateException e) {
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {
                         public void run() {

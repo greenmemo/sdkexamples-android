@@ -21,6 +21,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.hyphenate.EMChatRoomChangeListener;
+import com.hyphenate.EMError;
+import com.hyphenate.EMMessageListener;
+import com.hyphenate.EMValueCallBack;
+import com.hyphenate.applib.controller.HXSDKHelper;
+import com.hyphenate.applib.model.GroupRemoveListener;
+import com.hyphenate.chat.EMChatRoom;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chat.EMImageMessageBody;
+import com.hyphenate.chat.EMLocationMessageBody;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMessage.ChatType;
+import com.hyphenate.chat.EMNormalFileMessageBody;
+import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chat.EMVideoMessageBody;
+import com.hyphenate.chat.EMVoiceMessageBody;
+import com.hyphenate.chatuidemo.DemoApplication;
+import com.hyphenate.chatuidemo.DemoHXSDKHelper;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.adapter.ExpressionAdapter;
+import com.hyphenate.chatuidemo.adapter.ExpressionPagerAdapter;
+import com.hyphenate.chatuidemo.adapter.MessageAdapter;
+import com.hyphenate.chatuidemo.adapter.VoicePlayClickListener;
+import com.hyphenate.chatuidemo.domain.RobotUser;
+import com.hyphenate.chatuidemo.utils.CommonUtils;
+import com.hyphenate.chatuidemo.utils.SmileUtils;
+import com.hyphenate.chatuidemo.utils.UserUtils;
+import com.hyphenate.chatuidemo.widget.ExpandGridView;
+import com.hyphenate.chatuidemo.widget.PasteEditText;
+import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
+import com.hyphenate.util.PathUtil;
+import com.hyphenate.util.VoiceRecorder;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -62,42 +98,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.hyphenate.EMChatRoomChangeListener;
-import com.hyphenate.EMError;
-import com.hyphenate.EMMessageListener;
-import com.hyphenate.EMValueCallBack;
-import com.hyphenate.applib.controller.HXSDKHelper;
-import com.hyphenate.applib.model.GroupRemoveListener;
-import com.hyphenate.chat.EMChatRoom;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMConversation;
-import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chat.EMImageMessageBody;
-import com.hyphenate.chat.EMLocationMessageBody;
-import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chat.EMMessage.ChatType;
-import com.hyphenate.chat.EMNormalFileMessageBody;
-import com.hyphenate.chat.EMTextMessageBody;
-import com.hyphenate.chat.EMVideoMessageBody;
-import com.hyphenate.chat.EMVoiceMessageBody;
-import com.hyphenate.chatuidemo.DemoApplication;
-import com.hyphenate.chatuidemo.DemoHXSDKHelper;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.adapter.ExpressionAdapter;
-import com.hyphenate.chatuidemo.adapter.ExpressionPagerAdapter;
-import com.hyphenate.chatuidemo.adapter.MessageAdapter;
-import com.hyphenate.chatuidemo.adapter.VoicePlayClickListener;
-import com.hyphenate.chatuidemo.domain.RobotUser;
-import com.hyphenate.chatuidemo.utils.CommonUtils;
-import com.hyphenate.chatuidemo.utils.SmileUtils;
-import com.hyphenate.chatuidemo.utils.UserUtils;
-import com.hyphenate.chatuidemo.widget.ExpandGridView;
-import com.hyphenate.chatuidemo.widget.PasteEditText;
-import com.hyphenate.exceptions.EaseMobException;
-import com.hyphenate.util.EMLog;
-import com.hyphenate.util.PathUtil;
-import com.hyphenate.util.VoiceRecorder;
 
 /**
  * 聊天页面
@@ -1536,7 +1536,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
                             Toast.makeText(getApplicationContext(), R.string.Move_into_blacklist_success, 0).show();
                         }
                     });
-                } catch (EaseMobException e) {
+                } catch (HyphenateException e) {
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {
                         public void run() {

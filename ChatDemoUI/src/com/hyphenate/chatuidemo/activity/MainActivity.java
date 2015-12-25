@@ -19,6 +19,37 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.hyphenate.EMCallBack;
+import com.hyphenate.EMConnectionListener;
+import com.hyphenate.EMContactListener;
+import com.hyphenate.EMError;
+import com.hyphenate.EMGroupChangeListener;
+import com.hyphenate.EMMessageListener;
+import com.hyphenate.EMValueCallBack;
+import com.hyphenate.applib.controller.HXSDKHelper;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMConversation.EMConversationType;
+import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMessage.ChatType;
+import com.hyphenate.chat.EMMessage.Type;
+import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chatuidemo.Constant;
+import com.hyphenate.chatuidemo.DemoHXSDKHelper;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.db.InviteMessgeDao;
+import com.hyphenate.chatuidemo.db.UserDao;
+import com.hyphenate.chatuidemo.domain.InviteMessage;
+import com.hyphenate.chatuidemo.domain.InviteMessage.InviteMesageStatus;
+import com.hyphenate.chatuidemo.domain.User;
+import com.hyphenate.chatuidemo.utils.CommonUtils;
+import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
+import com.hyphenate.util.HanziToPinyin;
+import com.hyphenate.util.NetUtils;
+import com.umeng.analytics.MobclickAgent;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,37 +67,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.hyphenate.EMCallBack;
-import com.hyphenate.EMConnectionListener;
-import com.hyphenate.EMError;
-import com.hyphenate.EMGroupChangeListener;
-import com.hyphenate.EMMessageListener;
-import com.hyphenate.EMValueCallBack;
-import com.hyphenate.applib.controller.HXSDKHelper;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMContactListener;
-import com.hyphenate.chat.EMConversation;
-import com.hyphenate.chat.EMConversation.EMConversationType;
-import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chat.EMMessage.ChatType;
-import com.hyphenate.chat.EMMessage.Type;
-import com.hyphenate.chat.EMTextMessageBody;
-import com.hyphenate.chatuidemo.Constant;
-import com.hyphenate.chatuidemo.DemoHXSDKHelper;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.db.InviteMessgeDao;
-import com.hyphenate.chatuidemo.db.UserDao;
-import com.hyphenate.chatuidemo.domain.InviteMessage;
-import com.hyphenate.chatuidemo.domain.InviteMessage.InviteMesageStatus;
-import com.hyphenate.chatuidemo.domain.User;
-import com.hyphenate.chatuidemo.utils.CommonUtils;
-import com.hyphenate.exceptions.EaseMobException;
-import com.hyphenate.util.EMLog;
-import com.hyphenate.util.HanziToPinyin;
-import com.hyphenate.util.NetUtils;
-import com.umeng.analytics.MobclickAgent;
 
 public class MainActivity extends BaseActivity {
 
@@ -277,7 +277,7 @@ public class MainActivity extends BaseActivity {
             public void onSuccess(List<String> value) {
                 try {
                     EMClient.getInstance().contactManager().saveBlackList(value);
-                } catch (EaseMobException e) {
+                } catch (HyphenateException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }

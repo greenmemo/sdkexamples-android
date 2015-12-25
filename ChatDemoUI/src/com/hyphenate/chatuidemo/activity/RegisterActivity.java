@@ -25,7 +25,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.utils.CommonUtils;
-import com.hyphenate.exceptions.EaseMobException;
+import com.hyphenate.exceptions.HyphenateException;
 
 /**
  * 注册页
@@ -96,7 +96,7 @@ public class RegisterActivity extends BaseActivity {
 								finish();
 							}
 						});
-					} catch (final EaseMobException e) {
+					} catch (final HyphenateException e) {
 						runOnUiThread(new Runnable() {
 							public void run() {
 								if (!RegisterActivity.this.isFinishing())
