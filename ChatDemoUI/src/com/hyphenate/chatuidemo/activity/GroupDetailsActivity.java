@@ -43,7 +43,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.utils.UserUtils;
 import com.hyphenate.chatuidemo.widget.ExpandGridView;
-import com.hyphenate.exceptions.EaseMobException;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.NetUtils;
 
@@ -243,7 +243,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 									}
 								});
 								
-							} catch (EaseMobException e) {
+							} catch (HyphenateException e) {
 								e.printStackTrace();
 								runOnUiThread(new Runnable() {
 									public void run() {
@@ -270,7 +270,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 									Toast.makeText(getApplicationContext(), stsuccess, 0).show();
 								}
 							});
-						} catch (EaseMobException e) {
+						} catch (HyphenateException e) {
 							runOnUiThread(new Runnable() {
 								public void run() {
 									progressDialog.dismiss();

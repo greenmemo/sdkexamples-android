@@ -21,6 +21,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.hyphenate.applib.controller.HXSDKHelper;
+import com.hyphenate.applib.controller.HXSDKHelper.HXSyncListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.Constant;
+import com.hyphenate.chatuidemo.DemoHXSDKHelper;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.adapter.ContactAdapter;
+import com.hyphenate.chatuidemo.db.InviteMessgeDao;
+import com.hyphenate.chatuidemo.db.UserDao;
+import com.hyphenate.chatuidemo.domain.User;
+import com.hyphenate.chatuidemo.widget.Sidebar;
+import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -48,20 +62,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import com.hyphenate.applib.controller.HXSDKHelper;
-import com.hyphenate.applib.controller.HXSDKHelper.HXSyncListener;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.Constant;
-import com.hyphenate.chatuidemo.DemoHXSDKHelper;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.adapter.ContactAdapter;
-import com.hyphenate.chatuidemo.db.InviteMessgeDao;
-import com.hyphenate.chatuidemo.db.UserDao;
-import com.hyphenate.chatuidemo.domain.User;
-import com.hyphenate.chatuidemo.widget.Sidebar;
-import com.hyphenate.exceptions.EaseMobException;
-import com.hyphenate.util.EMLog;
 
 /**
  * 联系人列表页
@@ -379,7 +379,7 @@ public class ContactlistFragment extends Fragment {
 							refresh();
 						}
 					});
-				} catch (EaseMobException e) {
+				} catch (HyphenateException e) {
 					e.printStackTrace();
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {

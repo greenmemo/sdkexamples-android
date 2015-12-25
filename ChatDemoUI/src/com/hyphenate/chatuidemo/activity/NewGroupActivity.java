@@ -27,7 +27,7 @@ import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.exceptions.EaseMobException;
+import com.hyphenate.exceptions.HyphenateException;
 
 public class NewGroupActivity extends BaseActivity {
 	private EditText groupNameEditText;
@@ -111,7 +111,7 @@ public class NewGroupActivity extends BaseActivity {
 								finish();
 							}
 						});
-					} catch (final EaseMobException e) {
+					} catch (final HyphenateException e) {
 						runOnUiThread(new Runnable() {
 							public void run() {
 								progressDialog.dismiss();
