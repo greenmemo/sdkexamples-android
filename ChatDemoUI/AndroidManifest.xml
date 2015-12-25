@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.easemob.chatuidemo"
+    package="com.hyphenate.chatuidemo"
     android:versionCode="24"
     android:versionName="3.0.3" >
 
@@ -33,9 +33,9 @@
 
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
-    <permission android:name="com.easemob.chatuidemo.permission.C2D_MESSAGE"
+    <permission android:name="com.hyphenate.chatuidemo.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="com.easemob.chatuidemo.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.hyphenate.chatuidemo.permission.C2D_MESSAGE" />
     
     
     <application
@@ -142,7 +142,7 @@
         </activity>
         <!-- 地图 -->
         <activity
-            android:name="com.easemob.chatuidemo.activity.BaiduMapActivity"
+            android:name="com.hyphenate.chatuidemo.activity.BaiduMapActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" >
         </activity>
@@ -293,7 +293,7 @@
 		    ></activity>
 
         <!-- 开机自启动服务 -->
-        <receiver android:name="com.easemob.chat.StartServiceReceiver" >
+        <receiver android:name="com.hyphenate.chat.StartServiceReceiver" >
             <intent-filter android:priority="1000" >
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
@@ -304,37 +304,37 @@
         
         <!-- gcm start -->
         <receiver
-            android:name="com.easemob.chat.EMGCMBroadcastReceiver"
+            android:name="com.hyphenate.chat.EMGCMBroadcastReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.easemob.chatuidemo" />
+                <category android:name="com.hyphenate.chatuidemo" />
             </intent-filter>
         </receiver>
 
-        <service android:name="com.easemob.chat.EMGCMListenerService"
+        <service android:name="com.hyphenate.chat.EMGCMListenerService"
             android:exported="false" >
         </service>
         
         <receiver 
-            android:name="com.easemob.chatuidemo.receiver.GCMPushBroadCast"
+            android:name="com.hyphenate.chatuidemo.receiver.GCMPushBroadCast"
             android:exported="false">
             <intent-filter >
-                <action android:name="com.easemob.sdk.push"/>
-                <category android:name="com.easemob.chatuidemo"/>
+                <action android:name="com.hyphenate.sdk.push"/>
+                <category android:name="com.hyphenate.chatuidemo"/>
             </intent-filter>
         </receiver>
         <!-- gcm end -->
 
         <!-- 设置环信应用的appkey -->
         <meta-data
-            android:name="EASEMOB_APPKEY"
+            android:name="hyphenate_APPKEY"
             android:value="easemob-demo#no1" />
         <!-- 声明sdk所需的service -->
-        <service android:name="com.easemob.chat.EMChatService"/>
+        <service android:name="com.hyphenate.chat.EMChatService"/>
         <!-- 声明sdk所需的receiver -->
-        <receiver android:name="com.easemob.chat.EMMonitorReceiver">
+        <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REMOVED"/>
                 <data android:scheme="package"/>
