@@ -43,5 +43,11 @@ public abstract class GroupRemoveListener implements EMGroupChangeListener{
         // TODO Auto-generated method stub
         
     }
+
+    @Override
+    public void onAutoAcceptInvitationFromGroup(String groupId, String inviter, String inviteMessage) {
+        // TODO Auto-generated method stub
+
+    }
     
 }
