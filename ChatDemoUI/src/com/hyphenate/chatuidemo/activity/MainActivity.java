@@ -821,6 +821,10 @@ public class MainActivity extends BaseActivity {
         public void onApplicationDeclined(String groupId, String groupName, String decliner, String reason) {
             // 加群申请被拒绝，demo未实现
         }
+
+        @Override
+        public void onAutoAcceptInvitationFromGroup(String groupId, String inviter, String inviteMessage) {
+        }
     }
 
     /**
