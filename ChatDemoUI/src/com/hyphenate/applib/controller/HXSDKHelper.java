@@ -25,7 +25,6 @@ import com.hyphenate.applib.model.DefaultHXSDKModel;
 import com.hyphenate.applib.model.HXNotifier;
 import com.hyphenate.applib.model.HXNotifier.HXNotificationInfoProvider;
 import com.hyphenate.applib.model.HXSDKModel;
-import com.hyphenate.chat.EMChatConfig.EMEnvMode;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.exceptions.HyphenateException;
@@ -186,11 +185,6 @@ public abstract class HXSDKHelper {
         // 初始化环信SDK,一定要先调用init()
         EMOptions options = initHXOptions();
         EMClient.getInstance().init(context, options);
-        
-        // 设置sandbox测试环境
-        if(hxModel.isSandboxMode()){
-            EMClient.getInstance().setEnv(EMEnvMode.EMSandboxMode);
-        }
         
         if(hxModel.isDebugMode()){
             // set debug mode in development process

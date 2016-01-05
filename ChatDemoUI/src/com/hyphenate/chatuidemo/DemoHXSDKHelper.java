@@ -100,7 +100,9 @@ public class DemoHXSDKHelper extends HXSDKHelper{
             
             //if your app is supposed to user Google Push, please set project number
             String projectNumber = "562451699741";
-            EMClient.getInstance().setGCMProjectNumber(projectNumber);
+            EMOptions options = EMClient.getInstance().getOptions();
+            options.setGCMNumber(projectNumber)
+
             return true;
         }
         
