@@ -26,6 +26,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMGroupManager.EMGroupOptions;
+import com.hyphenate.chat.EMGroupManager.EMGroupStyle;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.exceptions.HyphenateException;
 
@@ -96,13 +98,18 @@ public class NewGroupActivity extends BaseActivity {
 					String desc = introductionEditText.getText().toString();
 					String[] members = data.getStringArrayExtra("newmembers");
 					try {
+					    EMGroupOptions option = new EMGroupOptions();
+                        option.maxUsers = 200;
+                        
 						if(checkBox.isChecked()){
 							//创建公开群，此种方式创建的群，可以自由加入
 							//创建公开群，此种方式创建的群，用户需要申请，等群主同意后才能加入此群
-						    EMClient.getInstance().groupManager().createPublicGroup(groupName, desc, members, true,200);
+						    option.style = EMGroupStyle.EMGroupStylePublicJoinNeedApproval;
+						    EMClient.getInstance().groupManager().createGroup(groupName, desc, members,option);
 						}else{
 							//创建不公开群
-						    EMClient.getInstance().groupManager().createPrivateGroup(groupName, desc, members, memberCheckbox.isChecked(),200);
+						    option.style = memberCheckbox.isChecked()?EMGroupStyle.EMGroupStylePrivateMemberCanInvite:EMGroupStyle.EMGroupStylePrivateOnlyOwnerInvite;
+						    EMClient.getInstance().groupManager().createGroup(groupName, desc, members, option);
 						}
 						runOnUiThread(new Runnable() {
 							public void run() {
