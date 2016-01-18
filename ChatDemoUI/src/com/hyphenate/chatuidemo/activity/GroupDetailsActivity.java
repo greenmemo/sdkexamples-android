@@ -738,7 +738,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				try {
 					group = EMClient.getInstance().groupManager().getGroupFromServer(groupId);
 					// 更新本地数据
-					EMClient.getInstance().groupManager().createOrUpdateLocalGroup(group);
 					EMLog.d(TAG, "group msg is __blocked:" + group.isMsgBlocked());
 
 					runOnUiThread(new Runnable() {

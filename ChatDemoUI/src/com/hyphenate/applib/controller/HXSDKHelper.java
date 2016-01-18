@@ -493,7 +493,7 @@ public abstract class HXSDKHelper {
             @Override
             public void run(){
                 try {
-                    EMClient.getInstance().groupManager().getGroupsFromServer();
+                    EMClient.getInstance().groupManager().getJoinedGroupsFromServer();
                     
                     // in case that logout already before server returns, we should return immediately
                     if(!EMClient.getInstance().isLoggedInBefore()){
