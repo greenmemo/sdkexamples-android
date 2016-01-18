@@ -98,6 +98,7 @@ public class NewGroupActivity extends BaseActivity {
 					String desc = introductionEditText.getText().toString();
 					String[] members = data.getStringArrayExtra("newmembers");
 					try {
+					    String reason = "welcome";
 					    EMGroupOptions option = new EMGroupOptions();
                         option.maxUsers = 200;
                         
@@ -105,11 +106,11 @@ public class NewGroupActivity extends BaseActivity {
 							//创建公开群，此种方式创建的群，可以自由加入
 							//创建公开群，此种方式创建的群，用户需要申请，等群主同意后才能加入此群
 						    option.style = EMGroupStyle.EMGroupStylePublicJoinNeedApproval;
-						    EMClient.getInstance().groupManager().createGroup(groupName, desc, members,option);
+						    EMClient.getInstance().groupManager().createGroup(groupName, desc, members,reason,option);
 						}else{
 							//创建不公开群
 						    option.style = memberCheckbox.isChecked()?EMGroupStyle.EMGroupStylePrivateMemberCanInvite:EMGroupStyle.EMGroupStylePrivateOnlyOwnerInvite;
-						    EMClient.getInstance().groupManager().createGroup(groupName, desc, members, option);
+						    EMClient.getInstance().groupManager().createGroup(groupName, desc, members, reason,option);
 						}
 						runOnUiThread(new Runnable() {
 							public void run() {
