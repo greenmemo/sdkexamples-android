@@ -538,7 +538,7 @@ public abstract class HXSDKHelper {
             public void run(){
                 List<String> usernames = null;
                 try {
-                    usernames = EMClient.getInstance().contactManager().getAllContacts();
+                    usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
                     
                     // in case that logout already before server returns, we should return immediately
                     if(!EMClient.getInstance().isLoggedInBefore()){
