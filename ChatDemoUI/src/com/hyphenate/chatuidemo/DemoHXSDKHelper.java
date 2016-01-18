@@ -98,11 +98,6 @@ public class DemoHXSDKHelper extends HXSDKHelper{
         if(super.onInit(context)){
             getUserProfileManager().onInit(context);
             
-            //if your app is supposed to user Google Push, please set project number
-            String projectNumber = "562451699741";
-            EMOptions options = EMClient.getInstance().getOptions();
-            options.setGCMNumber(projectNumber);
-
             return true;
         }
         
@@ -114,6 +109,9 @@ public class DemoHXSDKHelper extends HXSDKHelper{
         EMOptions options =  super.initHXOptions();
         // you can also get EMChatOptions to set related SDK options
         options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());  
+        //if your app is supposed to user Google Push, please set project number
+        String projectNumber = "562451699741";
+        options.setGCMNumber(projectNumber);
         return options;
     }
 
