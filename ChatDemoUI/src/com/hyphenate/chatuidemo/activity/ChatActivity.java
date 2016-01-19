@@ -998,7 +998,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
             }
             String to = toChatUsername;
             message.setReceipt(to);
-            EMVideoMessageBody body = new EMVideoMessageBody(videoFile, thumbPath, length, videoFile.length());
+            EMVideoMessageBody body = new EMVideoMessageBody(filePath, thumbPath, length, videoFile.length());
             message.addBody(body);
             if (isRobot) {
                 message.setAttribute("em_robot_message", true);
