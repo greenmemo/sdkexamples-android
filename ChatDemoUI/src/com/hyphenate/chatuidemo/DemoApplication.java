@@ -17,6 +17,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMChatManager;
 
 public class DemoApplication extends Application {

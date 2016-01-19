@@ -332,7 +332,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
                                 // }
                                 // else{
                                 // messages =
-                                // conversation.loadMoreGroupMsgFromDB(adapter.getItem(0).getMsgId(),
+                                // conversation.loadMoreMsgFromDB(adapter.getItem(0).getMsgId(),
                                 // pagesize);
                                 // }
                             } catch (Exception e1) {
@@ -438,7 +438,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
             // if (chatType == CHATTYPE_SINGLE) {
             conversation.loadMoreMsgFromDB(msgId, pagesize);
             // } else {
-            // conversation.loadMoreGroupMsgFromDB(msgId, pagesize);
+            // conversation.loadMoreMsgFromDB(msgId, pagesize);
             // }
         }
 
@@ -567,7 +567,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
             case RESULT_CODE_COPY: // 复制消息
                 EMMessage copyMsg = ((EMMessage) adapter.getItem(data.getIntExtra("position", -1)));
                 // clipboard.setText(SmileUtils.getSmiledText(ChatActivity.this,
-                // ((TextMessageBody) copyMsg.getBody()).getMessage()));
+                // ((EMTextMessageBody) copyMsg.getBody()).getMessage()));
                 clipboard.setText(((EMTextMessageBody) copyMsg.getBody()).getMessage());
                 break;
             case RESULT_CODE_DELETE: // 删除消息
@@ -1346,7 +1346,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
                         if (length > 0) {
                             sendVoice(voiceRecorder.getVoiceFilePath(), voiceRecorder.getVoiceFileName(toChatUsername),
                                     Integer.toString(length), false);
-                        } else if (length == EMError.INVALID_FILE) {
+                        } else if (length == EMError.FILE_INVALID) {
                             Toast.makeText(getApplicationContext(), st1, Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(getApplicationContext(), st2, Toast.LENGTH_SHORT).show();

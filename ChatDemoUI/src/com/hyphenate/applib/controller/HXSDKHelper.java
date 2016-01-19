@@ -259,13 +259,13 @@ public abstract class HXSDKHelper {
     abstract protected HXSDKModel createModel();
     
     /**
-     * please make sure you have to get EMChatOptions by following method and set related options
-     *      EMChatOptions options = EMClient.getInstance().chatManager().getChatOptions();
+     * please make sure you have to get EMOptions by following method and set related options
+     *      EMOptions options = EMClient.getInstance().chatManager().getChatOptions();
      */
     protected EMOptions initHXOptions(){
         Log.d(TAG, "init HuanXin Options");
         
-        // 获取到EMChatOptions对象
+        // 获取到EMOptions对象
         EMOptions options = new EMOptions();
         // 默认添加好友时，是不需要验证的，改成需要验证
         options.setAcceptInvitationAlways(hxModel.getAcceptInvitationAlways());
@@ -352,7 +352,7 @@ public abstract class HXSDKHelper {
             public void onDisconnected(int error) {
             	if (error == EMError.USER_REMOVED) {
             		onCurrentAccountRemoved();
-            	}else if (error == EMError.CONNECTION_CONFLICT) {
+            	}else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
                     onConnectionConflict();
                 }else{
                     onConnectionDisconnected(error);
