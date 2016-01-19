@@ -422,7 +422,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 
     protected void onConversationInit() {
         conversation = EMClient.getInstance().chatManager()
-                .getConversation(toChatUsername, CommonUtils.getConversationType(chatType));
+                .getConversation(toChatUsername, CommonUtils.getConversationType(chatType), true);
         // 把此会话的未读数置为0
         conversation.markAllMessagesAsRead();
 

@@ -76,6 +76,7 @@ import com.hyphenate.chatuidemo.activity.ShowVideoActivity;
 import com.hyphenate.chatuidemo.activity.UserProfileActivity;
 import com.hyphenate.chatuidemo.task.LoadImageTask;
 import com.hyphenate.chatuidemo.task.LoadVideoImageTask;
+import com.hyphenate.chatuidemo.utils.CommonUtils;
 import com.hyphenate.chatuidemo.utils.DateUtils;
 import com.hyphenate.chatuidemo.utils.ImageCache;
 import com.hyphenate.chatuidemo.utils.ImageUtils;
@@ -128,6 +129,7 @@ public class MessageAdapter extends BaseAdapter{
 	EMMessage[] messages = null;
 
 	private Context context;
+	private int chatType = ChatActivity.CHATTYPE_SINGLE; 
 
 	
 	private EMCallBack messageSendCallback;
@@ -136,9 +138,10 @@ public class MessageAdapter extends BaseAdapter{
 	public MessageAdapter(Context context, String username, int chatType) {
 		this.username = username;
 		this.context = context;
+		this.chatType = chatType;
 		inflater = LayoutInflater.from(context);
 		activity = (Activity) context;
-		this.conversation = EMClient.getInstance().chatManager().getConversation(username);
+		this.conversation = EMClient.getInstance().chatManager().getConversation(username, CommonUtils.getConversationType(chatType), true);
 	}
 	
 	Handler handler = new Handler() {
