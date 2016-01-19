@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chatuidemo.Constant;

@@ -107,7 +107,7 @@ public class DemoHXSDKHelper extends HXSDKHelper{
     @Override
     protected EMOptions initHXOptions(){
         EMOptions options =  super.initHXOptions();
-        // you can also get EMChatOptions to set related SDK options
+        // you can also get EMOptions to set related SDK options
         options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());  
         //if your app is supposed to user Google Push, please set project number
         String projectNumber = "562451699741";

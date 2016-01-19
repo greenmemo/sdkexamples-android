@@ -658,7 +658,7 @@ public class MainActivity extends BaseActivity {
                     if (error == EMError.USER_REMOVED) {
                         // 显示帐号已经被移除
                         showAccountRemovedDialog();
-                    } else if (error == EMError.CONNECTION_CONFLICT) {
+                    } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
                         // 显示帐号在其他设备登陆dialog
                         showConflictDialog();
                     } else {
