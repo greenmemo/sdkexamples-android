@@ -506,18 +506,18 @@ public class MainActivity extends BaseActivity {
     public class MyContactListener implements EMContactListener {
 
         @Override
-        public void onContactAdded(List<String> usernameList) {
+        public void onContactAdded(String username) {
             // 保存增加的联系人
             Map<String, User> localUsers = ((DemoHXSDKHelper) HXSDKHelper.getInstance()).getContactList();
             Map<String, User> toAddUsers = new HashMap<String, User>();
-            for (String username : usernameList) {
-                User user = setUserHead(username);
-                // 添加好友时可能会回调added方法两次
-                if (!localUsers.containsKey(username)) {
-                    userDao.saveContact(user);
-                }
-                toAddUsers.put(username, user);
+
+            User user = setUserHead(username);
+            // 添加好友时可能会回调added方法两次
+            if (!localUsers.containsKey(username)) {
+                userDao.saveContact(user);
             }
+            toAddUsers.put(username, user);
+
             localUsers.putAll(toAddUsers);
             // 刷新ui
             if (currentTabIndex == 1)
@@ -526,20 +526,18 @@ public class MainActivity extends BaseActivity {
         }
 
         @Override
-        public void onContactDeleted(final List<String> usernameList) {
+        public void onContactDeleted(final String username) {
             // 被删除
             Map<String, User> localUsers = ((DemoHXSDKHelper) HXSDKHelper.getInstance()).getContactList();
-            for (String username : usernameList) {
-                localUsers.remove(username);
-                userDao.deleteContact(username);
-                inviteMessgeDao.deleteMessage(username);
-            }
+            localUsers.remove(username);
+            userDao.deleteContact(username);
+            inviteMessgeDao.deleteMessage(username);
             runOnUiThread(new Runnable() {
                 public void run() {
                     // 如果正在与此用户的聊天页面
                     String st10 = getResources().getString(R.string.have_you_removed);
                     if (ChatActivity.activityInstance != null
-                            && usernameList.contains(ChatActivity.activityInstance.getToChatUsername())) {
+                            && username.equals(ChatActivity.activityInstance.getToChatUsername())) {
                         Toast.makeText(MainActivity.this, ChatActivity.activityInstance.getToChatUsername() + st10, 1)
                                 .show();
                         ChatActivity.activityInstance.finish();
