@@ -662,7 +662,7 @@ public class MessageAdapter extends BaseAdapter{
             public void run() {
                 if (message.status() == EMMessage.Status.FAIL) {
 
-                    if (message.getError() == EMError.MESSAGE_INCLUDE_ILLEGAL_SPEECH) {
+                    if (message.getError() == EMError.MESSAGE_INCLUDE_ILLEGAL_CONTENT) {
                         Toast.makeText(activity,activity.getString(R.string.send_fail) + activity.getString(R.string.error_send_invalid_content), 0).show();
                     } else if (message.getError() == EMError.GROUP_NOT_JOINED) {
                         Toast.makeText(activity,activity.getString(R.string.send_fail) + activity.getString(R.string.error_send_not_in_the_group), 0).show();
